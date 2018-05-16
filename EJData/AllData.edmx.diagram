@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="fc240ee507ef4ef39b0bef7641a3e2b3" Name="Diagram1" ZoomLevel="104">
+        <EntityTypeShape EntityType="CorporateModel.CustomerOrder" Width="1.5" PointX="13.625" PointY="7" IsExpanded="true" FillColor="192, 0, 0" />
+        <EntityTypeShape EntityType="CorporateModel.Customer" Width="1.5" PointX="16.125" PointY="1.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CorporateModel.CustomOrderAddress" Width="1.5" PointX="0.5" PointY="1.125" IsExpanded="true" FillColor="Purple" />
+        <EntityTypeShape EntityType="CorporateModel.CustOrderDetail" Width="1.5" PointX="11.125" PointY="7.625" IsExpanded="true" FillColor="192, 0, 0" />
+        <EntityTypeShape EntityType="CorporateModel.CustOrderItemDetail" Width="1.5" PointX="8.625" PointY="7.875" IsExpanded="true" FillColor="192, 0, 0" />
+        <EntityTypeShape EntityType="CorporateModel.Error" Width="1.5" PointX="1.25" PointY="4.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="CorporateModel.InvoiceDetail" Width="1.5" PointX="11.125" PointY="4.875" IsExpanded="true" FillColor="Green" />
+        <EntityTypeShape EntityType="CorporateModel.Invoice" Width="1.5" PointX="13.875" PointY="2.25" IsExpanded="true" FillColor="Green" />
+        <EntityTypeShape EntityType="CorporateModel.Item" Width="1.5" PointX="5.75" PointY="3.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="CorporateModel.MachineItem" Width="1.5" PointX="6.5" PointY="9.5" IsExpanded="true" FillColor="255, 255, 192" />
+        <EntityTypeShape EntityType="CorporateModel.Machine" Width="1.5" PointX="15.75" PointY="8.625" IsExpanded="true" FillColor="255, 255, 192" />
+        <EntityTypeShape EntityType="CorporateModel.OrderDetail" Width="1.5" PointX="4.625" PointY="8.5" IsExpanded="true" FillColor="Purple" />
+        <EntityTypeShape EntityType="CorporateModel.Order" Width="1.5" PointX="0.5" PointY="7.25" IsExpanded="true" FillColor="Purple" />
+        <EntityTypeShape EntityType="CorporateModel.Part" Width="1.5" PointX="3.75" PointY="3.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="CorporateModel.Spare_Part" Width="1.5" PointX="3.75" PointY="0.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="CorporateModel.Supplier" Width="1.5" PointX="2.625" PointY="9.125" IsExpanded="true" />
+        <AssociationConnector Association="CorporateModel.FK_CustomerOrders_Customers" ManuallyRouted="false" />
+        <AssociationConnector Association="CorporateModel.FK_CustOrderDetails_CustomerOrders" ManuallyRouted="false" />
+        <AssociationConnector Association="CorporateModel.FK_Invoices_Customers" ManuallyRouted="false" />
+        <AssociationConnector ManuallyRouted="false" Association="CorporateModel.FK_Machines_Customers"></AssociationConnector>
+        <AssociationConnector Association="CorporateModel.FK_CustomOrderAddresses_Orders" ManuallyRouted="false" />
+        <AssociationConnector Association="CorporateModel.FK_CustOrderDetails_Items" ManuallyRouted="false" />
+        <AssociationConnector Association="CorporateModel.FK_CustOrderItemDetails_CustOrderDetails" ManuallyRouted="false" />
+        <AssociationConnector Association="CorporateModel.FK_InvoiceDetails_CustOrderDetails" ManuallyRouted="false" />
+        <AssociationConnector Association="CorporateModel.FK_CustOrderItemDetails_Items" ManuallyRouted="false" />
+        <AssociationConnector Association="CorporateModel.FK_Errors_Orders" ManuallyRouted="false" />
+        <AssociationConnector Association="CorporateModel.FK_Errors_Parts" ManuallyRouted="false" />
+        <AssociationConnector Association="CorporateModel.FK_InvoiceDetails_Invoices" ManuallyRouted="false" />
+        <AssociationConnector Association="CorporateModel.FK_Items_Parts" ManuallyRouted="false" />
+        <AssociationConnector Association="CorporateModel.FK_MachineItems_Items" ManuallyRouted="false" ></AssociationConnector>
+        <AssociationConnector Association="CorporateModel.FK_MachineItems_Machines" ManuallyRouted="false" ></AssociationConnector>
+        <AssociationConnector Association="CorporateModel.FK_OrderDetails_Orders" ManuallyRouted="false" />
+        <AssociationConnector Association="CorporateModel.FK_OrderDetails_Parts1" ManuallyRouted="false" />
+        <AssociationConnector Association="CorporateModel.FK_Orders_Suppliers" ManuallyRouted="false" />
+        <AssociationConnector Association="CorporateModel.FK_Spare_Parts_Parts1" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="CorporateModel.Quote" Width="1.5" PointX="11.25" PointY="1" FillColor="Olive" />
+        <AssociationConnector Association="CorporateModel.FK_Quotes_Customers" />
+        <EntityTypeShape EntityType="CorporateModel.QuoteDetail" Width="1.5" PointX="8.75" PointY="0.875" FillColor="Olive" />
+        <EntityTypeShape EntityType="CorporateModel.QuoteItemDetail" Width="1.5" PointX="8.875" PointY="4.75" FillColor="Olive" />
+        <AssociationConnector Association="CorporateModel.FK_QuoteDetails_Items" />
+        <AssociationConnector Association="CorporateModel.FK_QuoteItemDetails_Items" />
+        <AssociationConnector Association="CorporateModel.FK_QuoteDetails_Quotes" />
+        <AssociationConnector Association="CorporateModel.FK_QuoteItemDetails_QuoteDetails" />
+        <AssociationConnector Association="CorporateModel.FK_CustomerOrders_CustomerInvoices" />
+        <AssociationConnector Association="CorporateModel.FK_CustomerOrders_CustomerOrders" />
+        <AssociationConnector Association="CorporateModel.FK_Machines_CustOrderDetails" />
+        <AssociationConnector Association="CorporateModel.FK_Items_Items" />
+        <AssociationConnector Association="CorporateModel.FK_QuoteItemDetails_QuoteItemDetails1" />
+        <EntityTypeShape EntityType="CorporateModel.FlatOrder" Width="1.5" PointX="0.5" PointY="11.75" FillColor="Purple" />
+        </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
