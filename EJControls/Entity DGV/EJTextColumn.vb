@@ -1,6 +1,6 @@
 ﻿Imports EJControls
 
-Public Class EJEntityColumn
+Public Class EJTextColumn
     Inherits DataGridViewTextBoxColumn
     Implements IEntityColumn
 
@@ -21,4 +21,22 @@ Public Class EJEntityColumn
             Throw New NotImplementedException()
         End Set
     End Property
+
+    ' TO DO: override Clone() method
+End Class
+
+Public Class JEntityCell
+    Inherits DataGridViewTextBoxCell
+    Implements IEntityCell
+
+    Public Property Entity As Object Implements IEntityCell.Entity
+        Get
+            Throw New NotImplementedException()
+        End Get
+        Set(value As Object)
+            Throw New NotImplementedException()
+        End Set
+    End Property
+
+    ' TO DO: override Clone() method
 End Class

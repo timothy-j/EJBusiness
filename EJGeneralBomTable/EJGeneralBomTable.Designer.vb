@@ -23,18 +23,18 @@ Partial Class EJGeneralBomTable
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
-        Dim DataGridViewCellStyle1 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle2 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle3 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle4 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle5 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle6 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle7 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle8 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Me.DataGridView1 = New System.Windows.Forms.DataGridView()
+        Dim DataGridViewCellStyle9 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle10 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle11 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle12 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle13 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle14 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle15 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle16 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Me.GeneralBindingSource = New System.Windows.Forms.BindingSource(Me.components)
+        Me.DataGridView1 = New EJControls.MultiSourceGrid()
         Me.MC000Column = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.MCS000Column = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.MCS000Column = New EJControls.EJTextBoxColumn()
         Me.StockColumn = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.ModelColumn = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.ItemColumn = New System.Windows.Forms.DataGridViewTextBoxColumn()
@@ -49,14 +49,18 @@ Partial Class EJGeneralBomTable
         Me.SecondOpColumn = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.DateCheckedColumn = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.PartColumn = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        CType(Me.DataGridView1, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.GeneralBindingSource, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.DataGridView1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
+        '
+        'GeneralBindingSource
+        '
         '
         'DataGridView1
         '
         Me.DataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
         Me.DataGridView1.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.MC000Column, Me.MCS000Column, Me.StockColumn, Me.ModelColumn, Me.ItemColumn, Me.DrawingTypeColumn, Me.DescriptionColumn, Me.SupplierColumn, Me.SuppliersDescriptionColumn, Me.QtyColumn, Me.StatusColumn, Me.RowNotesColumn, Me.UnitColumn, Me.SecondOpColumn, Me.DateCheckedColumn, Me.PartColumn})
+        Me.DataGridView1.DataSources = Nothing
         Me.DataGridView1.Dock = System.Windows.Forms.DockStyle.Fill
         Me.DataGridView1.Location = New System.Drawing.Point(0, 0)
         Me.DataGridView1.Name = "DataGridView1"
@@ -65,30 +69,29 @@ Partial Class EJGeneralBomTable
         Me.DataGridView1.Size = New System.Drawing.Size(704, 422)
         Me.DataGridView1.TabIndex = 0
         '
-        'GeneralBindingSource
-        '
-        '
         'MC000Column
         '
-        DataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
-        DataGridViewCellStyle1.Format = "0.##"
-        Me.MC000Column.DefaultCellStyle = DataGridViewCellStyle1
+        DataGridViewCellStyle9.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
+        DataGridViewCellStyle9.Format = "0.##"
+        Me.MC000Column.DefaultCellStyle = DataGridViewCellStyle9
         Me.MC000Column.HeaderText = "000"
         Me.MC000Column.Name = "MC000Column"
         Me.MC000Column.Width = 35
         '
         'MCS000Column
         '
+        Me.MCS000Column.EntityProperty = Nothing
         Me.MCS000Column.HeaderText = "S000"
         Me.MCS000Column.Name = "MCS000Column"
+        Me.MCS000Column.Resizable = System.Windows.Forms.DataGridViewTriState.[True]
         Me.MCS000Column.Width = 60
         '
         'StockColumn
         '
-        Me.StockColumn.DataPropertyName = "Stock"
-        DataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
-        DataGridViewCellStyle2.Format = "0.##"
-        Me.StockColumn.DefaultCellStyle = DataGridViewCellStyle2
+        Me.StockColumn.DataPropertyName = "Part.Stock"
+        DataGridViewCellStyle10.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
+        DataGridViewCellStyle10.Format = "0.##"
+        Me.StockColumn.DefaultCellStyle = DataGridViewCellStyle10
         Me.StockColumn.HeaderText = "Stock"
         Me.StockColumn.Name = "StockColumn"
         Me.StockColumn.Width = 45
@@ -96,8 +99,8 @@ Partial Class EJGeneralBomTable
         'ModelColumn
         '
         Me.ModelColumn.DataPropertyName = "Model"
-        DataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
-        Me.ModelColumn.DefaultCellStyle = DataGridViewCellStyle3
+        DataGridViewCellStyle11.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
+        Me.ModelColumn.DefaultCellStyle = DataGridViewCellStyle11
         Me.ModelColumn.HeaderText = "Model"
         Me.ModelColumn.Name = "ModelColumn"
         Me.ModelColumn.Width = 35
@@ -111,6 +114,7 @@ Partial Class EJGeneralBomTable
         '
         'DrawingTypeColumn
         '
+        Me.DrawingTypeColumn.DataPropertyName = "Part.DrawingType"
         Me.DrawingTypeColumn.HeaderText = "Dwg"
         Me.DrawingTypeColumn.Name = "DrawingTypeColumn"
         Me.DrawingTypeColumn.Width = 40
@@ -124,12 +128,14 @@ Partial Class EJGeneralBomTable
         '
         'SupplierColumn
         '
+        Me.SupplierColumn.DataPropertyName = "Part.Supplier"
         Me.SupplierColumn.HeaderText = "Supplier"
         Me.SupplierColumn.Name = "SupplierColumn"
         Me.SupplierColumn.Width = 55
         '
         'SuppliersDescriptionColumn
         '
+        Me.SuppliersDescriptionColumn.DataPropertyName = "Part.SuppliersDescription"
         Me.SuppliersDescriptionColumn.HeaderText = "Suppliers Description"
         Me.SuppliersDescriptionColumn.Name = "SuppliersDescriptionColumn"
         Me.SuppliersDescriptionColumn.Width = 250
@@ -137,58 +143,64 @@ Partial Class EJGeneralBomTable
         'QtyColumn
         '
         Me.QtyColumn.DataPropertyName = "Qty"
-        DataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
-        DataGridViewCellStyle4.Format = "0.##"
-        Me.QtyColumn.DefaultCellStyle = DataGridViewCellStyle4
+        DataGridViewCellStyle12.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
+        DataGridViewCellStyle12.Format = "0.##"
+        Me.QtyColumn.DefaultCellStyle = DataGridViewCellStyle12
         Me.QtyColumn.HeaderText = "Qty"
         Me.QtyColumn.Name = "QtyColumn"
         Me.QtyColumn.Width = 40
         '
         'StatusColumn
         '
+        Me.StatusColumn.DataPropertyName = "Part.Status"
         Me.StatusColumn.HeaderText = "Status"
         Me.StatusColumn.Name = "StatusColumn"
         Me.StatusColumn.Width = 40
         '
         'RowNotesColumn
         '
-        DataGridViewCellStyle5.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
-        Me.RowNotesColumn.DefaultCellStyle = DataGridViewCellStyle5
+        Me.RowNotesColumn.DataPropertyName = "Part.ProductionNotes"
+        DataGridViewCellStyle13.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
+        Me.RowNotesColumn.DefaultCellStyle = DataGridViewCellStyle13
         Me.RowNotesColumn.HeaderText = "Notes"
         Me.RowNotesColumn.Name = "RowNotesColumn"
         Me.RowNotesColumn.Width = 150
         '
         'UnitColumn
         '
-        DataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
-        DataGridViewCellStyle6.Format = "C2"
-        Me.UnitColumn.DefaultCellStyle = DataGridViewCellStyle6
+        Me.UnitColumn.DataPropertyName = "Part.Unit"
+        DataGridViewCellStyle14.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
+        DataGridViewCellStyle14.Format = "C2"
+        Me.UnitColumn.DefaultCellStyle = DataGridViewCellStyle14
         Me.UnitColumn.HeaderText = "Unit"
         Me.UnitColumn.Name = "UnitColumn"
         Me.UnitColumn.Width = 70
         '
         'SecondOpColumn
         '
-        DataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
-        DataGridViewCellStyle7.Format = "C2"
-        DataGridViewCellStyle7.NullValue = Nothing
-        Me.SecondOpColumn.DefaultCellStyle = DataGridViewCellStyle7
+        Me.SecondOpColumn.DataPropertyName = "Part.SecondOperation"
+        DataGridViewCellStyle15.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
+        DataGridViewCellStyle15.Format = "C2"
+        DataGridViewCellStyle15.NullValue = Nothing
+        Me.SecondOpColumn.DefaultCellStyle = DataGridViewCellStyle15
         Me.SecondOpColumn.HeaderText = "2nd Op"
         Me.SecondOpColumn.Name = "SecondOpColumn"
         Me.SecondOpColumn.Width = 60
         '
         'DateCheckedColumn
         '
-        DataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
-        DataGridViewCellStyle8.Format = "d"
-        DataGridViewCellStyle8.NullValue = Nothing
-        Me.DateCheckedColumn.DefaultCellStyle = DataGridViewCellStyle8
+        Me.DateCheckedColumn.DataPropertyName = "Part.DateChecked"
+        DataGridViewCellStyle16.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
+        DataGridViewCellStyle16.Format = "d"
+        DataGridViewCellStyle16.NullValue = Nothing
+        Me.DateCheckedColumn.DefaultCellStyle = DataGridViewCellStyle16
         Me.DateCheckedColumn.HeaderText = "Date Checked"
         Me.DateCheckedColumn.Name = "DateCheckedColumn"
         Me.DateCheckedColumn.Width = 80
         '
         'PartColumn
         '
+        Me.PartColumn.DataPropertyName = "Part.PartNo"
         Me.PartColumn.HeaderText = "Part"
         Me.PartColumn.Name = "PartColumn"
         Me.PartColumn.ReadOnly = True
@@ -201,16 +213,15 @@ Partial Class EJGeneralBomTable
         Me.Controls.Add(Me.DataGridView1)
         Me.Name = "EJGeneralBomTable"
         Me.Size = New System.Drawing.Size(704, 422)
-        CType(Me.DataGridView1, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.GeneralBindingSource, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.DataGridView1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
 
     End Sub
-
-    Friend WithEvents DataGridView1 As DataGridView
     Friend WithEvents GeneralBindingSource As BindingSource
+    Friend WithEvents DataGridView1 As EJControls.MultiSourceGrid
     Friend WithEvents MC000Column As DataGridViewTextBoxColumn
-    Friend WithEvents MCS000Column As DataGridViewTextBoxColumn
+    Friend WithEvents MCS000Column As EJControls.EJTextBoxColumn
     Friend WithEvents StockColumn As DataGridViewTextBoxColumn
     Friend WithEvents ModelColumn As DataGridViewTextBoxColumn
     Friend WithEvents ItemColumn As DataGridViewTextBoxColumn

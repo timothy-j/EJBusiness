@@ -195,7 +195,7 @@ Public Class ItemsTableControl
     Private Sub DataGridView1_MouseDown(sender As Object, e As MouseEventArgs) Handles DataGridView1.MouseDown
         If e.Button = MouseButtons.Left And DataGridView1.SelectedCells.Count > 1 Then
             ' TO DO: get ItemID of all selected cells?
-            ' HACK: test only!
+            ' HACK: test only! (Drag drop)
             Dim headers = (From header As DataGridViewColumn In DataGridView1.Columns.Cast(Of DataGridViewColumn)()
                            Select header.HeaderText).ToArray
             Dim rows = From row As DataGridViewRow In DataGridView1.Rows.Cast(Of DataGridViewRow)()

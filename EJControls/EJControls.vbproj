@@ -85,8 +85,8 @@
     <Compile Include="EJClassBrowser.vb">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Entity DGV columns\EJEntityCell.vb" />
-    <Compile Include="Entity DGV columns\EJEntityColumn.vb" />
+    <Compile Include="Entity DGV\EJEntityRow.vb" />
+    <Compile Include="Entity DGV\EJTextColumn.vb" />
     <Compile Include="EJMultiComboBoxColumn.vb" />
     <Compile Include="EJComboBoxColumn.vb" />
     <Compile Include="EJTable.Designer.vb">
@@ -96,9 +96,16 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="EJTextBoxCell.vb" />
-    <Compile Include="Entity DGV columns\IEntityCell.vb" />
+    <Compile Include="Entity DGV\IEntityCell.vb" />
+    <Compile Include="Entity DGV\TestCell.vb" />
     <Compile Include="ExampleCalendarColumn.vb" />
-    <Compile Include="Entity DGV columns\IEntityColumn.vb" />
+    <Compile Include="Entity DGV\IEntityColumn.vb" />
+    <Compile Include="Multi Source DataGridView\MultiSourceGrid.Designer.vb">
+      <DependentUpon>MultiSourceGrid.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Multi Source DataGridView\MultiSourceGrid.vb">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="MultiColComboBox.Designer.vb">
       <DependentUpon>MultiColComboBox.vb</DependentUpon>
     </Compile>
@@ -127,6 +134,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="EJTable.resx">
       <DependentUpon>EJTable.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Multi Source DataGridView\MultiSourceGrid.resx">
+      <DependentUpon>MultiSourceGrid.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MultiColComboBox.resx">
       <DependentUpon>MultiColComboBox.vb</DependentUpon>
