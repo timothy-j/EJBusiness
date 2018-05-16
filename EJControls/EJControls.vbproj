@@ -45,7 +45,14 @@
     <OptionInfer>On</OptionInfer>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Linq.Dynamic, Version=1.0.6132.35681, Culture=neutral, processorArchitecture=MSIL">
@@ -78,10 +85,20 @@
     <Compile Include="EJClassBrowser.vb">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="Entity DGV columns\EJEntityCell.vb" />
+    <Compile Include="Entity DGV columns\EJEntityColumn.vb" />
     <Compile Include="EJMultiComboBoxColumn.vb" />
     <Compile Include="EJComboBoxColumn.vb" />
+    <Compile Include="EJTable.Designer.vb">
+      <DependentUpon>EJTable.vb</DependentUpon>
+    </Compile>
+    <Compile Include="EJTable.vb">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="EJTextBoxCell.vb" />
+    <Compile Include="Entity DGV columns\IEntityCell.vb" />
     <Compile Include="ExampleCalendarColumn.vb" />
+    <Compile Include="Entity DGV columns\IEntityColumn.vb" />
     <Compile Include="MultiColComboBox.Designer.vb">
       <DependentUpon>MultiColComboBox.vb</DependentUpon>
     </Compile>
@@ -108,6 +125,9 @@
     <EmbeddedResource Include="EJClassBrowser.resx">
       <DependentUpon>EJClassBrowser.vb</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="EJTable.resx">
+      <DependentUpon>EJTable.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="MultiColComboBox.resx">
       <DependentUpon>MultiColComboBox.vb</DependentUpon>
     </EmbeddedResource>
@@ -119,6 +139,7 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <None Include="App.config" />
     <None Include="My Project\Application.myapp">
       <Generator>MyApplicationCodeGenerator</Generator>
       <LastGenOutput>Application.Designer.vb</LastGenOutput>
