@@ -59,19 +59,19 @@ Public Class EJGeneralBomTable
     End Sub
 
     Private Sub DataGridView1_RowsAdded(sender As Object, e As DataGridViewRowsAddedEventArgs) Handles DataGridView1.RowsAdded
-        If DataGridView1.Rows(e.RowIndex).DataBoundItem Is Nothing Then Exit Sub
+        'If DataGridView1.Rows(e.RowIndex).DataBoundItem Is Nothing Then Exit Sub
 
-        ' Add data to machines columns
-        For i As Integer = e.RowIndex To e.RowIndex + e.RowCount - 1
-            For Each mc In _machines
-                Dim m = (From mi In CType(DataGridView1.Rows(i).DataBoundItem, EJData.Item).MachineItems
-                         Where mi.MachineID = mc
-                         Select mi.Qty, mi.Status).FirstOrDefault
-                If m Is Nothing Then Continue For
-                DataGridView1.Rows(i).Cells("MC" & mc & "Column").Value = m.Qty
-                DataGridView1.Rows(i).Cells("MCS" & mc & "Column").Value = m.Status
-            Next
-        Next
+        '' Add data to machines columns
+        'For i As Integer = e.RowIndex To e.RowIndex + e.RowCount - 1
+        '    For Each mc In _machines
+        '        Dim m = (From mi In CType(DataGridView1.Rows(i).DataBoundItem, EJData.Item).MachineItems
+        '                 Where mi.MachineID = mc
+        '                 Select mi.Qty, mi.Status).FirstOrDefault
+        '        If m Is Nothing Then Continue For
+        '        DataGridView1.Rows(i).Cells("MC" & mc & "Column").Value = m.Qty
+        '        DataGridView1.Rows(i).Cells("MCS" & mc & "Column").Value = m.Status
+        '    Next
+        'Next
 
     End Sub
 

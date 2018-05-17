@@ -1,4 +1,5 @@
 ﻿Imports System.Reflection
+Imports System.Linq.Dynamic
 
 Public Class MultiSourceGrid
 
@@ -109,6 +110,23 @@ Public Class MultiSourceGrid
                 For i As Integer = e.RowIndex To e.RowIndex + e.RowCount - 1
                     Rows.Item(i).Cells.Item(col.Index).Value = GetBindProperty(Rows(i).DataBoundItem, col.DataPropertyName)
                 Next
+
+                ' HACK: TODO: make auto version where ###BindProperty() blocks work with methods as well as properties
+#Region "Input column hack"
+            ElseIf col.Name = "MC248Column" Then
+                'MsgBox("col")
+                For i As Integer = e.RowIndex To e.RowIndex + e.RowCount - 1
+                    Dim mi As EJData.MachineItem = CType(Rows(i).DataBoundItem, EJData.Item).MachineItems.Where("MachineID = 248").FirstOrDefault
+                    If mi Is Nothing Then Continue For
+                    Rows.Item(i).Cells.Item(col.Index).Value = CType(Rows(i).DataBoundItem, EJData.Item).MachineItems.Where("MachineID = 248").FirstOrDefault.Qty
+                Next
+            ElseIf col.Name = "MCS248Column" Then
+                For i As Integer = e.RowIndex To e.RowIndex + e.RowCount - 1
+                    Dim mi As EJData.MachineItem = CType(Rows(i).DataBoundItem, EJData.Item).MachineItems.Where("MachineID = 248").FirstOrDefault
+                    If mi Is Nothing Then Continue For
+                    Rows.Item(i).Cells.Item(col.Index).Value = CType(Rows(i).DataBoundItem, EJData.Item).MachineItems.Where("MachineID = 248").FirstOrDefault.Status
+                Next
+#End Region
             End If
 
         Next
@@ -119,18 +137,12 @@ Public Class MultiSourceGrid
         MsgBox(e.Exception.Message + vbNewLine + "(Press Esc to restore the previous value)")
     End Sub
 
-    Private Sub MultiSourceGrid_ColumnAdded(sender As Object, e As DataGridViewColumnEventArgs) Handles Me.ColumnAdded
-        If e.Column.DataPropertyName.Contains(".") Then
-            ' e.Column.ValueType = GetBindPropertyType()
-        End If
-    End Sub
-
     Private Sub MultiSourceGrid_CellParsing(sender As Object, e As DataGridViewCellParsingEventArgs) Handles Me.CellParsing
         ' Send null to nullable values
         If e.Value = "" Then
             ' Is type nullable?
             If Nullable.GetUnderlyingType(e.DesiredType) IsNot Nothing Then
-                ' Som columns causing string conversion data error on null. TODO: try putting e.value to cell value and then to nothing?
+                ' Some columns causing string conversion data error on null. TODO: try putting e.value to cell value and then to nothing?
                 e.Value = Nothing
                 e.ParsingApplied = True
             End If
