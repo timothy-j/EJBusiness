@@ -60,7 +60,6 @@ Partial Class EJGeneralBomTable
         '
         Me.DataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
         Me.DataGridView1.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.MC000Column, Me.MCS000Column, Me.StockColumn, Me.ModelColumn, Me.ItemColumn, Me.DrawingTypeColumn, Me.DescriptionColumn, Me.SupplierColumn, Me.SuppliersDescriptionColumn, Me.QtyColumn, Me.StatusColumn, Me.RowNotesColumn, Me.UnitColumn, Me.SecondOpColumn, Me.DateCheckedColumn, Me.PartColumn})
-        Me.DataGridView1.DataSources = Nothing
         Me.DataGridView1.Dock = System.Windows.Forms.DockStyle.Fill
         Me.DataGridView1.Location = New System.Drawing.Point(0, 0)
         Me.DataGridView1.Name = "DataGridView1"
@@ -194,7 +193,7 @@ Partial Class EJGeneralBomTable
         DataGridViewCellStyle16.Format = "d"
         DataGridViewCellStyle16.NullValue = Nothing
         Me.DateCheckedColumn.DefaultCellStyle = DataGridViewCellStyle16
-        Me.DateCheckedColumn.HeaderText = "Date Checked"
+        Me.DateCheckedColumn.HeaderText = "DateChecked"
         Me.DateCheckedColumn.Name = "DateCheckedColumn"
         Me.DateCheckedColumn.Width = 80
         '

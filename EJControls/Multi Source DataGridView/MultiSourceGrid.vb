@@ -2,10 +2,7 @@
 
 Public Class MultiSourceGrid
 
-    Property DataSources As List(Of Object)
-
-    'Public Overrides Property DataSource As Object
-
+    Private _commitAttempt As Boolean
 
     Public Sub New()
 
@@ -91,14 +88,10 @@ Public Class MultiSourceGrid
                 End If
             Next propertyInfo
         Else
-            'Dim propertyType As Type
             Dim propertyInfo As PropertyInfo
 
-            'propertyType = [property].GetType()
             propertyInfo = propertyType.GetProperty(propertyName)
-            retValue = propertyInfo.PropertyType 'GetValue([property], Nothing)
-            'If tempValue Is Nothing Then Return ""
-            'retValue = propertyInfo.GetValue([property], Nothing)
+            retValue = propertyInfo.PropertyType
         End If
 
         Return retValue
@@ -112,43 +105,18 @@ Public Class MultiSourceGrid
                 ' HACK: testing adding column valuetype
                 col.ValueType = GetBindPropertyType(Rows(0).DataBoundItem.GetType, col.DataPropertyName)
 
-                ' Insert the values from normally unbound source objects
+                ' Insert the values from 'complex bound' source objects
                 For i As Integer = e.RowIndex To e.RowIndex + e.RowCount - 1
                     Rows.Item(i).Cells.Item(col.Index).Value = GetBindProperty(Rows(i).DataBoundItem, col.DataPropertyName)
                 Next
             End If
 
         Next
-
-
-
-        '' Insert the values from normally unbound source objects
-        '' LOW: Put column test in outer loop for improved performance
-        'For i As Integer = e.RowIndex To e.RowIndex + e.RowCount - 1
-        '    For Each cell As DataGridViewCell In Rows.Item(i).Cells
-        '        If (Columns(cell.ColumnIndex).DataPropertyName.Contains(".")) Then
-        '            cell.Value = GetBindProperty(Rows(i).DataBoundItem, Columns(cell.ColumnIndex).DataPropertyName)
-        '        End If
-        '    Next
-        'Next
-    End Sub
-
-    Private Sub MultiSourceGrid_CellValidating(sender As Object, e As DataGridViewCellValidatingEventArgs) Handles Me.CellValidating
-        ' If this is an 'unbound' column, attempt to set the value to the source object
-        If (Columns(e.ColumnIndex).DataPropertyName.Contains(".")) Then
-            Dim cell As DataGridViewCell = Rows.Item(e.RowIndex).Cells.Item(e.ColumnIndex)
-            'Try
-            '    SetBindProperty(Rows.Item(e.RowIndex).DataBoundItem, Columns.Item(e.ColumnIndex).DataPropertyName, e.FormattedValue)
-            'Catch ex As Exception
-            '    MsgBox(ex.Message)
-            '    e.Cancel = True
-            'End Try
-        End If
     End Sub
 
     Private Sub MultiSourceGrid_DataError(sender As Object, e As DataGridViewDataErrorEventArgs) Handles Me.DataError
+        If _commitAttempt Then Exit Sub
         MsgBox(e.Exception.Message + vbNewLine + "(Press Esc to restore the previous value)")
-        e.Cancel = True
     End Sub
 
     Private Sub MultiSourceGrid_ColumnAdded(sender As Object, e As DataGridViewColumnEventArgs) Handles Me.ColumnAdded
@@ -158,20 +126,36 @@ Public Class MultiSourceGrid
     End Sub
 
     Private Sub MultiSourceGrid_CellParsing(sender As Object, e As DataGridViewCellParsingEventArgs) Handles Me.CellParsing
-        ' TO DO: add code to send null to nullable values
-
+        ' Send null to nullable values
+        If e.Value = "" Then
+            ' Is type nullable?
+            If Nullable.GetUnderlyingType(e.DesiredType) IsNot Nothing Then
+                ' Som columns causing string conversion data error on null. TODO: try putting e.value to cell value and then to nothing?
+                e.Value = Nothing
+                e.ParsingApplied = True
+            End If
+        End If
     End Sub
 
-
-    Private Sub MultiSourceGrid_CellValidated(sender As Object, e As DataGridViewCellEventArgs) Handles Me.CellValidated
-        ' If this is an 'unbound' column, attempt to set the value to the source object
+    Private Sub MultiSourceGrid_CellValidating(sender As Object, e As DataGridViewCellValidatingEventArgs) Handles Me.CellValidating
+        ' If this is an 'complex bound' column, attempt to set the value to the source object
         If (Columns(e.ColumnIndex).DataPropertyName.Contains(".")) And e.RowIndex >= 0 And e.ColumnIndex >= 0 Then
-            Dim cell As DataGridViewCell = Rows.Item(e.RowIndex).Cells.Item(e.ColumnIndex)
             Try
-                SetBindProperty(Rows.Item(e.RowIndex).DataBoundItem, Columns.Item(e.ColumnIndex).DataPropertyName, cell.Value)
+                _commitAttempt = True
+                CommitEdit(DataGridViewDataErrorContexts.Formatting) 'DataGridViewDataErrorContexts.Commit Or DataGridViewDataErrorContexts.Parsing)
             Catch ex As Exception
-                MsgBox(ex.Message)
+                MsgBox("[during cell validating]" + vbNewLine + ex.Message)
+                e.Cancel = True
             End Try
+            _commitAttempt = False
+        End If
+    End Sub
+
+    Private Sub MultiSourceGrid_CellValueChanged(sender As Object, e As DataGridViewCellEventArgs) Handles Me.CellValueChanged
+        ' If this is an 'complex bound' column, attempt to set the value to the source object
+        If _commitAttempt Then
+            Dim cell As DataGridViewCell = Rows.Item(e.RowIndex).Cells.Item(e.ColumnIndex)
+            SetBindProperty(Rows.Item(e.RowIndex).DataBoundItem, Columns.Item(e.ColumnIndex).DataPropertyName, cell.Value)
         End If
     End Sub
 End Class

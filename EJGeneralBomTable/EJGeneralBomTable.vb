@@ -60,19 +60,9 @@ Public Class EJGeneralBomTable
 
     Private Sub DataGridView1_RowsAdded(sender As Object, e As DataGridViewRowsAddedEventArgs) Handles DataGridView1.RowsAdded
         If DataGridView1.Rows(e.RowIndex).DataBoundItem Is Nothing Then Exit Sub
-        For i As Integer = e.RowIndex To e.RowIndex + e.RowCount - 1
-            'MsgBox(CType(DataGridView1.Rows(e.RowIndex).DataBoundItem.i, EJData.Item).Item1)
-            'DataGridView1.Rows(i).Cells("StockColumn").Value = CType(DataGridView1.Rows(i).DataBoundItem, EJData.Item).Part.Stock
-            'DataGridView1.Rows(i).Cells("SuppliersDescriptionColumn").Value = CType(DataGridView1.Rows(i).DataBoundItem, EJData.Item).Part.SuppliersDescription
-            'DataGridView1.Rows(i).Cells("SupplierColumn").Value = CType(DataGridView1.Rows(i).DataBoundItem, EJData.Item).Part.Supplier
-            'DataGridView1.Rows(i).Cells("UnitColumn").Value = CType(DataGridView1.Rows(i).DataBoundItem, EJData.Item).Part.Unit
-            'DataGridView1.Rows(i).Cells("SecondOpColumn").Value = CType(DataGridView1.Rows(i).DataBoundItem, EJData.Item).Part.SecondOperation
-            'DataGridView1.Rows(i).Cells("DateCheckedColumn").Value = CType(DataGridView1.Rows(i).DataBoundItem, EJData.Item).Part.DateChecked
-            'DataGridView1.Rows(i).Cells("StatusColumn").Value = CType(DataGridView1.Rows(i).DataBoundItem, EJData.Item).Part.Status
-            'DataGridView1.Rows(i).Cells("PartColumn").Value = CType(DataGridView1.Rows(i).DataBoundItem, EJData.Item).Part.PartNo
-            'DataGridView1.Rows(i).Cells("RowNotesColumn").Value = CType(DataGridView1.Rows(i).DataBoundItem, EJData.Item).Part.ProductionNotes
-            'DataGridView1.Rows(i).Cells("DrawingTypeColumn").Value = CType(DataGridView1.Rows(i).DataBoundItem, EJData.Item).Part.DrawingType
 
+        ' Add data to machines columns
+        For i As Integer = e.RowIndex To e.RowIndex + e.RowCount - 1
             For Each mc In _machines
                 Dim m = (From mi In CType(DataGridView1.Rows(i).DataBoundItem, EJData.Item).MachineItems
                          Where mi.MachineID = mc
@@ -87,20 +77,6 @@ Public Class EJGeneralBomTable
 
     Private Sub DataGridView1_RowValidating(sender As Object, e As DataGridViewCellCancelEventArgs) Handles DataGridView1.RowValidating
         ' Make unbound changes and attempt to save
-        ' TO DO: do unbound changes on cellvalidating
-        With CType(DataGridView1.CurrentRow.DataBoundItem, EJData.Item).Part
-            ' TO DO: sort out nulls or ""
-            '.Stock = DataGridView1.CurrentRow.Cells("StockColumn").Value
-            '.SuppliersDescription = DataGridView1.CurrentRow.Cells("SuppliersDescriptionColumn").Value
-            '.Supplier = DataGridView1.CurrentRow.Cells("SupplierColumn").Value
-            '.Unit = DataGridView1.CurrentRow.Cells("UnitColumn").Value
-            '.SecondOperation = DataGridView1.CurrentRow.Cells("SecondOpColumn").Value
-            '.DateChecked = DataGridView1.CurrentRow.Cells("DateCheckedColumn").Value
-            '.Status = DataGridView1.CurrentRow.Cells("StatusColumn").Value
-            ''.PartNo = DataGridView1.CurrentRow.Cells("PartColumn").Value 
-            '.ProductionNotes = DataGridView1.CurrentRow.Cells("RowNotesColumn").Value
-            '.DrawingType = DataGridView1.CurrentRow.Cells("DrawingTypeColumn").Value
-        End With
 
         ' TO DO: machine columns
 
