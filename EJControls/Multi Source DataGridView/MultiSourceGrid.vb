@@ -6,6 +6,50 @@ Public Class MultiSourceGrid
 
     Private _commitAttempt As Boolean
 
+    'Class CustomDataGetEventArgs
+    '    Inherits EventArgs
+    '    'Property CustomDataGe
+
+    '    ''' <summary>
+    '    ''' The binding source data for this row
+    '    ''' </summary>
+    '    ''' <returns></returns>
+    '    Property RowBoundItem As Object
+
+    '    Property Column As DataGridViewColumn
+    'End Class
+
+    ''' <summary>
+    ''' 
+    ''' </summary>
+    ''' <param name="sender"></param>
+    ''' <param name="e"></param>
+    ''' <param name="returnValue">Put requested data into this value</param>
+    Public Event CustomDataGet(ByVal sender As MultiSourceGrid, ByVal e As CustomDataGetSetEventArgs, ByRef returnValue As Object)
+
+    Class CustomDataGetSetEventArgs
+        Inherits EventArgs
+        ''' <summary>
+        ''' The value to be set in the data source
+        ''' </summary>
+        ''' <returns></returns>
+        Property Value As Object
+        ''' <summary>
+        ''' The binding source data for this row
+        ''' </summary>
+        ''' <returns></returns>
+        Property RowBoundItem As Object
+
+        Property Column As DataGridViewColumn
+    End Class
+
+    ''' <summary>
+    ''' 
+    ''' </summary>
+    ''' <param name="sender"></param>
+    ''' <param name="e"></param>
+    Public Event CustomDataSet(ByVal sender As MultiSourceGrid, ByVal e As CustomDataGetSetEventArgs)
+
     ''' <summary>
     ''' Stores list of properties/methods for complex bound columns
     ''' Key = column name
@@ -32,46 +76,56 @@ Public Class MultiSourceGrid
         DoubleBuffered = True
     End Sub
 
-    Private Function GetBindProperty(ByVal [property] As Object, ByVal propertyName As String) As Object
-        Dim retValue As Object = Nothing
+    ''' <summary>
+    ''' Gets the value of the  property (specified in the column binding property) from the supplied Object
+    ''' </summary>
+    ''' <param name="boundObject"></param>
+    ''' <param name="columnName"></param>
+    ''' <returns></returns>
+    Private Function GetBindProperty(ByVal boundObject As Object, ByVal columnName As String) As Object
 
-        ' LOW: extend this (and Set version) to work with more complicated property bindings
+        For Each prop As EJProperty In BindPropertyLists(columnName)
+            Select Case prop.Type
+                Case EJPropertyType.Property
+                    boundObject = boundObject.GetType().GetProperty(prop.Name).GetValue(boundObject, Nothing)
+                Case EJPropertyType.Method
+                    ' TO DO: write method code
+                    ' HACK: currently only works for methods with one string parameter or no parameter
+                    Dim propName As String = prop.Name.Substring(0, prop.Name.IndexOf("(") - 1)
+                    Dim args As New List(Of Object)
+                    args.Add(prop.Name.Substring(prop.Name.IndexOf(""""), prop.Name.LastIndexOf("""") - prop.Name.IndexOf("""")))
+                    boundObject = boundObject.GetType.GetMethod("MyMethod").Invoke(boundObject, args.ToArray)
+                Case Else
+                    ' Throw error
+            End Select
+            If boundObject Is Nothing Then Exit For
+        Next
 
-        If IsExpression(propertyName) Then
-            Dim thisPropertyName As String = ""
-
-            If GetNextPropertyType(propertyName, thisPropertyName) = EJPropertyType.Property Then
-                ' Get the next property name (before the next '.')
-                retValue = GetBindProperty([property].GetType().GetProperty(thisPropertyName).GetValue([property], Nothing), propertyName)
-            Else
-                ' TODO: deal with method 'property'
-            End If
-        Else
-            ' Return this (bottom) property value
-            Dim tempValue = [property].GetType().GetProperty(propertyName).GetValue([property], Nothing)
-            If tempValue Is Nothing Then Return ""
-            retValue = tempValue
-        End If
-
-        Return retValue
+        Return boundObject
     End Function
 
-    Private Sub SetBindProperty(ByVal [property] As Object, ByVal propertyName As String, ByVal value As Object)
+    Private Sub SetBindProperty(ByVal boundObject As Object, ByVal columnName As String, ByVal value As Object)
+        Dim i As Integer
+        For i = 0 To BindPropertyLists(columnName).Count - 2 ' Does not retrieve final property
+            Dim prop As EJProperty = BindPropertyLists(columnName)(i)
+            Select Case prop.Type
+                Case EJPropertyType.Property
+                    boundObject = boundObject.GetType().GetProperty(prop.Name).GetValue(boundObject, Nothing)
+                Case EJPropertyType.Method
+                    ' TODO: write method code
+                    ' HACK: currently only works for methods with one string parameter or no parameter
+                    Dim propName As String = prop.Name.Substring(0, prop.Name.IndexOf("("))
+                    Dim args As New List(Of Object)
+                    args.Add(prop.Name.Substring(prop.Name.IndexOf(""""), prop.Name.LastIndexOf("""") - prop.Name.IndexOf("""")))
+                    boundObject = boundObject.GetType.GetMethod("MyMethod").Invoke(boundObject, args.ToArray)
+                Case Else
+                    ' Throw error
+            End Select
+            If boundObject Is Nothing Then Throw New System.NullReferenceException("Part of the binding property has evaluated to null (nothing)")
+        Next
 
-        If IsExpression(propertyName) Then
-            Dim thisPropertyName As String = ""
-
-            If GetNextPropertyType(propertyName, thisPropertyName) = EJPropertyType.Property Then
-                ' Get the next property name (before the next '.')
-                SetBindProperty([property].GetType().GetProperty(thisPropertyName).GetValue([property], Nothing), propertyName, value)
-            Else
-                ' TODO: deal with method 'property'
-            End If
-
-        Else
-            ' Set the value to this (bottom) property
-            [property].GetType().GetProperty(propertyName).SetValue([property], value)
-        End If
+        ' TODO: Throw eroor if attempting to set to method rather than property (sort out when constructing BindPropertyLists)
+        boundObject.GetType().GetProperty(BindPropertyLists(columnName)(i).Name).SetValue(boundObject, value)
 
     End Sub
 
@@ -84,7 +138,17 @@ Public Class MultiSourceGrid
             Dim propType = GetNextPropertyType(propertyName, thisPropertyName)
             'thisPropertyName = propertyName.Substring(0, propertyName.IndexOf("."))
             BindPropertyLists(columnName).Add(New EJProperty With {.Name = thisPropertyName, .Type = propType})
-            retValue = GetBindPropertyType(propertyType.GetProperty(thisPropertyName).PropertyType, propertyName, columnName)
+            Select Case propType
+                Case EJPropertyType.Property
+                    retValue = GetBindPropertyType(propertyType.GetProperty(thisPropertyName).PropertyType, propertyName, columnName)
+                Case EJPropertyType.Method
+                    Dim propName As String = thisPropertyName.Substring(0, thisPropertyName.IndexOf("("))
+                    ' HACK: works for Where methods only
+                    If propName = "Where" Then
+                        'retValue = GetBindPropertyType(IEnumerable(Of propertyType), propertyName, columnName)
+                    End If
+                    retValue = GetBindPropertyType(propertyType.GetMethod(propName).ReturnType, propertyName, columnName)
+            End Select
         Else
             ' Return this (bottom) property type
             BindPropertyLists(columnName).Add(New EJProperty With {.Name = propertyName, .Type = EJPropertyType.Property})
@@ -110,12 +174,10 @@ Public Class MultiSourceGrid
                 ' Insert the values from 'complex bound' source objects
                 For i As Integer = e.RowIndex To e.RowIndex + e.RowCount - 1
                     ' LOW: work out whether same bind property can be used for each column, rather than parsing string for every row
-                    Rows.Item(i).Cells.Item(col.Index).Value = GetBindProperty(Rows(i).DataBoundItem, col.DataPropertyName)
+                    Rows.Item(i).Cells.Item(col.Index).Value = GetBindProperty(Rows(i).DataBoundItem, col.Name)
                 Next
 
                 ' HACK: TODO: make auto version where ###BindProperty() blocks work with methods as well as properties
-                ' use regex - see https://stackoverflow.com/questions/29725739/python-regex-get-everything-within-parentheses-unless-in-quotes
-                ' and regex.split(string) https://msdn.microsoft.com/en-us/library/ze12yx1d(v=vs.110).aspx
                 ' ans use MethodInfo.Invoke(Object, Args())                mi.GetType.GetMethod("MyMethod").Invoke(mi,)
 
 #Region "Input column hack"
@@ -173,7 +235,7 @@ Public Class MultiSourceGrid
         ' If this is an 'complex bound' column, attempt to set the value to the source object
         If _commitAttempt Then
             Dim cell As DataGridViewCell = Rows.Item(e.RowIndex).Cells.Item(e.ColumnIndex)
-            SetBindProperty(Rows.Item(e.RowIndex).DataBoundItem, Columns.Item(e.ColumnIndex).DataPropertyName, cell.Value)
+            SetBindProperty(Rows.Item(e.RowIndex).DataBoundItem, Columns.Item(e.ColumnIndex).Name, cell.Value)
         End If
     End Sub
 
@@ -208,8 +270,9 @@ Public Class MultiSourceGrid
             Case "("c
                 ' The next property is a method
                 Dim closePos As Integer = textInRemainderOut.IndexOf(")") ' TO DO: if this is > 0 throw error
-
-                NextProperty = Regex.Split(textInRemainderOut, "((?:""[^""]*""|[^()])*)\)")(0)
+                ' HACK: This doesn't allow for input strings with nested brackets or brackets in strings
+                NextProperty = textInRemainderOut.Substring(0, closePos + 1)
+                textInRemainderOut = textInRemainderOut.Substring(closePos + 2) ' allows for final ')' and following '.'
                 Return EJPropertyType.Method
         End Select
         Return EJPropertyType.None

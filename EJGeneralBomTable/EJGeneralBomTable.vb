@@ -36,6 +36,7 @@ Public Class EJGeneralBomTable
             Dim colS As DataGridViewColumn = DataGridView1.Columns.Item("MCS000Column").Clone
             colS.Name = "MCS" & mc & "Column"
             colS.HeaderText = "S" & mc
+            colS.DataPropertyName = "MachineItems.Where(""MachineID = " & mc & """).FirstOrDefault().Qty"
             DataGridView1.Columns.Insert(0, colS)
 
             Dim col As DataGridViewColumn = DataGridView1.Columns.Item("MC000Column").Clone
