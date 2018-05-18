@@ -1,9 +1,27 @@
 ﻿Imports System.Reflection
 Imports System.Linq.Dynamic
+Imports System.Text.RegularExpressions
 
 Public Class MultiSourceGrid
 
     Private _commitAttempt As Boolean
+
+    ''' <summary>
+    ''' Stores list of properties/methods for complex bound columns
+    ''' Key = column name
+    ''' </summary>
+    Dim BindPropertyLists As New Dictionary(Of String, List(Of EJProperty))
+
+    Enum EJPropertyType
+        None = 0
+        [Property]
+        [Method]
+    End Enum
+
+    Structure EJProperty
+        Public Name As String
+        Public [Type] As EJPropertyType
+    End Structure
 
     Public Sub New()
 
@@ -19,28 +37,20 @@ Public Class MultiSourceGrid
 
         ' LOW: extend this (and Set version) to work with more complicated property bindings
 
-        If propertyName.Contains(".") Then
-            Dim arrayProperties() As PropertyInfo
-            Dim leftPropertyName As String
+        If IsExpression(propertyName) Then
+            Dim thisPropertyName As String = ""
 
-            leftPropertyName = propertyName.Substring(0, propertyName.IndexOf("."))
-            arrayProperties = [property].GetType().GetProperties()
-
-            For Each propertyInfo As PropertyInfo In arrayProperties
-                If propertyInfo.Name = leftPropertyName Then
-                    retValue = GetBindProperty(propertyInfo.GetValue([property], Nothing), propertyName.Substring(propertyName.IndexOf(".") + 1))
-                    Exit For
-                End If
-            Next propertyInfo
+            If GetNextPropertyType(propertyName, thisPropertyName) = EJPropertyType.Property Then
+                ' Get the next property name (before the next '.')
+                retValue = GetBindProperty([property].GetType().GetProperty(thisPropertyName).GetValue([property], Nothing), propertyName)
+            Else
+                ' TODO: deal with method 'property'
+            End If
         Else
-            Dim propertyType As Type
-            Dim propertyInfo As PropertyInfo
-
-            propertyType = [property].GetType()
-            propertyInfo = propertyType.GetProperty(propertyName)
-            Dim tempValue = propertyInfo.GetValue([property], Nothing)
+            ' Return this (bottom) property value
+            Dim tempValue = [property].GetType().GetProperty(propertyName).GetValue([property], Nothing)
             If tempValue Is Nothing Then Return ""
-            retValue = propertyInfo.GetValue([property], Nothing)
+            retValue = tempValue
         End If
 
         Return retValue
@@ -48,51 +58,37 @@ Public Class MultiSourceGrid
 
     Private Sub SetBindProperty(ByVal [property] As Object, ByVal propertyName As String, ByVal value As Object)
 
-        If propertyName.Contains(".") Then
-            Dim arrayProperties() As PropertyInfo
-            Dim leftPropertyName As String
+        If IsExpression(propertyName) Then
+            Dim thisPropertyName As String = ""
 
-            leftPropertyName = propertyName.Substring(0, propertyName.IndexOf("."))
-            arrayProperties = [property].GetType().GetProperties()
+            If GetNextPropertyType(propertyName, thisPropertyName) = EJPropertyType.Property Then
+                ' Get the next property name (before the next '.')
+                SetBindProperty([property].GetType().GetProperty(thisPropertyName).GetValue([property], Nothing), propertyName, value)
+            Else
+                ' TODO: deal with method 'property'
+            End If
 
-            For Each propertyInfo As PropertyInfo In arrayProperties
-                If propertyInfo.Name = leftPropertyName Then
-                    SetBindProperty(propertyInfo.GetValue([property], Nothing), propertyName.Substring(propertyName.IndexOf(".") + 1), value)
-                    Exit For
-                End If
-            Next propertyInfo
         Else
-            Dim propertyType As Type
-            Dim propertyInfo As PropertyInfo
-
-            propertyType = [property].GetType()
-            propertyInfo = propertyType.GetProperty(propertyName)
-            propertyInfo.SetValue([property], value)
+            ' Set the value to this (bottom) property
+            [property].GetType().GetProperty(propertyName).SetValue([property], value)
         End If
 
     End Sub
 
-    Private Function GetBindPropertyType(ByVal propertyType As Type, ByVal propertyName As String) As Type
+    Private Function GetBindPropertyType(ByVal propertyType As Type, ByVal propertyName As String, ByVal columnName As String) As Type
         Dim retValue As Type = Nothing
 
-        If propertyName.Contains(".") Then
-            Dim arrayProperties() As PropertyInfo
-            Dim leftPropertyName As String
+        If IsExpression(propertyName) Then
+            Dim thisPropertyName As String = ""
 
-            leftPropertyName = propertyName.Substring(0, propertyName.IndexOf("."))
-            arrayProperties = propertyType.GetProperties()
-
-            For Each propertyInfo As PropertyInfo In arrayProperties
-                If propertyInfo.Name = leftPropertyName Then
-                    retValue = GetBindPropertyType(propertyInfo.PropertyType, propertyName.Substring(propertyName.IndexOf(".") + 1))
-                    Exit For
-                End If
-            Next propertyInfo
+            Dim propType = GetNextPropertyType(propertyName, thisPropertyName)
+            'thisPropertyName = propertyName.Substring(0, propertyName.IndexOf("."))
+            BindPropertyLists(columnName).Add(New EJProperty With {.Name = thisPropertyName, .Type = propType})
+            retValue = GetBindPropertyType(propertyType.GetProperty(thisPropertyName).PropertyType, propertyName, columnName)
         Else
-            Dim propertyInfo As PropertyInfo
-
-            propertyInfo = propertyType.GetProperty(propertyName)
-            retValue = propertyInfo.PropertyType
+            ' Return this (bottom) property type
+            BindPropertyLists(columnName).Add(New EJProperty With {.Name = propertyName, .Type = EJPropertyType.Property})
+            retValue = propertyType.GetProperty(propertyName).PropertyType
         End If
 
         Return retValue
@@ -101,17 +97,27 @@ Public Class MultiSourceGrid
     Private Sub MultiSourceGrid_RowsAdded(sender As Object, e As DataGridViewRowsAddedEventArgs) Handles Me.RowsAdded
         If Rows(e.RowIndex).DataBoundItem Is Nothing Then Exit Sub
 
+        ' Clear the BindPropertyLists so Add can't throw exception
+        BindPropertyLists.Clear()
+
         For Each col As DataGridViewColumn In Columns
-            If col.DataPropertyName.Contains(".") Then
+            If IsExpressionColumn(col) Then
                 ' HACK: testing adding column valuetype
-                col.ValueType = GetBindPropertyType(Rows(0).DataBoundItem.GetType, col.DataPropertyName)
+                ' Create new (empty) list for this column in 
+                BindPropertyLists.Add(col.Name, New List(Of EJProperty))
+                col.ValueType = GetBindPropertyType(Rows(0).DataBoundItem.GetType, col.DataPropertyName, col.Name)
 
                 ' Insert the values from 'complex bound' source objects
                 For i As Integer = e.RowIndex To e.RowIndex + e.RowCount - 1
+                    ' LOW: work out whether same bind property can be used for each column, rather than parsing string for every row
                     Rows.Item(i).Cells.Item(col.Index).Value = GetBindProperty(Rows(i).DataBoundItem, col.DataPropertyName)
                 Next
 
                 ' HACK: TODO: make auto version where ###BindProperty() blocks work with methods as well as properties
+                ' use regex - see https://stackoverflow.com/questions/29725739/python-regex-get-everything-within-parentheses-unless-in-quotes
+                ' and regex.split(string) https://msdn.microsoft.com/en-us/library/ze12yx1d(v=vs.110).aspx
+                ' ans use MethodInfo.Invoke(Object, Args())                mi.GetType.GetMethod("MyMethod").Invoke(mi,)
+
 #Region "Input column hack"
             ElseIf col.Name = "MC248Column" Then
                 'MsgBox("col")
@@ -151,7 +157,7 @@ Public Class MultiSourceGrid
 
     Private Sub MultiSourceGrid_CellValidating(sender As Object, e As DataGridViewCellValidatingEventArgs) Handles Me.CellValidating
         ' If this is an 'complex bound' column, attempt to set the value to the source object
-        If (Columns(e.ColumnIndex).DataPropertyName.Contains(".")) And e.RowIndex >= 0 And e.ColumnIndex >= 0 Then
+        If (IsExpressionColumn(Columns(e.ColumnIndex))) And e.RowIndex >= 0 And e.ColumnIndex >= 0 Then
             Try
                 _commitAttempt = True
                 CommitEdit(DataGridViewDataErrorContexts.Formatting) 'DataGridViewDataErrorContexts.Commit Or DataGridViewDataErrorContexts.Parsing)
@@ -170,4 +176,42 @@ Public Class MultiSourceGrid
             SetBindProperty(Rows.Item(e.RowIndex).DataBoundItem, Columns.Item(e.ColumnIndex).DataPropertyName, cell.Value)
         End If
     End Sub
+
+    ''' <summary>
+    ''' Determines whether the column binding contains expressions (including nested properties)
+    ''' </summary>
+    ''' <param name="column"></param>
+    ''' <returns></returns>
+    Private Function IsExpressionColumn(column As DataGridViewColumn) As Boolean
+        Return IsExpression(column.DataPropertyName)
+    End Function
+
+    ''' <summary>
+    ''' Determines whether the string contains expressions (including nested properties)
+    ''' </summary>
+    ''' <param name="text">String expression representing bound property</param>
+    ''' <returns></returns>
+    Private Function IsExpression(text As String) As Boolean
+        If text.IndexOfAny({".", "("}) >= 0 Then Return True
+        Return False
+    End Function
+
+    Private Function GetNextPropertyType(ByRef textInRemainderOut As String, ByRef NextProperty As String) As EJPropertyType
+        Dim pos As Integer = textInRemainderOut.IndexOfAny({".", "("})
+        Select Case GetChar(textInRemainderOut, pos + 1) ' IMPORTANT - GetChar index is 1-based whereas IndexOfAny is 0-based
+            Case "."c
+                ' the next property is a function
+                NextProperty = textInRemainderOut.Substring(0, pos)
+                textInRemainderOut = textInRemainderOut.Substring(pos + 1)
+                Return EJPropertyType.Property
+                Exit Select
+            Case "("c
+                ' The next property is a method
+                Dim closePos As Integer = textInRemainderOut.IndexOf(")") ' TO DO: if this is > 0 throw error
+
+                NextProperty = Regex.Split(textInRemainderOut, "((?:""[^""]*""|[^()])*)\)")(0)
+                Return EJPropertyType.Method
+        End Select
+        Return EJPropertyType.None
+    End Function
 End Class
