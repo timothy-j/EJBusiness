@@ -214,6 +214,10 @@
       <Project>{51763fd1-634a-49f1-8681-024b8837e5a7}</Project>
       <Name>EJEmail</Name>
     </ProjectReference>
+    <ProjectReference Include="..\LinqHelper\LinqHelper.csproj">
+      <Project>{e6db3899-5e08-4317-a251-3cb28f8f6684}</Project>
+      <Name>LinqHelper</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="SqlServerTypes\Loader.cs" />

@@ -1,6 +1,4 @@
-﻿Imports System.Text.RegularExpressions
-
-Public Class Startup
+﻿Public Class Startup
     Private Sub btnOrders_Click(sender As Object, e As EventArgs) Handles btnOrders.Click
         Dim o = New OrderForm
         o.Show()
@@ -29,9 +27,5 @@ Public Class Startup
     Private Sub GridTest_Click(sender As Object, e As EventArgs) Handles GridTest.Click
         Dim o = New DGTest
         o.Show()
-    End Sub
-
-    Private Sub TextBox1_TextChanged(sender As Object, e As EventArgs) Handles TextBox1.TextChanged, RegexTextBox.TextChanged
-        ResultTextBox.Text = Regex.Match(TextBox1.Text, RegexTextBox.Text).Value
     End Sub
 End Class
