@@ -6,21 +6,8 @@ Public Class MultiSourceGrid
 
     Private _commitAttempt As Boolean
 
-    'Class CustomDataGetEventArgs
-    '    Inherits EventArgs
-    '    'Property CustomDataGe
-
-    '    ''' <summary>
-    '    ''' The binding source data for this row
-    '    ''' </summary>
-    '    ''' <returns></returns>
-    '    Property RowBoundItem As Object
-
-    '    Property Column As DataGridViewColumn
-    'End Class
-
     ''' <summary>
-    ''' 
+    ''' Request to retrieve data from the data source
     ''' </summary>
     ''' <param name="sender"></param>
     ''' <param name="e"></param>
@@ -50,6 +37,8 @@ Public Class MultiSourceGrid
     ''' <param name="e"></param>
     Public Event CustomDataSet(ByVal sender As MultiSourceGrid, ByVal e As CustomDataGetSetEventArgs)
 
+    Public Event CustomDataGetType(ByVal sender As MultiSourceGrid, ByVal e As CustomDataGetSetEventArgs, ByRef returnType As Type)
+
     ''' <summary>
     ''' Stores list of properties/methods for complex bound columns
     ''' Key = column name
@@ -60,6 +49,7 @@ Public Class MultiSourceGrid
         None = 0
         [Property]
         [Method]
+        Custom
     End Enum
 
     Structure EJProperty
@@ -111,13 +101,6 @@ Public Class MultiSourceGrid
             Select Case prop.Type
                 Case EJPropertyType.Property
                     boundObject = boundObject.GetType().GetProperty(prop.Name).GetValue(boundObject, Nothing)
-                Case EJPropertyType.Method
-                    ' TODO: write method code
-                    ' HACK: currently only works for methods with one string parameter or no parameter
-                    Dim propName As String = prop.Name.Substring(0, prop.Name.IndexOf("("))
-                    Dim args As New List(Of Object)
-                    args.Add(prop.Name.Substring(prop.Name.IndexOf(""""), prop.Name.LastIndexOf("""") - prop.Name.IndexOf("""")))
-                    boundObject = boundObject.GetType.GetMethod("MyMethod").Invoke(boundObject, args.ToArray)
                 Case Else
                     ' Throw error
             End Select
@@ -141,13 +124,9 @@ Public Class MultiSourceGrid
             Select Case propType
                 Case EJPropertyType.Property
                     retValue = GetBindPropertyType(propertyType.GetProperty(thisPropertyName).PropertyType, propertyName, columnName)
-                Case EJPropertyType.Method
-                    Dim propName As String = thisPropertyName.Substring(0, thisPropertyName.IndexOf("("))
-                    ' HACK: works for Where methods only
-                    If propName = "Where" Then
-                        'retValue = GetBindPropertyType(IEnumerable(Of propertyType), propertyName, columnName)
-                    End If
-                    retValue = GetBindPropertyType(propertyType.GetMethod(propName).ReturnType, propertyName, columnName)
+                Case EJPropertyType.Custom
+                    Dim e As New CustomDataGetSetEventArgs With {.Column = Me.Columns.Item(columnName), .RowBoundItem = Nothing, .Value = Nothing}
+                    RaiseEvent CustomDataGetType(Me, e, retValue)
             End Select
         Else
             ' Return this (bottom) property type
@@ -166,15 +145,28 @@ Public Class MultiSourceGrid
 
         For Each col As DataGridViewColumn In Columns
             If IsExpressionColumn(col) Then
-                ' HACK: testing adding column valuetype
                 ' Create new (empty) list for this column in 
                 BindPropertyLists.Add(col.Name, New List(Of EJProperty))
-                col.ValueType = GetBindPropertyType(Rows(0).DataBoundItem.GetType, col.DataPropertyName, col.Name)
+
+                ' HACK: this makes most of GetNextPropertyType obsolete
+                If col.DataPropertyName.Contains("(") Then
+                    BindPropertyLists(col.Name).Add(New EJProperty With
+                                                    {.Name = col.DataPropertyName.Substring(1, col.DataPropertyName.LastIndexOf(")") - 2),
+                                                    .Type = EJPropertyType.Custom})
+                Else
+                    col.ValueType = GetBindPropertyType(Rows(0).DataBoundItem.GetType, col.DataPropertyName, col.Name)
+                End If
 
                 ' Insert the values from 'complex bound' source objects
                 For i As Integer = e.RowIndex To e.RowIndex + e.RowCount - 1
-                    ' LOW: work out whether same bind property can be used for each column, rather than parsing string for every row
-                    Rows.Item(i).Cells.Item(col.Index).Value = GetBindProperty(Rows(i).DataBoundItem, col.Name)
+                    If BindPropertyLists(col.Name)(0).Type = EJPropertyType.Custom Then
+
+                        Dim ev As New CustomDataGetSetEventArgs With {.Column = col,
+                            .RowBoundItem = Rows.Item(i).DataBoundItem, .Value = Nothing}
+                        'RaiseEvent CustomDataGet(Me, ev, Rows.Item(i).Cells.Item(col.Index).Value)
+                    Else
+                        Rows.Item(i).Cells.Item(col.Index).Value = GetBindProperty(Rows(i).DataBoundItem, col.Name)
+                    End If
                 Next
 
                 ' HACK: TODO: make auto version where ###BindProperty() blocks work with methods as well as properties
@@ -235,7 +227,13 @@ Public Class MultiSourceGrid
         ' If this is an 'complex bound' column, attempt to set the value to the source object
         If _commitAttempt Then
             Dim cell As DataGridViewCell = Rows.Item(e.RowIndex).Cells.Item(e.ColumnIndex)
-            SetBindProperty(Rows.Item(e.RowIndex).DataBoundItem, Columns.Item(e.ColumnIndex).Name, cell.Value)
+            If BindPropertyLists(Columns.Item(e.ColumnIndex).Name)(0).Type = EJPropertyType.Custom Then
+                Dim ev As New CustomDataGetSetEventArgs With {.Column = Columns.Item(e.ColumnIndex),
+                    .RowBoundItem = Rows.Item(e.RowIndex).DataBoundItem, .Value = cell.Value}
+                RaiseEvent CustomDataSet(Me, ev)
+            Else
+                SetBindProperty(Rows.Item(e.RowIndex).DataBoundItem, Columns.Item(e.ColumnIndex).Name, cell.Value)
+            End If
         End If
     End Sub
 
