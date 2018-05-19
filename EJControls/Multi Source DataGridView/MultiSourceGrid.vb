@@ -5,6 +5,12 @@ Public Class MultiSourceGrid
 
     Private _commitAttempt As Boolean
 
+    ''' <summary>
+    ''' Stores list of properties for nested property bound columns
+    ''' Key = column name
+    ''' </summary>
+    Dim BindPropertyLists As New Dictionary(Of String, List(Of String))
+
     Public Sub New()
 
         ' This call is required by the designer.
@@ -17,30 +23,18 @@ Public Class MultiSourceGrid
     Private Function GetBindProperty(ByVal [property] As Object, ByVal propertyName As String) As Object
         Dim retValue As Object = Nothing
 
-        ' LOW: extend this (and Set version) to work with more complicated property bindings
-
         If propertyName.Contains(".") Then
-            Dim arrayProperties() As PropertyInfo
-            Dim leftPropertyName As String
+            Dim thisPropertyName As String
 
-            leftPropertyName = propertyName.Substring(0, propertyName.IndexOf("."))
-            arrayProperties = [property].GetType().GetProperties()
+            thisPropertyName = propertyName.Substring(0, propertyName.IndexOf("."))
+            propertyName = propertyName.Substring(propertyName.IndexOf(".") + 1)
 
-            For Each propertyInfo As PropertyInfo In arrayProperties
-                If propertyInfo.Name = leftPropertyName Then
-                    retValue = GetBindProperty(propertyInfo.GetValue([property], Nothing), propertyName.Substring(propertyName.IndexOf(".") + 1))
-                    Exit For
-                End If
-            Next propertyInfo
+            retValue = GetBindProperty([property].GetType().GetProperty(thisPropertyName).GetValue([property], Nothing), propertyName)
         Else
-            Dim propertyType As Type
-            Dim propertyInfo As PropertyInfo
-
-            propertyType = [property].GetType()
-            propertyInfo = propertyType.GetProperty(propertyName)
-            Dim tempValue = propertyInfo.GetValue([property], Nothing)
+            ' Return this (bottom) property value
+            Dim tempValue = [property].GetType().GetProperty(propertyName).GetValue([property], Nothing)
             If tempValue Is Nothing Then Return ""
-            retValue = propertyInfo.GetValue([property], Nothing)
+            retValue = tempValue
         End If
 
         Return retValue
@@ -48,47 +42,33 @@ Public Class MultiSourceGrid
 
     Private Sub SetBindProperty(ByVal [property] As Object, ByVal propertyName As String, ByVal value As Object)
 
+        ' If there are further property nest levels
         If propertyName.Contains(".") Then
-            Dim arrayProperties() As PropertyInfo
-            Dim leftPropertyName As String
+            Dim thisPropertyName As String
 
-            leftPropertyName = propertyName.Substring(0, propertyName.IndexOf("."))
-            arrayProperties = [property].GetType().GetProperties()
+            thisPropertyName = propertyName.Substring(0, propertyName.IndexOf("."))
+            propertyName = propertyName.Substring(propertyName.IndexOf(".") + 1)
 
-            For Each propertyInfo As PropertyInfo In arrayProperties
-                If propertyInfo.Name = leftPropertyName Then
-                    SetBindProperty(propertyInfo.GetValue([property], Nothing), propertyName.Substring(propertyName.IndexOf(".") + 1), value)
-                    Exit For
-                End If
-            Next propertyInfo
-        Else
-            Dim propertyType As Type
-            Dim propertyInfo As PropertyInfo
-
-            propertyType = [property].GetType()
-            propertyInfo = propertyType.GetProperty(propertyName)
-            propertyInfo.SetValue([property], value)
+            SetBindProperty([property].GetType().GetProperty(thisPropertyName).GetValue([property], Nothing), propertyName, value)
+        Else ' Bottom property level
+            ' Set the value to this (bottom) property
+            [property].GetType().GetProperty(propertyName).SetValue([property], value)
         End If
 
     End Sub
 
-    Private Function GetBindPropertyType(ByVal propertyType As Type, ByVal propertyName As String) As Type
+    Private Function GetBindPropertyType(ByVal propertyType As Type, ByVal propertyName As String, ByVal columnName As String) As Type
         Dim retValue As Type = Nothing
 
+        ' If there are further property nest levels
         If propertyName.Contains(".") Then
-            Dim arrayProperties() As PropertyInfo
-            Dim leftPropertyName As String
+            Dim thisPropertyName As String
 
-            leftPropertyName = propertyName.Substring(0, propertyName.IndexOf("."))
-            arrayProperties = propertyType.GetProperties()
+            thisPropertyName = propertyName.Substring(0, propertyName.IndexOf("."))
+            propertyName = propertyName.Substring(propertyName.IndexOf(".") + 1)
 
-            For Each propertyInfo As PropertyInfo In arrayProperties
-                If propertyInfo.Name = leftPropertyName Then
-                    retValue = GetBindPropertyType(propertyInfo.PropertyType, propertyName.Substring(propertyName.IndexOf(".") + 1))
-                    Exit For
-                End If
-            Next propertyInfo
-        Else
+            retValue = GetBindPropertyType(propertyType.GetProperty(thisPropertyName).PropertyType, propertyName, columnName)
+        Else ' Bottom property level
             Dim propertyInfo As PropertyInfo
 
             propertyInfo = propertyType.GetProperty(propertyName)
@@ -101,10 +81,15 @@ Public Class MultiSourceGrid
     Private Sub MultiSourceGrid_RowsAdded(sender As Object, e As DataGridViewRowsAddedEventArgs) Handles Me.RowsAdded
         If Rows(e.RowIndex).DataBoundItem Is Nothing Then Exit Sub
 
+        ' Clear the BindPropertyLists so Add can't throw exception
+        BindPropertyLists.Clear()
+
         For Each col As DataGridViewColumn In Columns
             If col.DataPropertyName.Contains(".") Then
                 ' HACK: testing adding column valuetype
-                col.ValueType = GetBindPropertyType(Rows(0).DataBoundItem.GetType, col.DataPropertyName)
+                ' Create new (empty) list for this column in 
+                BindPropertyLists.Add(col.Name, New List(Of String))
+                col.ValueType = GetBindPropertyType(Rows(0).DataBoundItem.GetType, col.DataPropertyName, col.Name)
 
                 ' Insert the values from 'complex bound' source objects
                 For i As Integer = e.RowIndex To e.RowIndex + e.RowCount - 1
