@@ -1,6 +1,5 @@
 ﻿Imports System.Linq.Dynamic
 Imports System.Reflection
-Imports EJControls
 
 Public Class EJGeneralBomTable
     Private _db As EJData.CorporateEntities
@@ -37,13 +36,12 @@ Public Class EJGeneralBomTable
             Dim colS As DataGridViewColumn = DataGridView1.Columns.Item("MCS000Column").Clone
             colS.Name = "MCS" & mc & "Column"
             colS.HeaderText = "S" & mc
-            colS.DataPropertyName = "(" & mc & "S)"
+            colS.DataPropertyName = "MachineItems.Where(""MachineID = " & mc & """).FirstOrDefault().Qty"
             DataGridView1.Columns.Insert(0, colS)
 
             Dim col As DataGridViewColumn = DataGridView1.Columns.Item("MC000Column").Clone
             col.Name = "MC" & mc & "Column"
             col.HeaderText = mc
-            col.DataPropertyName = "(" & mc & ")"
             DataGridView1.Columns.Insert(0, col)
         Next
 
@@ -188,37 +186,5 @@ Public Class EJGeneralBomTable
             Dim info() As PropertyInfo = GetType(EJData.Item).GetProperties
             Dim info2() As MethodInfo = GetType(EJData.Item).GetMethods
         End If
-    End Sub
-
-    Private Sub DataGridView1_CustomDataGet(sender As MultiSourceGrid, e As MultiSourceGrid.CustomDataGetSetEventArgs, ByRef returnValue As Object) Handles DataGridView1.CustomDataGet
-        Try
-            If e.Column.DataPropertyName.Contains("S") Then
-                ' HACK: machine number needs to be worked out
-                returnValue = CType(e.RowBoundItem, EJData.Item).MachineItems.Where("MachineID = 248").FirstOrDefault.Status
-            Else
-                returnValue = CType(e.RowBoundItem, EJData.Item).MachineItems.Where("MachineID = 248").FirstOrDefault.Qty
-            End If
-        Catch
-        End Try
-    End Sub
-
-    Private Sub DataGridView1_CustomDataGetType(sender As MultiSourceGrid, e As MultiSourceGrid.CustomDataGetSetEventArgs, ByRef returnType As Type) Handles DataGridView1.CustomDataGetType
-        If e.Column.DataPropertyName.Contains("S") Then
-            returnType = GetType(String)
-        Else
-            returnType = GetType(Integer)
-        End If
-    End Sub
-
-    Private Sub DataGridView1_CustomDataSet(sender As MultiSourceGrid, e As MultiSourceGrid.CustomDataGetSetEventArgs) Handles DataGridView1.CustomDataSet
-        Try
-            If e.Column.DataPropertyName.Contains("S") Then
-                ' HACK: machine number needs to be worked out
-                CType(e.RowBoundItem, EJData.Item).MachineItems.Where("MachineID = 248").FirstOrDefault.Status = e.Value
-            Else
-                CType(e.RowBoundItem, EJData.Item).MachineItems.Where("MachineID = 248").FirstOrDefault.Qty = e.Value
-            End If
-        Catch
-        End Try
     End Sub
 End Class
