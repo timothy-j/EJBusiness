@@ -1,5 +1,5 @@
 ﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
-Partial Class MultiSourceGrid
+Partial Class NestedSourceGrid
     Inherits System.Windows.Forms.DataGridView
 
     'UserControl overrides dispose to clean up the component list.

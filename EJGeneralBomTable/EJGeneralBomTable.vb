@@ -4,7 +4,9 @@ Imports System.Reflection
 Public Class EJGeneralBomTable
     Private _db As EJData.CorporateEntities
     Private _machines As List(Of Short)
+    Private _initialisingGrid As Boolean
     Public Property MachineType() As String
+
 
     Private _currRow As New List(Of Object) ' row values for restoring row if edit is cancelled
     Private _getRowValues As Boolean ' indicates that row values should be saved to enable edit to be cancelled
@@ -36,17 +38,18 @@ Public Class EJGeneralBomTable
             Dim colS As DataGridViewColumn = DataGridView1.Columns.Item("MCS000Column").Clone
             colS.Name = "MCS" & mc & "Column"
             colS.HeaderText = "S" & mc
+            colS.ValueType = GetType(String)
             DataGridView1.Columns.Insert(0, colS)
 
             Dim col As DataGridViewColumn = DataGridView1.Columns.Item("MC000Column").Clone
             col.Name = "MC" & mc & "Column"
             col.HeaderText = mc
+            col.ValueType = GetType(EJData.MachineItem).GetProperty("Qty").PropertyType
             DataGridView1.Columns.Insert(0, col)
         Next
 
         DataGridView1.Columns.Item("MC000Column").Visible = False
         DataGridView1.Columns.Item("MCS000Column").Visible = False
-        'DataGridView1.DoubleBuffered = True
 
         Dim Bom As IQueryable(Of EJData.Item) = From i In _db.Items.Include("MachineItems").Include("Part")
                                                 Order By i.Type, i.Item1
@@ -59,19 +62,22 @@ Public Class EJGeneralBomTable
     End Sub
 
     Private Sub DataGridView1_RowsAdded(sender As Object, e As DataGridViewRowsAddedEventArgs) Handles DataGridView1.RowsAdded
-        'If DataGridView1.Rows(e.RowIndex).DataBoundItem Is Nothing Then Exit Sub
+        If DataGridView1.Rows(e.RowIndex).DataBoundItem Is Nothing Then Exit Sub
 
-        '' Add data to machines columns
-        'For i As Integer = e.RowIndex To e.RowIndex + e.RowCount - 1
-        '    For Each mc In _machines
-        '        Dim m = (From mi In CType(DataGridView1.Rows(i).DataBoundItem, EJData.Item).MachineItems
-        '                 Where mi.MachineID = mc
-        '                 Select mi.Qty, mi.Status).FirstOrDefault
-        '        If m Is Nothing Then Continue For
-        '        DataGridView1.Rows(i).Cells("MC" & mc & "Column").Value = m.Qty
-        '        DataGridView1.Rows(i).Cells("MCS" & mc & "Column").Value = m.Status
-        '    Next
-        'Next
+        ' Add data to machines columns
+        _initialisingGrid = True
+        For i As Integer = e.RowIndex To e.RowIndex + e.RowCount - 1
+            For Each mc In _machines
+                Dim m = (From mi In CType(DataGridView1.Rows(i).DataBoundItem, EJData.Item).MachineItems
+                         Where mi.MachineID = mc
+                         Select mi.Qty, mi.Status).FirstOrDefault
+                If m Is Nothing Then Continue For
+                DataGridView1.Rows(i).Cells("MC" & mc & "Column").Value = m.Qty
+                DataGridView1.Rows(i).Cells("MCS" & mc & "Column").Value = m.Status
+            Next
+        Next
+
+        _initialisingGrid = False
 
     End Sub
 
@@ -184,6 +190,38 @@ Public Class EJGeneralBomTable
             End Try
             Dim info() As PropertyInfo = GetType(EJData.Item).GetProperties
             Dim info2() As MethodInfo = GetType(EJData.Item).GetMethods
+        End If
+    End Sub
+
+    Private Sub DataGridView1_CellValueChanged(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridView1.CellValueChanged
+        If Not _initialisingGrid Then
+            If DataGridView1.Columns(e.ColumnIndex).Name.StartsWith("MC") Then
+                If DataGridView1.Rows.Item(e.RowIndex).DataBoundItem IsNot Nothing Then
+                    For Each mc In _machines
+                        If DataGridView1.Columns(e.ColumnIndex).Name = "MC" & mc & "Column" Then
+                            CType(DataGridView1.Rows.Item(e.RowIndex).DataBoundItem, EJData.Item).MachineItems.Where("MachineID = " & mc).FirstOrDefault.Qty _
+                                = DataGridView1.Rows.Item(e.RowIndex).Cells.Item("MC" & mc & "Column").Value
+                        ElseIf DataGridView1.Columns(e.ColumnIndex).Name = "MCS" & mc & "Column" Then
+                            CType(DataGridView1.Rows.Item(e.RowIndex).DataBoundItem, EJData.Item).MachineItems.Where("MachineID = " & mc).FirstOrDefault.Status _
+                                = DataGridView1.Rows.Item(e.RowIndex).Cells.Item("MCS" & mc & "Column").Value
+                        End If
+                    Next
+                End If
+            End If
+        End If
+    End Sub
+
+    Private Sub DataGridView1_CellParsing(sender As Object, e As DataGridViewCellParsingEventArgs) Handles DataGridView1.CellParsing
+        ' Send null to nullable values
+        If DataGridView1.Columns(e.ColumnIndex).Name.StartsWith("MC") Then
+            If e.Value = "" Then
+                ' Is type nullable?
+                If Nullable.GetUnderlyingType(e.DesiredType) IsNot Nothing Then
+                    ' Some columns causing string conversion data error on null. TODO: try putting e.value to cell value and then to nothing?
+                    e.Value = Nothing
+                    e.ParsingApplied = True
+                End If
+            End If
         End If
     End Sub
 End Class

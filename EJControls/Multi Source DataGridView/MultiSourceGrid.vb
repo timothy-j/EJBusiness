@@ -1,7 +1,7 @@
 ﻿Imports System.Reflection
 Imports System.Linq.Dynamic
 
-Public Class MultiSourceGrid
+Public Class NestedSourceGrid
 
     Private _commitAttempt As Boolean
 
@@ -86,8 +86,7 @@ Public Class MultiSourceGrid
 
         For Each col As DataGridViewColumn In Columns
             If col.DataPropertyName.Contains(".") Then
-                ' HACK: testing adding column valuetype
-                ' Create new (empty) list for this column in 
+                ' Create new (empty) list for this column in BindPropertyLists
                 BindPropertyLists.Add(col.Name, New List(Of String))
                 col.ValueType = GetBindPropertyType(Rows(0).DataBoundItem.GetType, col.DataPropertyName, col.Name)
 
@@ -95,23 +94,6 @@ Public Class MultiSourceGrid
                 For i As Integer = e.RowIndex To e.RowIndex + e.RowCount - 1
                     Rows.Item(i).Cells.Item(col.Index).Value = GetBindProperty(Rows(i).DataBoundItem, col.DataPropertyName)
                 Next
-
-                ' HACK: TODO: make auto version where ###BindProperty() blocks work with methods as well as properties
-#Region "Input column hack"
-            ElseIf col.Name = "MC248Column" Then
-                'MsgBox("col")
-                For i As Integer = e.RowIndex To e.RowIndex + e.RowCount - 1
-                    Dim mi As EJData.MachineItem = CType(Rows(i).DataBoundItem, EJData.Item).MachineItems.Where("MachineID = 248").FirstOrDefault
-                    If mi Is Nothing Then Continue For
-                    Rows.Item(i).Cells.Item(col.Index).Value = CType(Rows(i).DataBoundItem, EJData.Item).MachineItems.Where("MachineID = 248").FirstOrDefault.Qty
-                Next
-            ElseIf col.Name = "MCS248Column" Then
-                For i As Integer = e.RowIndex To e.RowIndex + e.RowCount - 1
-                    Dim mi As EJData.MachineItem = CType(Rows(i).DataBoundItem, EJData.Item).MachineItems.Where("MachineID = 248").FirstOrDefault
-                    If mi Is Nothing Then Continue For
-                    Rows.Item(i).Cells.Item(col.Index).Value = CType(Rows(i).DataBoundItem, EJData.Item).MachineItems.Where("MachineID = 248").FirstOrDefault.Status
-                Next
-#End Region
             End If
 
         Next

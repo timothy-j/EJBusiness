@@ -32,7 +32,7 @@ Partial Class EJGeneralBomTable
         Dim DataGridViewCellStyle15 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle16 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Me.GeneralBindingSource = New System.Windows.Forms.BindingSource(Me.components)
-        Me.DataGridView1 = New EJControls.MultiSourceGrid()
+        Me.DataGridView1 = New EJControls.NestedSourceGrid()
         Me.MC000Column = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.MCS000Column = New EJControls.EJTextBoxColumn()
         Me.StockColumn = New System.Windows.Forms.DataGridViewTextBoxColumn()
@@ -218,7 +218,7 @@ Partial Class EJGeneralBomTable
 
     End Sub
     Friend WithEvents GeneralBindingSource As BindingSource
-    Friend WithEvents DataGridView1 As EJControls.MultiSourceGrid
+    Friend WithEvents DataGridView1 As EJControls.NestedSourceGrid
     Friend WithEvents MC000Column As DataGridViewTextBoxColumn
     Friend WithEvents MCS000Column As EJControls.EJTextBoxColumn
     Friend WithEvents StockColumn As DataGridViewTextBoxColumn
