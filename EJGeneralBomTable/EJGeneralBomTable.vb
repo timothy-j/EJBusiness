@@ -6,6 +6,7 @@ Public Class EJGeneralBomTable
     Private _db As EJData.CorporateEntities
     Private _machines As List(Of Short)
     Private _initialisingGrid As Boolean
+    Private _editMouseLocation As Point
     Public Property MachineType() As String = ""
 
     <Category("Appearance"), Description("Defines the cell text colour of child rows")>
@@ -238,6 +239,69 @@ Public Class EJGeneralBomTable
                     e.ParsingApplied = True
                 End If
             End If
+        End If
+    End Sub
+
+    Private Sub DataGridView1_EditingControlShowing(sender As Object, e As DataGridViewEditingControlShowingEventArgs) Handles DataGridView1.EditingControlShowing
+        e.Control.ContextMenuStrip = DefaultContextStrip
+        ' HACK: consider other edit control types?
+        Dim ctl As TextBox = CType(e.Control, TextBox)
+        Dim pt As Point = e.Control.PointToClient(_editMouseLocation)
+        ctl.SelectionStart = ctl.GetCharIndexFromPosition(_editMouseLocation)
+    End Sub
+
+    Private Sub CopyToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles CopyToolStripMenuItem.Click
+        If DataGridView1.IsCurrentCellInEditMode Then
+            CType(DataGridView1.EditingControl, TextBox).Copy()
+        End If
+    End Sub
+
+    Private Sub CutToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles CutToolStripMenuItem.Click
+        If DataGridView1.IsCurrentCellInEditMode Then
+            CType(DataGridView1.EditingControl, TextBox).Cut()
+        End If
+    End Sub
+
+    Private Sub PasteToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles PasteToolStripMenuItem.Click
+        If DataGridView1.IsCurrentCellInEditMode Then
+            CType(DataGridView1.EditingControl, TextBox).Paste()
+        End If
+    End Sub
+
+    Private Sub UndoToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles UndoToolStripMenuItem.Click
+        If DataGridView1.IsCurrentCellInEditMode Then
+            CType(DataGridView1.EditingControl, TextBox).Undo()
+        End If
+    End Sub
+
+    Private Sub DefaultContextStrip_Opening(sender As Object, e As CancelEventArgs) Handles DefaultContextStrip.Opening
+        If DataGridView1.IsCurrentCellInEditMode Then
+            If EJHelpers.IsNumericType(DataGridView1.CurrentCell.ValueType) Then
+                ' TODO: Show only numeric options
+                'DefaultContextStrip.
+            ElseIf DataGridView1.CurrentCell.ValueType = GetType(DateTime) Or Nullable.GetUnderlyingType(DataGridView1.CurrentCell.ValueType) = GetType(DateTime) Then
+                ' TODO: Show only date options
+            ElseIf DataGridView1.CurrentCell.ValueType = GetType(String) Then
+                ' TODO: Show only string options
+            Else
+                ' Assume data can only be equal or not equal
+            End If
+        End If
+    End Sub
+
+    Private Sub DataGridView1_CellMouseDown(sender As Object, e As DataGridViewCellMouseEventArgs) Handles DataGridView1.CellMouseDown
+        ' If click was on a header..
+        If e.RowIndex < 0 Or e.ColumnIndex < 0 Then Exit Sub
+
+        Dim cell As DataGridViewCell = DataGridView1.Rows.Item(e.RowIndex).Cells.Item(e.ColumnIndex)
+        If cell.IsInEditMode Or DataGridView1.SelectedCells.Count > 1 Then
+            Exit Sub
+        Else
+
+            _editMouseLocation = e.Location
+            DataGridView1.CurrentCell = cell
+            ' Mouse location must be se before this call, as this is when cell edit is called
+            DataGridView1.BeginEdit(False)
         End If
     End Sub
 End Class

@@ -51,14 +51,14 @@ Partial Class OrderView
         Me.ReportViewer1.Name = "ReportViewer1"
         Me.ReportViewer1.PageCountMode = Microsoft.Reporting.WinForms.PageCountMode.Actual
         Me.ReportViewer1.ServerReport.BearerToken = Nothing
-        Me.ReportViewer1.Size = New System.Drawing.Size(739, 386)
+        Me.ReportViewer1.Size = New System.Drawing.Size(1097, 871)
         Me.ReportViewer1.TabIndex = 3
         '
         'OrderView
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(739, 386)
+        Me.ClientSize = New System.Drawing.Size(1097, 871)
         Me.Controls.Add(Me.Button1)
         Me.Controls.Add(Me.ReportViewer1)
         Me.Name = "OrderView"

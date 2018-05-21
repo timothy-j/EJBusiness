@@ -145,4 +145,26 @@ Public Module EJHelpers
         Return True
     End Function
 
+    Private NumericTypes As New HashSet(Of Type) From {
+    GetType(Integer),
+    GetType(UInteger),
+    GetType(Double),
+    GetType(Decimal),
+    GetType(Single)
+    } ' TODO: add other numeric types as per https://stackoverflow.com/questions/1749966/c-sharp-how-to-determine-whether-a-type-is-a-number:
+    'Case TypeCode.Byte
+    'Case TypeCode.SByte
+    'Case TypeCode.UInt16
+    'Case TypeCode.UInt32
+    'Case TypeCode.UInt64
+    'Case TypeCode.Int16
+    'Case TypeCode.Int32
+    'Case TypeCode.Int64
+    'Case TypeCode.Decimal
+    'Case TypeCode.Double
+    'Case TypeCode.Single
+
+    Public Function IsNumericType(ByVal type As Type) As Boolean
+        Return NumericTypes.Contains(type) OrElse NumericTypes.Contains(Nullable.GetUnderlyingType(type))
+    End Function
 End Module
