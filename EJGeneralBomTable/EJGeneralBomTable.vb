@@ -6,7 +6,7 @@ Public Class EJGeneralBomTable
     Private _db As EJData.CorporateEntities
     Private _machines As List(Of Short)
     Private _initialisingGrid As Boolean
-    Public Property MachineType() As String
+    Public Property MachineType() As String = ""
 
     <Category("Appearance"), Description("Defines the cell text colour of child rows")>
     Public Property ChildRowTextColor As Color = Color.Gray
@@ -30,7 +30,7 @@ Public Class EJGeneralBomTable
 
         _db = EJData.DataHelpers.GetNewDbContext
 
-        MachineType = "RF"
+        If MachineType = "" Then MachineType = InputBox("Enter machine type (e.g. CW or RF, not W3 or R2)")
 
         _machines = (From m In _db.Machines
                      Where m.Supplied = False And m.Type = MachineType

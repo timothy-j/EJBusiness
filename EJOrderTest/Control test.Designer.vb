@@ -22,16 +22,28 @@ Partial Class Control_test
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
+        Me.PartsTableControl1 = New EJParts.PartsTableControl()
         Me.SuspendLayout()
+        '
+        'PartsTableControl1
+        '
+        Me.PartsTableControl1.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.PartsTableControl1.Location = New System.Drawing.Point(0, 0)
+        Me.PartsTableControl1.Name = "PartsTableControl1"
+        Me.PartsTableControl1.Size = New System.Drawing.Size(800, 450)
+        Me.PartsTableControl1.TabIndex = 0
         '
         'Control_test
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(800, 450)
+        Me.Controls.Add(Me.PartsTableControl1)
         Me.Name = "Control_test"
         Me.Text = "Control_test"
         Me.ResumeLayout(False)
 
     End Sub
+
+    Friend WithEvents PartsTableControl1 As EJParts.PartsTableControl
 End Class

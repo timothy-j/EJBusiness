@@ -50,6 +50,9 @@
     <Reference Include="EJHelpers">
       <HintPath>..\EJHelpers\bin\Debug\EJHelpers.dll</HintPath>
     </Reference>
+    <Reference Include="EJItems">
+      <HintPath>..\EJItems\bin\Debug\EJItems.dll</HintPath>
+    </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
@@ -124,12 +127,6 @@
     <Compile Include="GeneralTableTest.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="OrderView.Designer.vb">
-      <DependentUpon>OrderView.vb</DependentUpon>
-    </Compile>
-    <Compile Include="OrderView.vb">
-      <SubType>Form</SubType>
-    </Compile>
     <Compile Include="OrderForm.vb">
       <SubType>Form</SubType>
     </Compile>
@@ -174,9 +171,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="GeneralTableTest.resx">
       <DependentUpon>GeneralTableTest.vb</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="OrderView.resx">
-      <DependentUpon>OrderView.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="OrderForm.resx">
       <DependentUpon>OrderForm.vb</DependentUpon>
@@ -232,6 +226,14 @@
     <ProjectReference Include="..\EJGeneralBomTable\EJGeneralBomTable.vbproj">
       <Project>{8A1BA392-5A99-4F46-A932-0D692D83AAD8}</Project>
       <Name>EJGeneralBomTable</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\EJOrderView\EJOrderView.vbproj">
+      <Project>{1954720a-839f-486f-a1c5-b4de287c0f77}</Project>
+      <Name>EJOrderView</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\EJParts\EJParts.vbproj">
+      <Project>{5C596F25-9E21-46B6-899A-46E284B380A3}</Project>
+      <Name>EJParts</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

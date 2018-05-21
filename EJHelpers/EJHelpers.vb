@@ -22,9 +22,10 @@ Public Module EJHelpers
             ElseIf InStr(DrawingType, "#") Then '> 0 Then
                 ' TO DO: put base path in user settings
                 ' Converts #MC-AS00 to MC\MC-AS00
-                Dim partString As String = Right(DrawingType, Len(DrawingType) - InStr(DrawingType, "#"))
+                Dim partString As String = DrawingType.Substring(DrawingType.IndexOf("#") + 1) 'Right(DrawingType, Len(DrawingType) - InStr(DrawingType, "#"))
                 Dim folderString As String = ""
-                If Not (InStr(partString, "\") Or InStr(partString, "/")) Then folderString = partString.Substring(0, partString.IndexOf("-")) + "\"
+                'If Not (InStr(partString, "\") Or InStr(partString, "/")) Then folderString = partString.Substring(0, partString.IndexOf("-")) + "\"
+                If Not (partString.Contains("\") Or partString.Contains("/")) Then folderString = partString.Substring(0, partString.IndexOf("-")) + "\"
                 dwgString = "\\SERVER2\Business\Drawings\" + folderString + partString
                 Process.Start(dwgString)
                 Return False

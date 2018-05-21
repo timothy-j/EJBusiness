@@ -19,8 +19,7 @@
     End Sub
 
     Private Sub btnReport_Click(sender As Object, e As EventArgs) Handles btnReport.Click
-        Dim rpt = New OrderView
-        'rpt.Order = 2456
+        Dim rpt = New EJOrderView.OrderView
         rpt.Show()
     End Sub
 
