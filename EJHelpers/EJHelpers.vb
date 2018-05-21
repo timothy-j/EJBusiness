@@ -130,4 +130,18 @@ Public Module EJHelpers
         'End Try
         Return dwgString
     End Function
+
+    Function OpenOrderView(Status As String) As Boolean
+        ' HACK: TODO: get order number from string or warn if not available
+        Dim order As String = CInt(Status.Substring(Status.IndexOf("-") + 1))
+        If order = 0 Then
+            MsgBox("No order number specified")
+            Return False
+        End If
+        Dim frm As New EJOrderView.OrderView
+        frm.Order = order
+        frm.Show()
+        Return True
+    End Function
+
 End Module

@@ -1,4 +1,5 @@
-﻿Imports System.Linq.Dynamic
+﻿Imports System.ComponentModel
+Imports System.Linq.Dynamic
 Imports System.Reflection
 
 Public Class EJGeneralBomTable
@@ -6,6 +7,9 @@ Public Class EJGeneralBomTable
     Private _machines As List(Of Short)
     Private _initialisingGrid As Boolean
     Public Property MachineType() As String
+
+    <Category("Appearance"), Description("Defines the cell text colour of child rows")>
+    Public Property ChildRowTextColor As Color = Color.Gray
 
 
     Private _currRow As New List(Of Object) ' row values for restoring row if edit is cancelled
@@ -26,7 +30,7 @@ Public Class EJGeneralBomTable
 
         _db = EJData.DataHelpers.GetNewDbContext
 
-        MachineType = "HX"
+        MachineType = "RF"
 
         _machines = (From m In _db.Machines
                      Where m.Supplied = False And m.Type = MachineType
@@ -51,9 +55,12 @@ Public Class EJGeneralBomTable
         DataGridView1.Columns.Item("MC000Column").Visible = False
         DataGridView1.Columns.Item("MCS000Column").Visible = False
 
+        ' HACK: TODO: get this to work. should be Parent != top level item (rather than Is Nothing)
         Dim Bom As IQueryable(Of EJData.Item) = From i In _db.Items.Include("MachineItems").Include("Part")
-                                                Order By i.Type, i.Item1
-                                                Where i.Type = MachineType
+                                                Let topLevel = If(i.Parent Is Nothing, i.Item1, i.Parent.Item1 + "_")
+                                                Order By topLevel, i.Item1
+                                                Where i.Type = MachineType And i.Status <> "D"
+                                                Select i
 
         GeneralBindingSource.DataSource = Bom.ToList
 
@@ -67,6 +74,10 @@ Public Class EJGeneralBomTable
         ' Add data to machines columns
         _initialisingGrid = True
         For i As Integer = e.RowIndex To e.RowIndex + e.RowCount - 1
+
+            ' Make assembly items grey
+            If DataGridView1.Rows.Item(i).DataBoundItem.Parent IsNot Nothing Then DataGridView1.Rows.Item(i).DefaultCellStyle.ForeColor = ChildRowTextColor
+
             For Each mc In _machines
                 Dim m = (From mi In CType(DataGridView1.Rows(i).DataBoundItem, EJData.Item).MachineItems
                          Where mi.MachineID = mc
@@ -171,6 +182,9 @@ Public Class EJGeneralBomTable
                 EJHelpers.FollowDrawingLink(.Item("DrawingTypeColumn").Value, .Item("PartColumn").Value)
             End With
         End If
+        If DataGridView1.Columns.Item(e.ColumnIndex).Name.StartsWith("MCS") Then
+            EJHelpers.OpenOrderView(DataGridView1.Rows.Item(e.RowIndex).Cells.Item(e.ColumnIndex).Value)
+        End If
     End Sub
 
     Private Sub DataGridView1_MouseClick(sender As Object, e As MouseEventArgs) Handles DataGridView1.MouseClick
@@ -196,14 +210,16 @@ Public Class EJGeneralBomTable
     Private Sub DataGridView1_CellValueChanged(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridView1.CellValueChanged
         If Not _initialisingGrid Then
             If DataGridView1.Columns(e.ColumnIndex).Name.StartsWith("MC") Then
-                If DataGridView1.Rows.Item(e.RowIndex).DataBoundItem IsNot Nothing Then
+                Dim rowItem As EJData.Item = DataGridView1.Rows.Item(e.RowIndex).DataBoundItem
+                ' HACK: TODO: get this to work. should be Parent != top level item
+                If rowItem.Parent IsNot Nothing Then
                     For Each mc In _machines
                         If DataGridView1.Columns(e.ColumnIndex).Name = "MC" & mc & "Column" Then
-                            CType(DataGridView1.Rows.Item(e.RowIndex).DataBoundItem, EJData.Item).MachineItems.Where("MachineID = " & mc).FirstOrDefault.Qty _
-                                = DataGridView1.Rows.Item(e.RowIndex).Cells.Item("MC" & mc & "Column").Value
+                            rowItem.MachineItems.Where("MachineID = " & mc).FirstOrDefault.Qty _
+                            = DataGridView1.Rows.Item(e.RowIndex).Cells.Item("MC" & mc & "Column").Value
                         ElseIf DataGridView1.Columns(e.ColumnIndex).Name = "MCS" & mc & "Column" Then
-                            CType(DataGridView1.Rows.Item(e.RowIndex).DataBoundItem, EJData.Item).MachineItems.Where("MachineID = " & mc).FirstOrDefault.Status _
-                                = DataGridView1.Rows.Item(e.RowIndex).Cells.Item("MCS" & mc & "Column").Value
+                            rowItem.MachineItems.Where("MachineID = " & mc).FirstOrDefault.Status _
+                            = DataGridView1.Rows.Item(e.RowIndex).Cells.Item("MCS" & mc & "Column").Value
                         End If
                     Next
                 End If

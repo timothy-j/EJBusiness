@@ -25,7 +25,7 @@
     End Sub
 
     Private Sub GridTest_Click(sender As Object, e As EventArgs) Handles GridTest.Click
-        Dim o = New DGTest
+        Dim o = New GeneralTableTest
         o.Show()
     End Sub
 End Class

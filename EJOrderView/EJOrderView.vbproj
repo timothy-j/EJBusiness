@@ -1,37 +1,32 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{96115991-0E57-4E07-AB6A-9E6417D38CC3}</ProjectGuid>
+    <ProjectGuid>{1954720A-839F-486F-A1C5-B4DE287C0F77}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <StartupObject>EJBusiness.My.MyApplication</StartupObject>
-    <RootNamespace>EJBusiness</RootNamespace>
-    <AssemblyName>EJOrderTest</AssemblyName>
-    <FileAlignment>512</FileAlignment>
+    <StartupObject>EJOrderView.My.MyApplication</StartupObject>
+    <RootNamespace>EJOrderView</RootNamespace>
+    <AssemblyName>EJOrderView</AssemblyName>
     <MyType>WindowsForms</MyType>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
-    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <DefineDebug>true</DefineDebug>
     <DefineTrace>true</DefineTrace>
     <OutputPath>bin\Debug\</OutputPath>
-    <DocumentationFile>EJOrderTest.xml</DocumentationFile>
+    <DocumentationFile>EJOrderView.xml</DocumentationFile>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <DefineDebug>false</DefineDebug>
     <DefineTrace>true</DefineTrace>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
-    <DocumentationFile>EJOrderTest.xml</DocumentationFile>
+    <DocumentationFile>EJOrderView.xml</DocumentationFile>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
   </PropertyGroup>
   <PropertyGroup>
@@ -47,15 +42,10 @@
     <OptionInfer>On</OptionInfer>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="EJHelpers">
-      <HintPath>..\EJHelpers\bin\Debug\EJHelpers.dll</HintPath>
-    </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
     </Reference>
     <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.ReportViewer.Common, Version=14.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
@@ -75,22 +65,21 @@
     </Reference>
     <Reference Include="Microsoft.SqlServer.Types, Version=14.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.SqlServer.Types.14.0.314.76\lib\net40\Microsoft.SqlServer.Types.dll</HintPath>
-      <Private>True</Private>
     </Reference>
-    <Reference Include="PresentationCore" />
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Data" />
     <Reference Include="System.Deployment" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Linq.Dynamic, Version=1.0.6132.35681, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Linq.Dynamic.1.0.7\lib\net40\System.Linq.Dynamic.dll</HintPath>
     </Reference>
+    <Reference Include="System.Web.Services" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="System.Net.Http" />
   </ItemGroup>
   <ItemGroup>
     <Import Include="Microsoft.VisualBasic" />
@@ -106,35 +95,11 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Control test.Designer.vb">
-      <DependentUpon>Control test.vb</DependentUpon>
-    </Compile>
-    <Compile Include="Control test.vb">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="DGTest.Designer.vb">
-      <DependentUpon>DGTest.vb</DependentUpon>
-    </Compile>
-    <Compile Include="DGTest.vb">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="GeneralTableTest.Designer.vb">
-      <DependentUpon>GeneralTableTest.vb</DependentUpon>
-    </Compile>
-    <Compile Include="GeneralTableTest.vb">
+    <Compile Include="OrderView.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="OrderView.Designer.vb">
       <DependentUpon>OrderView.vb</DependentUpon>
-    </Compile>
-    <Compile Include="OrderView.vb">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="OrderForm.vb">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="OrderForm.Designer.vb">
-      <DependentUpon>OrderForm.vb</DependentUpon>
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="My Project\AssemblyInfo.vb" />
@@ -152,34 +117,13 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <Compile Include="QuoteForm.Designer.vb">
-      <DependentUpon>QuoteForm.vb</DependentUpon>
-    </Compile>
-    <Compile Include="QuoteForm.vb">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Startup.Designer.vb">
-      <DependentUpon>Startup.vb</DependentUpon>
-    </Compile>
-    <Compile Include="Startup.vb">
-      <SubType>Form</SubType>
-    </Compile>
+    <None Include="My Project\DataSources\EJData.FlatOrder.datasource" />
+    <None Include="packages.config" />
+    <None Include="welcome.mht" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Control test.resx">
-      <DependentUpon>Control test.vb</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="DGTest.resx">
-      <DependentUpon>DGTest.vb</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="GeneralTableTest.resx">
-      <DependentUpon>GeneralTableTest.vb</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="OrderView.resx">
       <DependentUpon>OrderView.vb</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="OrderForm.resx">
-      <DependentUpon>OrderForm.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="My Project\Resources.resx">
       <Generator>VbMyResourcesResXFileCodeGenerator</Generator>
@@ -187,14 +131,8 @@
       <CustomToolNamespace>My.Resources</CustomToolNamespace>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="QuoteForm.resx">
-      <DependentUpon>QuoteForm.vb</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="SqlServerTypes\TestRpt.rdlc">
+    <EmbeddedResource Include="TestRpt.rdlc">
       <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Startup.resx">
-      <DependentUpon>Startup.vb</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
@@ -202,37 +140,12 @@
       <Generator>MyApplicationCodeGenerator</Generator>
       <LastGenOutput>Application.Designer.vb</LastGenOutput>
     </None>
-    <None Include="My Project\DataSources\EJData.Customer.datasource" />
-    <None Include="My Project\DataSources\EJData.FlatOrder.datasource" />
-    <None Include="My Project\DataSources\EJData.Item.datasource" />
-    <None Include="My Project\DataSources\EJData.Machine.datasource" />
-    <None Include="My Project\DataSources\EJData.Order.datasource" />
-    <None Include="My Project\DataSources\EJData.Quote.datasource" />
-    <None Include="My Project\DataSources\EJData.Supplier.datasource" />
     <None Include="My Project\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <CustomToolNamespace>My</CustomToolNamespace>
       <LastGenOutput>Settings.Designer.vb</LastGenOutput>
     </None>
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\EJControls\EJControls.vbproj">
-      <Project>{955bac9b-1322-4fe3-b73d-1a56e2f7c0b9}</Project>
-      <Name>EJControls</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\EJData\EJData.vbproj">
-      <Project>{89227503-7a55-40c3-8127-e8098787d3a0}</Project>
-      <Name>EJData</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\EJEmail\EJEmail.vbproj">
-      <Project>{51763fd1-634a-49f1-8681-024b8837e5a7}</Project>
-      <Name>EJEmail</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\EJGeneralBomTable\EJGeneralBomTable.vbproj">
-      <Project>{8A1BA392-5A99-4F46-A932-0D692D83AAD8}</Project>
-      <Name>EJGeneralBomTable</Name>
-    </ProjectReference>
+    <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="SqlServerTypes\Loader.cs" />
@@ -250,5 +163,22 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\EJData\EJData.vbproj">
+      <Project>{89227503-7a55-40c3-8127-e8098787d3a0}</Project>
+      <Name>EJData</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\EJEmail\EJEmail.vbproj">
+      <Project>{51763fd1-634a-49f1-8681-024b8837e5a7}</Project>
+      <Name>EJEmail</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
 </Project>

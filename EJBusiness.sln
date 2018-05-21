@@ -9,10 +9,6 @@ Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "EJData", "EJData\EJData.vbp
 EndProject
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "EJControls", "EJControls\EJControls.vbproj", "{955BAC9B-1322-4FE3-B73D-1A56E2F7C0B9}"
 EndProject
-Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "EJControlLibrary", "EJControlLibrary\EJControlLibrary.vbproj", "{72D54CA0-69F2-4583-A029-93346F439234}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LinqHelper", "LinqHelper\LinqHelper.csproj", "{E6DB3899-5E08-4317-A251-3CB28F8F6684}"
-EndProject
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "EJEmail", "EJEmail\EJEmail.vbproj", "{51763FD1-634A-49F1-8681-024B8837E5A7}"
 EndProject
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "EJParts", "EJParts\EJParts.vbproj", "{5C596F25-9E21-46B6-899A-46E284B380A3}"
@@ -24,6 +20,8 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{D64B32B0-0FA7-4B84-BF3F-1DB8C178B2CC}"
 EndProject
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "EJHelpers", "EJHelpers\EJHelpers.vbproj", "{5531E03D-7401-468D-B568-ACB62148037D}"
+EndProject
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "EJOrderView", "EJOrderView\EJOrderView.vbproj", "{1954720A-839F-486F-A1C5-B4DE287C0F77}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -43,14 +41,6 @@ Global
 		{955BAC9B-1322-4FE3-B73D-1A56E2F7C0B9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{955BAC9B-1322-4FE3-B73D-1A56E2F7C0B9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{955BAC9B-1322-4FE3-B73D-1A56E2F7C0B9}.Release|Any CPU.Build.0 = Release|Any CPU
-		{72D54CA0-69F2-4583-A029-93346F439234}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{72D54CA0-69F2-4583-A029-93346F439234}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{72D54CA0-69F2-4583-A029-93346F439234}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{72D54CA0-69F2-4583-A029-93346F439234}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E6DB3899-5E08-4317-A251-3CB28F8F6684}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E6DB3899-5E08-4317-A251-3CB28F8F6684}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E6DB3899-5E08-4317-A251-3CB28F8F6684}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E6DB3899-5E08-4317-A251-3CB28F8F6684}.Release|Any CPU.Build.0 = Release|Any CPU
 		{51763FD1-634A-49F1-8681-024B8837E5A7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{51763FD1-634A-49F1-8681-024B8837E5A7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{51763FD1-634A-49F1-8681-024B8837E5A7}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -71,6 +61,10 @@ Global
 		{5531E03D-7401-468D-B568-ACB62148037D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5531E03D-7401-468D-B568-ACB62148037D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5531E03D-7401-468D-B568-ACB62148037D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1954720A-839F-486F-A1C5-B4DE287C0F77}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1954720A-839F-486F-A1C5-B4DE287C0F77}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1954720A-839F-486F-A1C5-B4DE287C0F77}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1954720A-839F-486F-A1C5-B4DE287C0F77}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
