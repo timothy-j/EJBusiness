@@ -27,6 +27,9 @@ Partial Class PartsTableControl
         Dim DataGridViewCellStyle2 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Me.SplitContainer1 = New System.Windows.Forms.SplitContainer()
         Me.DataGridView1 = New System.Windows.Forms.DataGridView()
+        Me.PartBindingSource = New System.Windows.Forms.BindingSource(Me.components)
+        Me.ItemsTableControl2 = New EJItems.ItemsTableControl()
+        Me.Label1 = New System.Windows.Forms.Label()
         Me.Stock = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.PartNo = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.DrawingType = New System.Windows.Forms.DataGridViewTextBoxColumn()
@@ -38,9 +41,6 @@ Partial Class PartsTableControl
         Me.Unit = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.DateChecked = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.OpType = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.PartBindingSource = New System.Windows.Forms.BindingSource(Me.components)
-        Me.ItemsTableControl2 = New EJItems.ItemsTableControl()
-        Me.Label1 = New System.Windows.Forms.Label()
         CType(Me.SplitContainer1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SplitContainer1.Panel1.SuspendLayout()
         Me.SplitContainer1.Panel2.SuspendLayout()
@@ -84,10 +84,36 @@ Partial Class PartsTableControl
         Me.DataGridView1.Size = New System.Drawing.Size(692, 246)
         Me.DataGridView1.TabIndex = 3
         '
+        'PartBindingSource
+        '
+        Me.PartBindingSource.DataSource = GetType(EJData.Part)
+        '
+        'ItemsTableControl2
+        '
+        Me.ItemsTableControl2.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.ItemsTableControl2.DataBindings.Add(New System.Windows.Forms.Binding("PartIDFilter", Me.PartBindingSource, "ID", True, System.Windows.Forms.DataSourceUpdateMode.Never))
+        Me.ItemsTableControl2.Location = New System.Drawing.Point(0, 22)
+        Me.ItemsTableControl2.Name = "ItemsTableControl2"
+        Me.ItemsTableControl2.PartIDFilter = Nothing
+        Me.ItemsTableControl2.Size = New System.Drawing.Size(692, 187)
+        Me.ItemsTableControl2.SplitterDistance = 100
+        Me.ItemsTableControl2.TabIndex = 5
+        '
+        'Label1
+        '
+        Me.Label1.AutoSize = True
+        Me.Label1.Location = New System.Drawing.Point(3, 6)
+        Me.Label1.Name = "Label1"
+        Me.Label1.Size = New System.Drawing.Size(87, 13)
+        Me.Label1.TabIndex = 3
+        Me.Label1.Text = "Associated Items"
+        '
         'Stock
         '
         Me.Stock.DataPropertyName = "Stock"
-        DataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.TopRight
+        DataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
         DataGridViewCellStyle1.Format = "0.##"
         Me.Stock.DefaultCellStyle = DataGridViewCellStyle1
         Me.Stock.HeaderText = "Stock"
@@ -148,7 +174,7 @@ Partial Class PartsTableControl
         'Unit
         '
         Me.Unit.DataPropertyName = "Unit"
-        DataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.TopRight
+        DataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
         DataGridViewCellStyle2.Format = "C2"
         DataGridViewCellStyle2.NullValue = Nothing
         Me.Unit.DefaultCellStyle = DataGridViewCellStyle2
@@ -169,32 +195,6 @@ Partial Class PartsTableControl
         Me.OpType.HeaderText = "OpType"
         Me.OpType.Name = "OpType"
         Me.OpType.Width = 40
-        '
-        'PartBindingSource
-        '
-        Me.PartBindingSource.DataSource = GetType(EJData.Part)
-        '
-        'ItemsTableControl2
-        '
-        Me.ItemsTableControl2.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-            Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.ItemsTableControl2.DataBindings.Add(New System.Windows.Forms.Binding("PartIDFilter", Me.PartBindingSource, "ID", True, System.Windows.Forms.DataSourceUpdateMode.Never))
-        Me.ItemsTableControl2.Location = New System.Drawing.Point(0, 22)
-        Me.ItemsTableControl2.Name = "ItemsTableControl2"
-        Me.ItemsTableControl2.PartIDFilter = Nothing
-        Me.ItemsTableControl2.Size = New System.Drawing.Size(692, 185)
-        Me.ItemsTableControl2.SplitterDistance = 100
-        Me.ItemsTableControl2.TabIndex = 5
-        '
-        'Label1
-        '
-        Me.Label1.AutoSize = True
-        Me.Label1.Location = New System.Drawing.Point(3, 6)
-        Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(87, 13)
-        Me.Label1.TabIndex = 3
-        Me.Label1.Text = "Associated Items"
         '
         'PartsTableControl
         '

@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27004.2009
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "EJOrderTest", "EJOrderTest\EJOrderTest.vbproj", "{96115991-0E57-4E07-AB6A-9E6417D38CC3}"
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "EJBusiness", "EJOrderTest\EJBusiness.vbproj", "{96115991-0E57-4E07-AB6A-9E6417D38CC3}"
 EndProject
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "EJData", "EJData\EJData.vbproj", "{89227503-7A55-40C3-8127-E8098787D3A0}"
 EndProject

@@ -33,6 +33,11 @@ Public Class OrderView
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         _db = EJData.DataHelpers.GetNewDbContext
 
+        ' If there are problems with binding to the report dataset, uncomment the following:
+        'Dim ReportDataSource1 As Microsoft.Reporting.WinForms.ReportDataSource = New Microsoft.Reporting.WinForms.ReportDataSource()
+        'ReportDataSource1.Name = "OrderDS"
+        'ReportDataSource1.Value = Me.FlatOrderBindingSource
+        'Me.ReportViewer1.LocalReport.DataSources.Add(ReportDataSource1)
 
         Dim bs = From o In _db.FlatOrders
                  Where o.Order = Me.Order

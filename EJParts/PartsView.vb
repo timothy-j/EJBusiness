@@ -8,4 +8,8 @@ Public Class PartsView
         ''frm.PartIDFilter = 566
         'Me.Controls.Add(frm)
     End Sub
+
+    Private Sub PartsTableControl1_Load(sender As Object, e As EventArgs) Handles PartsTableControl1.Load
+
+    End Sub
 End Class
