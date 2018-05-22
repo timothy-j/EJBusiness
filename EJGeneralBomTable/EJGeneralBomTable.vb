@@ -7,6 +7,7 @@ Public Class EJGeneralBomTable
     Private _machines As List(Of Short)
     Private _initialisingGrid As Boolean
     Private _editMouseLocation As Point
+    Private _dynamicSelectingCell As DataGridViewCell
     Public Property MachineType() As String = ""
 
     <Category("Appearance"), Description("Defines the cell text colour of child rows")>
@@ -33,8 +34,18 @@ Public Class EJGeneralBomTable
 
         If MachineType = "" Then MachineType = InputBox("Enter machine type (e.g. CW or RF, not W3 or R2)")
 
-        _machines = (From m In _db.Machines
-                     Where m.Supplied = False And m.Type = MachineType
+        Dim machines As IQueryable(Of EJData.Machine) = From m In _db.Machines
+                                                        Where m.Supplied = False
+
+        If MachineType = "" Or MachineType = "All" Then
+            ' No further filtering needed
+        Else
+            ' Filter machines for machineType
+            machines = From m In machines
+                       Where m.Type = MachineType
+        End If
+
+        _machines = (From m In machines
                      Order By m.Number Descending
                      Select m.Number).ToList
 
@@ -60,8 +71,16 @@ Public Class EJGeneralBomTable
         Dim Bom As IQueryable(Of EJData.Item) = From i In _db.Items.Include("MachineItems").Include("Part")
                                                 Let topLevel = If(i.Parent Is Nothing, i.Item1, i.Parent.Item1 + "_")
                                                 Order By topLevel, i.Item1
-                                                Where i.Type = MachineType And i.Status <> "D"
+                                                Where i.Status <> "D"
                                                 Select i
+
+        If MachineType = "" Or MachineType = "All" Then
+            ' No further filtering needed
+        Else
+            ' Filter Items for machineType
+            Bom = From m In Bom
+                  Where m.Type = MachineType
+        End If
 
         GeneralBindingSource.DataSource = Bom.ToList
 
@@ -244,10 +263,10 @@ Public Class EJGeneralBomTable
 
     Private Sub DataGridView1_EditingControlShowing(sender As Object, e As DataGridViewEditingControlShowingEventArgs) Handles DataGridView1.EditingControlShowing
         e.Control.ContextMenuStrip = DefaultContextStrip
-        ' HACK: consider other edit control types?
-        Dim ctl As TextBox = CType(e.Control, TextBox)
-        Dim pt As Point = e.Control.PointToClient(_editMouseLocation)
-        ctl.SelectionStart = ctl.GetCharIndexFromPosition(_editMouseLocation)
+        '' HACK:   consider other edit control types?
+        '        Dim ctl As TextBox = CType(e.Control, TextBox)
+        '        Dim pt As Point = e.Control.PointToClient(_editMouseLocation)
+        '        ctl.SelectionStart = ctl.GetCharIndexFromPosition(_editMouseLocation)
     End Sub
 
     Private Sub CopyToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles CopyToolStripMenuItem.Click
@@ -289,19 +308,30 @@ Public Class EJGeneralBomTable
         End If
     End Sub
 
-    Private Sub DataGridView1_CellMouseDown(sender As Object, e As DataGridViewCellMouseEventArgs) Handles DataGridView1.CellMouseDown
-        ' If click was on a header..
-        If e.RowIndex < 0 Or e.ColumnIndex < 0 Then Exit Sub
+    'Private Sub DataGridView1_CellMouseDown(sender As Object, e As DataGridViewCellMouseEventArgs) Handles DataGridView1.CellMouseDown
+    '    ' If click was on a header..
+    '    If e.RowIndex < 0 Or e.ColumnIndex < 0 Then Exit Sub
 
-        Dim cell As DataGridViewCell = DataGridView1.Rows.Item(e.RowIndex).Cells.Item(e.ColumnIndex)
-        If cell.IsInEditMode Or DataGridView1.SelectedCells.Count > 1 Then
-            Exit Sub
-        Else
+    '    Dim cell As DataGridViewCell = DataGridView1.Rows.Item(e.RowIndex).Cells.Item(e.ColumnIndex)
+    '    If cell.IsInEditMode Or DataGridView1.SelectedCells.Count > 1 Then
+    '        Exit Sub
+    '    Else
 
-            _editMouseLocation = e.Location
-            DataGridView1.CurrentCell = cell
-            ' Mouse location must be se before this call, as this is when cell edit is called
-            DataGridView1.BeginEdit(False)
-        End If
-    End Sub
+    '        _editMouseLocation = e.Location
+    '        _dynamicSelectingCell = cell
+    '        'DataGridView1.CurrentCell = cell
+    '        '' Mouse location must be se before this call, as this is when cell edit is called
+    '        'DataGridView1.BeginEdit(False)
+    '    End If
+    'End Sub
+
+    'Private Sub DataGridView1_CellMouseMove(sender As Object, e As DataGridViewCellMouseEventArgs) Handles DataGridView1.CellMouseMove
+    '    If _dynamicSelectingCell IsNot Nothing Then
+    '        ' Simulate text selection in this cell
+    '        ' HACK: assumes textboxcell
+    '        'CType(_dynamicSelectingCell, DataGridViewTextBoxCell)
+    '        ' Cause cell to repaint
+    '        DataGridView1.InvalidateCell(_dynamicSelectingCell)
+    '    End If
+    'End Sub
 End Class

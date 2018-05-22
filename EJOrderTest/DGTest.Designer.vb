@@ -23,35 +23,31 @@ Partial Class DGTest
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
-        Me.TableGridView = New System.Windows.Forms.DataGridView()
         Me.TableBindingSource = New System.Windows.Forms.BindingSource(Me.components)
-        CType(Me.TableGridView, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.PartsTableControl1 = New EJParts.PartsTableControl()
         CType(Me.TableBindingSource, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
-        'TableGridView
+        'PartsTableControl1
         '
-        Me.TableGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        Me.TableGridView.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.TableGridView.Location = New System.Drawing.Point(0, 0)
-        Me.TableGridView.Name = "TableGridView"
-        Me.TableGridView.Size = New System.Drawing.Size(800, 450)
-        Me.TableGridView.TabIndex = 0
+        Me.PartsTableControl1.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.PartsTableControl1.Location = New System.Drawing.Point(0, 0)
+        Me.PartsTableControl1.Name = "PartsTableControl1"
+        Me.PartsTableControl1.Size = New System.Drawing.Size(800, 450)
+        Me.PartsTableControl1.TabIndex = 0
         '
         'DGTest
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(800, 450)
-        Me.Controls.Add(Me.TableGridView)
+        Me.Controls.Add(Me.PartsTableControl1)
         Me.Name = "DGTest"
         Me.Text = "DGTest"
-        CType(Me.TableGridView, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.TableBindingSource, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
 
     End Sub
-
-    Friend WithEvents TableGridView As DataGridView
     Friend WithEvents TableBindingSource As BindingSource
+    Friend WithEvents PartsTableControl1 As EJParts.PartsTableControl
 End Class

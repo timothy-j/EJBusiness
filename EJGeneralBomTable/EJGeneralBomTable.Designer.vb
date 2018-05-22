@@ -1,9 +1,9 @@
-﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()>
 Partial Class EJGeneralBomTable
     Inherits System.Windows.Forms.UserControl
 
     'UserControl1 overrides dispose to clean up the component list.
-    <System.Diagnostics.DebuggerNonUserCode()> _
+    <System.Diagnostics.DebuggerNonUserCode()>
     Protected Overrides Sub Dispose(ByVal disposing As Boolean)
         Try
             If disposing AndAlso components IsNot Nothing Then
@@ -20,17 +20,17 @@ Partial Class EJGeneralBomTable
     'NOTE: The following procedure is required by the Windows Form Designer
     'It can be modified using the Windows Form Designer.  
     'Do not modify it using the code editor.
-    <System.Diagnostics.DebuggerStepThrough()> _
+    <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
-        Dim DataGridViewCellStyle17 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle18 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle19 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle20 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle21 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle22 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle23 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle24 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle9 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle10 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle11 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle12 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle13 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle14 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle15 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle16 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Me.GeneralBindingSource = New System.Windows.Forms.BindingSource(Me.components)
         Me.DataGridView1 = New EJControls.NestedSourceGrid()
         Me.MC000Column = New System.Windows.Forms.DataGridViewTextBoxColumn()
@@ -66,6 +66,19 @@ Partial Class EJGeneralBomTable
         Me.EndsWithToolStripMenuItem1 = New System.Windows.Forms.ToolStripMenuItem()
         Me.DoesNotEndWithToolStripMenuItem1 = New System.Windows.Forms.ToolStripMenuItem()
         Me.NumberFiltersToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.EqualsToolStripMenuItem2 = New System.Windows.Forms.ToolStripMenuItem()
+        Me.DoesNotEqualToolStripMenuItem2 = New System.Windows.Forms.ToolStripMenuItem()
+        Me.GreaterThanToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.LessThanToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.BetweenToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.DateFiltersToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.EqualsToolStripMenuItem3 = New System.Windows.Forms.ToolStripMenuItem()
+        Me.DoesNotEqualToolStripMenuItem3 = New System.Windows.Forms.ToolStripMenuItem()
+        Me.BeforeOrOnToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.AfterOrOnToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.BetweenToolStripMenuItem1 = New System.Windows.Forms.ToolStripMenuItem()
+        Me.UndoFilterToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripSeparator3 = New System.Windows.Forms.ToolStripSeparator()
         Me.EqualsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.DoesNotEqualToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ContainsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
@@ -76,7 +89,6 @@ Partial Class EJGeneralBomTable
         Me.DoesNotBeginWithToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.EndsWithToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.DoesNotEndWithToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.TextBox1 = New System.Windows.Forms.TextBox()
         CType(Me.GeneralBindingSource, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.DataGridView1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.DefaultContextStrip.SuspendLayout()
@@ -87,10 +99,12 @@ Partial Class EJGeneralBomTable
         '
         'DataGridView1
         '
+        Me.DataGridView1.AllowUserToAddRows = False
+        Me.DataGridView1.AllowUserToDeleteRows = False
         Me.DataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
         Me.DataGridView1.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.MC000Column, Me.MCS000Column, Me.StockColumn, Me.ModelColumn, Me.ItemColumn, Me.DrawingTypeColumn, Me.DescriptionColumn, Me.SupplierColumn, Me.SuppliersDescriptionColumn, Me.QtyColumn, Me.StatusColumn, Me.RowNotesColumn, Me.UnitColumn, Me.SecondOpColumn, Me.DateCheckedColumn, Me.PartColumn})
         Me.DataGridView1.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.DataGridView1.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically
+        Me.DataGridView1.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnEnter
         Me.DataGridView1.Location = New System.Drawing.Point(0, 0)
         Me.DataGridView1.Name = "DataGridView1"
         Me.DataGridView1.RowHeadersWidth = 25
@@ -101,9 +115,9 @@ Partial Class EJGeneralBomTable
         '
         'MC000Column
         '
-        DataGridViewCellStyle17.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
-        DataGridViewCellStyle17.Format = "0.##"
-        Me.MC000Column.DefaultCellStyle = DataGridViewCellStyle17
+        DataGridViewCellStyle9.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
+        DataGridViewCellStyle9.Format = "0.##"
+        Me.MC000Column.DefaultCellStyle = DataGridViewCellStyle9
         Me.MC000Column.HeaderText = "000"
         Me.MC000Column.Name = "MC000Column"
         Me.MC000Column.Width = 35
@@ -119,9 +133,9 @@ Partial Class EJGeneralBomTable
         'StockColumn
         '
         Me.StockColumn.DataPropertyName = "Part.Stock"
-        DataGridViewCellStyle18.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
-        DataGridViewCellStyle18.Format = "0.##"
-        Me.StockColumn.DefaultCellStyle = DataGridViewCellStyle18
+        DataGridViewCellStyle10.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
+        DataGridViewCellStyle10.Format = "0.##"
+        Me.StockColumn.DefaultCellStyle = DataGridViewCellStyle10
         Me.StockColumn.HeaderText = "Stock"
         Me.StockColumn.Name = "StockColumn"
         Me.StockColumn.Width = 45
@@ -129,8 +143,8 @@ Partial Class EJGeneralBomTable
         'ModelColumn
         '
         Me.ModelColumn.DataPropertyName = "Model"
-        DataGridViewCellStyle19.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
-        Me.ModelColumn.DefaultCellStyle = DataGridViewCellStyle19
+        DataGridViewCellStyle11.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
+        Me.ModelColumn.DefaultCellStyle = DataGridViewCellStyle11
         Me.ModelColumn.HeaderText = "Model"
         Me.ModelColumn.Name = "ModelColumn"
         Me.ModelColumn.Width = 35
@@ -173,9 +187,9 @@ Partial Class EJGeneralBomTable
         'QtyColumn
         '
         Me.QtyColumn.DataPropertyName = "Qty"
-        DataGridViewCellStyle20.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
-        DataGridViewCellStyle20.Format = "0.##"
-        Me.QtyColumn.DefaultCellStyle = DataGridViewCellStyle20
+        DataGridViewCellStyle12.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
+        DataGridViewCellStyle12.Format = "0.##"
+        Me.QtyColumn.DefaultCellStyle = DataGridViewCellStyle12
         Me.QtyColumn.HeaderText = "Qty"
         Me.QtyColumn.Name = "QtyColumn"
         Me.QtyColumn.Width = 40
@@ -190,8 +204,8 @@ Partial Class EJGeneralBomTable
         'RowNotesColumn
         '
         Me.RowNotesColumn.DataPropertyName = "Part.ProductionNotes"
-        DataGridViewCellStyle21.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
-        Me.RowNotesColumn.DefaultCellStyle = DataGridViewCellStyle21
+        DataGridViewCellStyle13.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
+        Me.RowNotesColumn.DefaultCellStyle = DataGridViewCellStyle13
         Me.RowNotesColumn.HeaderText = "Notes"
         Me.RowNotesColumn.Name = "RowNotesColumn"
         Me.RowNotesColumn.Width = 150
@@ -199,9 +213,9 @@ Partial Class EJGeneralBomTable
         'UnitColumn
         '
         Me.UnitColumn.DataPropertyName = "Part.Unit"
-        DataGridViewCellStyle22.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
-        DataGridViewCellStyle22.Format = "C2"
-        Me.UnitColumn.DefaultCellStyle = DataGridViewCellStyle22
+        DataGridViewCellStyle14.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
+        DataGridViewCellStyle14.Format = "C2"
+        Me.UnitColumn.DefaultCellStyle = DataGridViewCellStyle14
         Me.UnitColumn.HeaderText = "Unit"
         Me.UnitColumn.Name = "UnitColumn"
         Me.UnitColumn.Width = 70
@@ -209,10 +223,10 @@ Partial Class EJGeneralBomTable
         'SecondOpColumn
         '
         Me.SecondOpColumn.DataPropertyName = "Part.SecondOperation"
-        DataGridViewCellStyle23.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
-        DataGridViewCellStyle23.Format = "C2"
-        DataGridViewCellStyle23.NullValue = Nothing
-        Me.SecondOpColumn.DefaultCellStyle = DataGridViewCellStyle23
+        DataGridViewCellStyle15.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
+        DataGridViewCellStyle15.Format = "C2"
+        DataGridViewCellStyle15.NullValue = Nothing
+        Me.SecondOpColumn.DefaultCellStyle = DataGridViewCellStyle15
         Me.SecondOpColumn.HeaderText = "2nd Op"
         Me.SecondOpColumn.Name = "SecondOpColumn"
         Me.SecondOpColumn.Width = 60
@@ -220,10 +234,10 @@ Partial Class EJGeneralBomTable
         'DateCheckedColumn
         '
         Me.DateCheckedColumn.DataPropertyName = "Part.DateChecked"
-        DataGridViewCellStyle24.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
-        DataGridViewCellStyle24.Format = "d"
-        DataGridViewCellStyle24.NullValue = Nothing
-        Me.DateCheckedColumn.DefaultCellStyle = DataGridViewCellStyle24
+        DataGridViewCellStyle16.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
+        DataGridViewCellStyle16.Format = "d"
+        DataGridViewCellStyle16.NullValue = Nothing
+        Me.DateCheckedColumn.DefaultCellStyle = DataGridViewCellStyle16
         Me.DateCheckedColumn.HeaderText = "DateChecked"
         Me.DateCheckedColumn.Name = "DateCheckedColumn"
         Me.DateCheckedColumn.Width = 80
@@ -238,9 +252,9 @@ Partial Class EJGeneralBomTable
         '
         'DefaultContextStrip
         '
-        Me.DefaultContextStrip.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.CopyToolStripMenuItem, Me.CutToolStripMenuItem, Me.PasteToolStripMenuItem, Me.ToolStripSeparator1, Me.UndoToolStripMenuItem, Me.ToolStripSeparator2, Me.TextFiltersToolStripMenuItem, Me.NumberFiltersToolStripMenuItem, Me.EqualsToolStripMenuItem, Me.DoesNotEqualToolStripMenuItem, Me.ContainsToolStripMenuItem, Me.DoesNotContainToolStripMenuItem, Me.LessThanOrEqualToToolStripMenuItem, Me.GreaterThanOrEqualToToolStripMenuItem, Me.BeginsWithToolStripMenuItem, Me.DoesNotBeginWithToolStripMenuItem, Me.EndsWithToolStripMenuItem, Me.DoesNotEndWithToolStripMenuItem})
+        Me.DefaultContextStrip.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.CopyToolStripMenuItem, Me.CutToolStripMenuItem, Me.PasteToolStripMenuItem, Me.ToolStripSeparator1, Me.UndoToolStripMenuItem, Me.ToolStripSeparator2, Me.TextFiltersToolStripMenuItem, Me.NumberFiltersToolStripMenuItem, Me.DateFiltersToolStripMenuItem, Me.UndoFilterToolStripMenuItem, Me.ToolStripSeparator3, Me.EqualsToolStripMenuItem, Me.DoesNotEqualToolStripMenuItem, Me.ContainsToolStripMenuItem, Me.DoesNotContainToolStripMenuItem, Me.LessThanOrEqualToToolStripMenuItem, Me.GreaterThanOrEqualToToolStripMenuItem, Me.BeginsWithToolStripMenuItem, Me.DoesNotBeginWithToolStripMenuItem, Me.EndsWithToolStripMenuItem, Me.DoesNotEndWithToolStripMenuItem})
         Me.DefaultContextStrip.Name = "DefaultContextStrip"
-        Me.DefaultContextStrip.Size = New System.Drawing.Size(200, 368)
+        Me.DefaultContextStrip.Size = New System.Drawing.Size(200, 440)
         '
         'CopyToolStripMenuItem
         '
@@ -333,9 +347,88 @@ Partial Class EJGeneralBomTable
         '
         'NumberFiltersToolStripMenuItem
         '
+        Me.NumberFiltersToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.EqualsToolStripMenuItem2, Me.DoesNotEqualToolStripMenuItem2, Me.GreaterThanToolStripMenuItem, Me.LessThanToolStripMenuItem, Me.BetweenToolStripMenuItem})
         Me.NumberFiltersToolStripMenuItem.Name = "NumberFiltersToolStripMenuItem"
         Me.NumberFiltersToolStripMenuItem.Size = New System.Drawing.Size(199, 22)
         Me.NumberFiltersToolStripMenuItem.Text = "Number Filters"
+        '
+        'EqualsToolStripMenuItem2
+        '
+        Me.EqualsToolStripMenuItem2.Name = "EqualsToolStripMenuItem2"
+        Me.EqualsToolStripMenuItem2.Size = New System.Drawing.Size(205, 22)
+        Me.EqualsToolStripMenuItem2.Text = "Equals.."
+        '
+        'DoesNotEqualToolStripMenuItem2
+        '
+        Me.DoesNotEqualToolStripMenuItem2.Name = "DoesNotEqualToolStripMenuItem2"
+        Me.DoesNotEqualToolStripMenuItem2.Size = New System.Drawing.Size(205, 22)
+        Me.DoesNotEqualToolStripMenuItem2.Text = "Does not equal.."
+        '
+        'GreaterThanToolStripMenuItem
+        '
+        Me.GreaterThanToolStripMenuItem.Name = "GreaterThanToolStripMenuItem"
+        Me.GreaterThanToolStripMenuItem.Size = New System.Drawing.Size(205, 22)
+        Me.GreaterThanToolStripMenuItem.Text = "Greater than or equal to.."
+        '
+        'LessThanToolStripMenuItem
+        '
+        Me.LessThanToolStripMenuItem.Name = "LessThanToolStripMenuItem"
+        Me.LessThanToolStripMenuItem.Size = New System.Drawing.Size(205, 22)
+        Me.LessThanToolStripMenuItem.Text = "Less than or equal to.."
+        '
+        'BetweenToolStripMenuItem
+        '
+        Me.BetweenToolStripMenuItem.Name = "BetweenToolStripMenuItem"
+        Me.BetweenToolStripMenuItem.Size = New System.Drawing.Size(205, 22)
+        Me.BetweenToolStripMenuItem.Text = "Between.."
+        '
+        'DateFiltersToolStripMenuItem
+        '
+        Me.DateFiltersToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.EqualsToolStripMenuItem3, Me.DoesNotEqualToolStripMenuItem3, Me.BeforeOrOnToolStripMenuItem, Me.AfterOrOnToolStripMenuItem, Me.BetweenToolStripMenuItem1})
+        Me.DateFiltersToolStripMenuItem.Name = "DateFiltersToolStripMenuItem"
+        Me.DateFiltersToolStripMenuItem.Size = New System.Drawing.Size(199, 22)
+        Me.DateFiltersToolStripMenuItem.Text = "Date Filters"
+        '
+        'EqualsToolStripMenuItem3
+        '
+        Me.EqualsToolStripMenuItem3.Name = "EqualsToolStripMenuItem3"
+        Me.EqualsToolStripMenuItem3.Size = New System.Drawing.Size(180, 22)
+        Me.EqualsToolStripMenuItem3.Text = "Equals"
+        '
+        'DoesNotEqualToolStripMenuItem3
+        '
+        Me.DoesNotEqualToolStripMenuItem3.Name = "DoesNotEqualToolStripMenuItem3"
+        Me.DoesNotEqualToolStripMenuItem3.Size = New System.Drawing.Size(180, 22)
+        Me.DoesNotEqualToolStripMenuItem3.Text = "Does not equal"
+        '
+        'BeforeOrOnToolStripMenuItem
+        '
+        Me.BeforeOrOnToolStripMenuItem.Name = "BeforeOrOnToolStripMenuItem"
+        Me.BeforeOrOnToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
+        Me.BeforeOrOnToolStripMenuItem.Text = "Before or on.."
+        '
+        'AfterOrOnToolStripMenuItem
+        '
+        Me.AfterOrOnToolStripMenuItem.Name = "AfterOrOnToolStripMenuItem"
+        Me.AfterOrOnToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
+        Me.AfterOrOnToolStripMenuItem.Text = "After or on.."
+        '
+        'BetweenToolStripMenuItem1
+        '
+        Me.BetweenToolStripMenuItem1.Name = "BetweenToolStripMenuItem1"
+        Me.BetweenToolStripMenuItem1.Size = New System.Drawing.Size(180, 22)
+        Me.BetweenToolStripMenuItem1.Text = "Between.."
+        '
+        'UndoFilterToolStripMenuItem
+        '
+        Me.UndoFilterToolStripMenuItem.Name = "UndoFilterToolStripMenuItem"
+        Me.UndoFilterToolStripMenuItem.Size = New System.Drawing.Size(199, 22)
+        Me.UndoFilterToolStripMenuItem.Text = "Undo previous filter"
+        '
+        'ToolStripSeparator3
+        '
+        Me.ToolStripSeparator3.Name = "ToolStripSeparator3"
+        Me.ToolStripSeparator3.Size = New System.Drawing.Size(196, 6)
         '
         'EqualsToolStripMenuItem
         '
@@ -397,18 +490,10 @@ Partial Class EJGeneralBomTable
         Me.DoesNotEndWithToolStripMenuItem.Size = New System.Drawing.Size(199, 22)
         Me.DoesNotEndWithToolStripMenuItem.Text = "Does not end with"
         '
-        'TextBox1
-        '
-        Me.TextBox1.Location = New System.Drawing.Point(278, 243)
-        Me.TextBox1.Name = "TextBox1"
-        Me.TextBox1.Size = New System.Drawing.Size(100, 20)
-        Me.TextBox1.TabIndex = 1
-        '
         'EJGeneralBomTable
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.Controls.Add(Me.TextBox1)
         Me.Controls.Add(Me.DataGridView1)
         Me.Name = "EJGeneralBomTable"
         Me.Size = New System.Drawing.Size(704, 422)
@@ -416,7 +501,6 @@ Partial Class EJGeneralBomTable
         CType(Me.DataGridView1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.DefaultContextStrip.ResumeLayout(False)
         Me.ResumeLayout(False)
-        Me.PerformLayout()
 
     End Sub
     Friend WithEvents GeneralBindingSource As BindingSource
@@ -464,5 +548,17 @@ Partial Class EJGeneralBomTable
     Friend WithEvents DoesNotBeginWithToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents EndsWithToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents DoesNotEndWithToolStripMenuItem As ToolStripMenuItem
-    Friend WithEvents TextBox1 As TextBox
+    Friend WithEvents EqualsToolStripMenuItem2 As ToolStripMenuItem
+    Friend WithEvents DoesNotEqualToolStripMenuItem2 As ToolStripMenuItem
+    Friend WithEvents GreaterThanToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents LessThanToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents BetweenToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents DateFiltersToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents EqualsToolStripMenuItem3 As ToolStripMenuItem
+    Friend WithEvents DoesNotEqualToolStripMenuItem3 As ToolStripMenuItem
+    Friend WithEvents BeforeOrOnToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents AfterOrOnToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents BetweenToolStripMenuItem1 As ToolStripMenuItem
+    Friend WithEvents UndoFilterToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents ToolStripSeparator3 As ToolStripSeparator
 End Class

@@ -26,6 +26,7 @@ Partial Class Startup
         Me.btnQuotes = New System.Windows.Forms.Button()
         Me.btnReport = New System.Windows.Forms.Button()
         Me.GridTest = New System.Windows.Forms.Button()
+        Me.Button1 = New System.Windows.Forms.Button()
         Me.SuspendLayout()
         '
         'btnOrders
@@ -64,11 +65,21 @@ Partial Class Startup
         Me.GridTest.Text = "Grid"
         Me.GridTest.UseVisualStyleBackColor = True
         '
+        'Button1
+        '
+        Me.Button1.Location = New System.Drawing.Point(189, 89)
+        Me.Button1.Name = "Button1"
+        Me.Button1.Size = New System.Drawing.Size(75, 23)
+        Me.Button1.TabIndex = 5
+        Me.Button1.Text = "Parts"
+        Me.Button1.UseVisualStyleBackColor = True
+        '
         'Startup
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(419, 124)
+        Me.Controls.Add(Me.Button1)
         Me.Controls.Add(Me.GridTest)
         Me.Controls.Add(Me.btnReport)
         Me.Controls.Add(Me.btnQuotes)
@@ -83,4 +94,5 @@ Partial Class Startup
     Friend WithEvents btnQuotes As Button
     Friend WithEvents btnReport As Button
     Friend WithEvents GridTest As Button
+    Friend WithEvents Button1 As Button
 End Class

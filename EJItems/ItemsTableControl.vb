@@ -9,6 +9,17 @@ Public Class ItemsTableControl
     Private _newRow As DataGridViewRow ' the latest new row
     Private _discardRow As Boolean ' marks _newRow for deletion
     Private _previousPartFilter As Integer?
+    Private _addedItem As EJData.Item ' Stores the last item added to the database so it can be removed if necessary (e.g. if it is a duplicate)
+    Private _leavingDGV As Boolean
+
+    Public Property DBContext() As EJData.CorporateEntities
+        Get
+            Return _db
+        End Get
+        Set(ByVal value As EJData.CorporateEntities)
+            _db = value
+        End Set
+    End Property
 
     ''' <summary>
     ''' Checks whether the form is currently being used in the VS form designer
@@ -44,12 +55,14 @@ Public Class ItemsTableControl
 
             _previousPartFilter = value
 
-            OrderedItems = From i In _db.Items
-                           Order By i.Type, i.Item1
-                           Where i.PartID = value
-                           Select i
+            Requery()
 
-            ItemBindingSource.DataSource = OrderedItems.ToList
+            'OrderedItems = From i In _db.Items
+            '               Order By i.Type, i.Item1
+            '               Where i.PartID = value
+            '               Select i
+
+            'ItemBindingSource.DataSource = OrderedItems.ToList
         End Set
     End Property
 
@@ -64,7 +77,7 @@ Public Class ItemsTableControl
 
     Private Sub ItemsView_Load(sender As Object, e As EventArgs) Handles Me.Load
         If IsInDesignMode() Then Exit Sub
-        _db = EJData.DataHelpers.GetNewDbContext
+        If DBContext Is Nothing Then DBContext = EJData.DataHelpers.GetNewDbContext
 
         OrderedItems = From i In _db.Items
                        Order By i.Type, i.Item1
@@ -90,10 +103,14 @@ Public Class ItemsTableControl
                     DataGridView1.CurrentRow.Cells("PartIDDataGridViewTextBoxColumn").Value = PartIDFilter
                 End If
 
-                _db.Items.Add(CType(DataGridView1.CurrentRow.DataBoundItem, EJData.Item))
+                'MsgBox(_db.Items.Contains(_addedItem))
+                If _addedItem IsNot CType(DataGridView1.CurrentRow.DataBoundItem, EJData.Item) Then
+                    _addedItem = _db.Items.Add(CType(DataGridView1.CurrentRow.DataBoundItem, EJData.Item))
+                End If
                 _db.SaveChanges()
                 ' Empty temporary previous row values _currRow
                 _currRow.RemoveRange(0, _currRow.Count)
+                _newRow = Nothing
             Catch ex As Exception
                 ' Get the lowest level exception message
                 Do Until ex.InnerException Is Nothing
@@ -114,6 +131,7 @@ Public Class ItemsTableControl
 
         ' If this is a row edit (or delete?)
         If _db.ChangeTracker.HasChanges Then
+
             Try
                 _db.SaveChanges()
                 ' Empty temporary previous row values _currRow
@@ -179,7 +197,7 @@ Public Class ItemsTableControl
         If _discardRow Then
             _discardRow = False
             Try
-                _db.Items.Remove(CType(_newRow.DataBoundItem, EJData.Item))
+                _db.Items.Remove(_addedItem)
                 _db.SaveChanges()
                 DataGridView1.Rows.Remove(_newRow)
             Catch ex As Exception
@@ -209,6 +227,43 @@ Public Class ItemsTableControl
             data.SetData(DataFormats.Text, String.Join(vbTab, rows(0)))
             'data.SetData(DataFormats.CommaSeparatedValue, False, rows) 'DataGridView1.SelectedRows)
             DoDragDrop(data, DragDropEffects.Copy)
+        End If
+    End Sub
+
+    Public Sub Requery()
+        OrderedItems = From i In _db.Items
+                       Order By i.Type, i.Item1
+                       Where i.PartID = PartIDFilter
+                       Select i
+
+        ItemBindingSource.DataSource = OrderedItems.ToList
+    End Sub
+
+    Private Sub DataGridView1_Leave(sender As Object, e As EventArgs) Handles DataGridView1.Leave
+        _leavingDGV = True
+    End Sub
+
+    Private Sub DataGridView1_RowValidated(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridView1.RowValidated
+        If Not _leavingDGV Then Exit Sub
+        _leavingDGV = True
+
+        _getRowValues = True
+
+        ' Now we've moved away from it we can delete the row marked for deletion
+        If _discardRow Then
+            _discardRow = False
+            Try
+                _db.Items.Remove(_addedItem)
+                _db.SaveChanges()
+                _newRow = Nothing
+                Requery()
+            Catch ex As Exception
+                ' Get the lowest level exception message
+                Do Until ex.InnerException Is Nothing
+                    ex = ex.InnerException
+                Loop
+                MsgBox(ex.Message)
+            End Try
         End If
     End Sub
 End Class

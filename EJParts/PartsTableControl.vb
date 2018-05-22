@@ -8,6 +8,8 @@ Public Class PartsTableControl
     Private _getRowValues As Boolean ' indicates that row values should be saved to enable edit to be cancelled
     Private _newRow As DataGridViewRow ' the latest new row
     Private _discardRow As Boolean ' marks _newRow for deletion
+    Private _addedPart As EJData.Part ' Stores the last item added to the database so it can be removed if necessary (e.g. if it is a duplicate)
+    Private _leavingDGV As Boolean
 
     Function IsInDesignMode() As Boolean
         Return System.Reflection.Assembly.GetExecutingAssembly().Location.Contains("VisualStudio")
@@ -16,11 +18,13 @@ Public Class PartsTableControl
     Private Sub PartsView_Load(sender As Object, e As EventArgs) Handles Me.Load
         If IsInDesignMode() Then Exit Sub
         _db = EJData.DataHelpers.GetNewDbContext
+        'ItemsTableControl2.DBContext = _db
 
-        OrderedParts = From p In _db.Parts
-                       Order By p.PartNo
-                       Select p
-        PartBindingSource.DataSource = OrderedParts.ToList
+        Requery()
+        'OrderedParts = From p In _db.Parts
+        '               Order By p.PartNo
+        '               Select p
+        'PartBindingSource.DataSource = OrderedParts.ToList
     End Sub
 
     Private Sub DataGridView1_CellDoubleClick(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridView1.CellDoubleClick
@@ -31,10 +35,13 @@ Public Class PartsTableControl
         ' If this is a new row..
         If DataGridView1.CurrentRow Is _newRow Then
             Try
-                _db.Parts.Add(CType(DataGridView1.CurrentRow.DataBoundItem, EJData.Part))
+                If _addedPart IsNot CType(DataGridView1.CurrentRow.DataBoundItem, EJData.Part) Then
+                    _addedPart = _db.Parts.Add(CType(DataGridView1.CurrentRow.DataBoundItem, EJData.Part))
+                End If
                 _db.SaveChanges()
                 ' Empty temporary previous row values _currRow
                 _currRow.RemoveRange(0, _currRow.Count)
+                _newRow = Nothing
             Catch ex As Exception
                 ' Get the lowest level exception message
                 Do Until ex.InnerException Is Nothing
@@ -113,6 +120,34 @@ Public Class PartsTableControl
         End If
     End Sub
 
+    Private Sub DataGridView1_Leave(sender As Object, e As EventArgs) Handles DataGridView1.Leave
+        _leavingDGV = True
+    End Sub
+
+    Private Sub DataGridView1_RowValidated(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridView1.RowValidated
+        If Not _leavingDGV Then Exit Sub
+        _leavingDGV = True
+
+        _getRowValues = True
+
+        ' Now we've moved away from it we can delete the row marked for deletion
+        If _discardRow Then
+            _discardRow = False
+            Try
+                _db.Parts.Remove(_addedPart)
+                _db.SaveChanges()
+                _newRow = Nothing
+                Requery()
+            Catch ex As Exception
+                ' Get the lowest level exception message
+                Do Until ex.InnerException Is Nothing
+                    ex = ex.InnerException
+                Loop
+                MsgBox(ex.Message)
+            End Try
+        End If
+    End Sub
+
     Private Sub PartBindingSource_CurrentChanged(sender As Object, e As EventArgs) Handles PartBindingSource.CurrentChanged
         _getRowValues = True
 
@@ -120,7 +155,7 @@ Public Class PartsTableControl
         If _discardRow Then
             _discardRow = False
             Try
-                _db.Parts.Remove(CType(_newRow.DataBoundItem, EJData.Part))
+                _db.Parts.Remove(_addedPart)
                 _db.SaveChanges()
                 DataGridView1.Rows.Remove(_newRow)
             Catch ex As Exception
@@ -143,5 +178,12 @@ Public Class PartsTableControl
         Dim files() As String = CType(e.Data.GetData(DataFormats.Text), String())
         MsgBox(files(0))
         MsgBox(e.Data.GetData(DataFormats.Text, True))
+    End Sub
+
+    Public Sub Requery()
+        OrderedParts = From p In _db.Parts
+                       Order By p.PartNo
+                       Select p
+        PartBindingSource.DataSource = OrderedParts.ToList
     End Sub
 End Class

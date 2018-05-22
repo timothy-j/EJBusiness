@@ -137,4 +137,5 @@ Public Class NestedSourceGrid
             SetBindProperty(Rows.Item(e.RowIndex).DataBoundItem, Columns.Item(e.ColumnIndex).DataPropertyName, cell.Value)
         End If
     End Sub
+
 End Class

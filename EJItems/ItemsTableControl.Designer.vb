@@ -23,23 +23,14 @@ Partial Class ItemsTableControl
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
-        Dim DataGridViewCellStyle2 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle1 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle2 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Me.SplitContainer1 = New System.Windows.Forms.SplitContainer()
         Me.DataGridView1 = New System.Windows.Forms.DataGridView()
-        Me.DataGridView2 = New System.Windows.Forms.DataGridView()
-        Me.Item1 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.Label1 = New System.Windows.Forms.Label()
         Me.ItemBindingSource = New System.Windows.Forms.BindingSource(Me.components)
-        Me.DataGridViewTextBoxColumn1 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.DataGridViewTextBoxColumn2 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.DataGridViewTextBoxColumn4 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.DataGridViewTextBoxColumn5 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.DataGridViewTextBoxColumn6 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.DataGridViewTextBoxColumn7 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.DataGridViewCheckBoxColumn1 = New System.Windows.Forms.DataGridViewCheckBoxColumn()
-        Me.DataGridViewTextBoxColumn9 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.DataGridView2 = New System.Windows.Forms.DataGridView()
         Me.ChildrenBindingSource = New System.Windows.Forms.BindingSource(Me.components)
+        Me.Label1 = New System.Windows.Forms.Label()
         Me.TypeDataGridViewTextBoxColumn = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.ModelDataGridViewTextBoxColumn = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.Item1DataGridViewTextBoxColumn = New System.Windows.Forms.DataGridViewTextBoxColumn()
@@ -50,13 +41,22 @@ Partial Class ItemsTableControl
         Me.ExcludeDataGridViewCheckBoxColumn = New System.Windows.Forms.DataGridViewCheckBoxColumn()
         Me.ParentIDDataGridViewTextBoxColumn = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.PartIDDataGridViewTextBoxColumn = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.DataGridViewTextBoxColumn1 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.DataGridViewTextBoxColumn2 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.Item1 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.DataGridViewTextBoxColumn4 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.DataGridViewTextBoxColumn5 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.DataGridViewTextBoxColumn6 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.DataGridViewTextBoxColumn7 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.DataGridViewCheckBoxColumn1 = New System.Windows.Forms.DataGridViewCheckBoxColumn()
+        Me.DataGridViewTextBoxColumn9 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         CType(Me.SplitContainer1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SplitContainer1.Panel1.SuspendLayout()
         Me.SplitContainer1.Panel2.SuspendLayout()
         Me.SplitContainer1.SuspendLayout()
         CType(Me.DataGridView1, System.ComponentModel.ISupportInitialize).BeginInit()
-        CType(Me.DataGridView2, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.ItemBindingSource, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.DataGridView2, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.ChildrenBindingSource, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
@@ -93,6 +93,10 @@ Partial Class ItemsTableControl
         Me.DataGridView1.Size = New System.Drawing.Size(692, 302)
         Me.DataGridView1.TabIndex = 3
         '
+        'ItemBindingSource
+        '
+        Me.ItemBindingSource.DataSource = GetType(EJData.Item)
+        '
         'DataGridView2
         '
         Me.DataGridView2.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
@@ -104,15 +108,13 @@ Partial Class ItemsTableControl
         Me.DataGridView2.DataSource = Me.ChildrenBindingSource
         Me.DataGridView2.Location = New System.Drawing.Point(0, 22)
         Me.DataGridView2.Name = "DataGridView2"
-        Me.DataGridView2.Size = New System.Drawing.Size(692, 127)
+        Me.DataGridView2.Size = New System.Drawing.Size(692, 129)
         Me.DataGridView2.TabIndex = 5
         '
-        'Item1
+        'ChildrenBindingSource
         '
-        Me.Item1.DataPropertyName = "Item1"
-        Me.Item1.HeaderText = "Item"
-        Me.Item1.Name = "Item1"
-        Me.Item1.Width = 60
+        Me.ChildrenBindingSource.DataMember = "Children"
+        Me.ChildrenBindingSource.DataSource = Me.ItemBindingSource
         '
         'Label1
         '
@@ -122,75 +124,6 @@ Partial Class ItemsTableControl
         Me.Label1.Size = New System.Drawing.Size(79, 13)
         Me.Label1.TabIndex = 3
         Me.Label1.Text = "Assembly Items"
-        '
-        'ItemBindingSource
-        '
-        Me.ItemBindingSource.DataSource = GetType(EJData.Item)
-        '
-        'DataGridViewTextBoxColumn1
-        '
-        Me.DataGridViewTextBoxColumn1.DataPropertyName = "Type"
-        Me.DataGridViewTextBoxColumn1.FillWeight = 10.0!
-        Me.DataGridViewTextBoxColumn1.HeaderText = "Type"
-        Me.DataGridViewTextBoxColumn1.Name = "DataGridViewTextBoxColumn1"
-        Me.DataGridViewTextBoxColumn1.Width = 40
-        '
-        'DataGridViewTextBoxColumn2
-        '
-        Me.DataGridViewTextBoxColumn2.DataPropertyName = "Model"
-        Me.DataGridViewTextBoxColumn2.FillWeight = 10.0!
-        Me.DataGridViewTextBoxColumn2.HeaderText = "Model"
-        Me.DataGridViewTextBoxColumn2.Name = "DataGridViewTextBoxColumn2"
-        Me.DataGridViewTextBoxColumn2.Width = 40
-        '
-        'DataGridViewTextBoxColumn4
-        '
-        Me.DataGridViewTextBoxColumn4.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill
-        Me.DataGridViewTextBoxColumn4.DataPropertyName = "Description"
-        Me.DataGridViewTextBoxColumn4.HeaderText = "Description"
-        Me.DataGridViewTextBoxColumn4.Name = "DataGridViewTextBoxColumn4"
-        '
-        'DataGridViewTextBoxColumn5
-        '
-        Me.DataGridViewTextBoxColumn5.DataPropertyName = "Qty"
-        DataGridViewCellStyle2.Format = "0.##"
-        Me.DataGridViewTextBoxColumn5.DefaultCellStyle = DataGridViewCellStyle2
-        Me.DataGridViewTextBoxColumn5.HeaderText = "Qty"
-        Me.DataGridViewTextBoxColumn5.Name = "DataGridViewTextBoxColumn5"
-        Me.DataGridViewTextBoxColumn5.Width = 40
-        '
-        'DataGridViewTextBoxColumn6
-        '
-        Me.DataGridViewTextBoxColumn6.DataPropertyName = "Status"
-        Me.DataGridViewTextBoxColumn6.HeaderText = "Status"
-        Me.DataGridViewTextBoxColumn6.Name = "DataGridViewTextBoxColumn6"
-        Me.DataGridViewTextBoxColumn6.Width = 40
-        '
-        'DataGridViewTextBoxColumn7
-        '
-        Me.DataGridViewTextBoxColumn7.DataPropertyName = "Associations"
-        Me.DataGridViewTextBoxColumn7.HeaderText = "Associations"
-        Me.DataGridViewTextBoxColumn7.Name = "DataGridViewTextBoxColumn7"
-        Me.DataGridViewTextBoxColumn7.Width = 50
-        '
-        'DataGridViewCheckBoxColumn1
-        '
-        Me.DataGridViewCheckBoxColumn1.DataPropertyName = "Exclude"
-        Me.DataGridViewCheckBoxColumn1.HeaderText = "Exclude"
-        Me.DataGridViewCheckBoxColumn1.Name = "DataGridViewCheckBoxColumn1"
-        Me.DataGridViewCheckBoxColumn1.Width = 25
-        '
-        'DataGridViewTextBoxColumn9
-        '
-        Me.DataGridViewTextBoxColumn9.DataPropertyName = "PartID"
-        Me.DataGridViewTextBoxColumn9.HeaderText = "PartID"
-        Me.DataGridViewTextBoxColumn9.Name = "DataGridViewTextBoxColumn9"
-        Me.DataGridViewTextBoxColumn9.Width = 60
-        '
-        'ChildrenBindingSource
-        '
-        Me.ChildrenBindingSource.DataMember = "Children"
-        Me.ChildrenBindingSource.DataSource = Me.ItemBindingSource
         '
         'TypeDataGridViewTextBoxColumn
         '
@@ -226,7 +159,7 @@ Partial Class ItemsTableControl
         'QtyDataGridViewTextBoxColumn
         '
         Me.QtyDataGridViewTextBoxColumn.DataPropertyName = "Qty"
-        DataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.TopRight
+        DataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
         DataGridViewCellStyle1.Format = "0.##"
         Me.QtyDataGridViewTextBoxColumn.DefaultCellStyle = DataGridViewCellStyle1
         Me.QtyDataGridViewTextBoxColumn.HeaderText = "Qty"
@@ -268,6 +201,74 @@ Partial Class ItemsTableControl
         Me.PartIDDataGridViewTextBoxColumn.Name = "PartIDDataGridViewTextBoxColumn"
         Me.PartIDDataGridViewTextBoxColumn.Width = 60
         '
+        'DataGridViewTextBoxColumn1
+        '
+        Me.DataGridViewTextBoxColumn1.DataPropertyName = "Type"
+        Me.DataGridViewTextBoxColumn1.FillWeight = 10.0!
+        Me.DataGridViewTextBoxColumn1.HeaderText = "Type"
+        Me.DataGridViewTextBoxColumn1.Name = "DataGridViewTextBoxColumn1"
+        Me.DataGridViewTextBoxColumn1.Width = 40
+        '
+        'DataGridViewTextBoxColumn2
+        '
+        Me.DataGridViewTextBoxColumn2.DataPropertyName = "Model"
+        Me.DataGridViewTextBoxColumn2.FillWeight = 10.0!
+        Me.DataGridViewTextBoxColumn2.HeaderText = "Model"
+        Me.DataGridViewTextBoxColumn2.Name = "DataGridViewTextBoxColumn2"
+        Me.DataGridViewTextBoxColumn2.Width = 40
+        '
+        'Item1
+        '
+        Me.Item1.DataPropertyName = "Item1"
+        Me.Item1.HeaderText = "Item"
+        Me.Item1.Name = "Item1"
+        Me.Item1.Width = 60
+        '
+        'DataGridViewTextBoxColumn4
+        '
+        Me.DataGridViewTextBoxColumn4.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill
+        Me.DataGridViewTextBoxColumn4.DataPropertyName = "Description"
+        Me.DataGridViewTextBoxColumn4.HeaderText = "Description"
+        Me.DataGridViewTextBoxColumn4.Name = "DataGridViewTextBoxColumn4"
+        '
+        'DataGridViewTextBoxColumn5
+        '
+        Me.DataGridViewTextBoxColumn5.DataPropertyName = "Qty"
+        DataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
+        DataGridViewCellStyle2.Format = "0.##"
+        Me.DataGridViewTextBoxColumn5.DefaultCellStyle = DataGridViewCellStyle2
+        Me.DataGridViewTextBoxColumn5.HeaderText = "Qty"
+        Me.DataGridViewTextBoxColumn5.Name = "DataGridViewTextBoxColumn5"
+        Me.DataGridViewTextBoxColumn5.Width = 40
+        '
+        'DataGridViewTextBoxColumn6
+        '
+        Me.DataGridViewTextBoxColumn6.DataPropertyName = "Status"
+        Me.DataGridViewTextBoxColumn6.HeaderText = "Status"
+        Me.DataGridViewTextBoxColumn6.Name = "DataGridViewTextBoxColumn6"
+        Me.DataGridViewTextBoxColumn6.Width = 40
+        '
+        'DataGridViewTextBoxColumn7
+        '
+        Me.DataGridViewTextBoxColumn7.DataPropertyName = "Associations"
+        Me.DataGridViewTextBoxColumn7.HeaderText = "Associations"
+        Me.DataGridViewTextBoxColumn7.Name = "DataGridViewTextBoxColumn7"
+        Me.DataGridViewTextBoxColumn7.Width = 50
+        '
+        'DataGridViewCheckBoxColumn1
+        '
+        Me.DataGridViewCheckBoxColumn1.DataPropertyName = "Exclude"
+        Me.DataGridViewCheckBoxColumn1.HeaderText = "Exclude"
+        Me.DataGridViewCheckBoxColumn1.Name = "DataGridViewCheckBoxColumn1"
+        Me.DataGridViewCheckBoxColumn1.Width = 25
+        '
+        'DataGridViewTextBoxColumn9
+        '
+        Me.DataGridViewTextBoxColumn9.DataPropertyName = "PartID"
+        Me.DataGridViewTextBoxColumn9.HeaderText = "PartID"
+        Me.DataGridViewTextBoxColumn9.Name = "DataGridViewTextBoxColumn9"
+        Me.DataGridViewTextBoxColumn9.Width = 60
+        '
         'ItemsTableControl
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -281,8 +282,8 @@ Partial Class ItemsTableControl
         CType(Me.SplitContainer1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.SplitContainer1.ResumeLayout(False)
         CType(Me.DataGridView1, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.DataGridView2, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.ItemBindingSource, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.DataGridView2, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.ChildrenBindingSource, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
 
@@ -294,15 +295,6 @@ Partial Class ItemsTableControl
     Friend WithEvents ChildrenBindingSource As BindingSource
     Friend WithEvents DataGridView2 As DataGridView
     Friend WithEvents DataGridView1 As DataGridView
-    Friend WithEvents DataGridViewTextBoxColumn1 As DataGridViewTextBoxColumn
-    Friend WithEvents DataGridViewTextBoxColumn2 As DataGridViewTextBoxColumn
-    Friend WithEvents Item1 As DataGridViewTextBoxColumn
-    Friend WithEvents DataGridViewTextBoxColumn4 As DataGridViewTextBoxColumn
-    Friend WithEvents DataGridViewTextBoxColumn5 As DataGridViewTextBoxColumn
-    Friend WithEvents DataGridViewTextBoxColumn6 As DataGridViewTextBoxColumn
-    Friend WithEvents DataGridViewTextBoxColumn7 As DataGridViewTextBoxColumn
-    Friend WithEvents DataGridViewCheckBoxColumn1 As DataGridViewCheckBoxColumn
-    Friend WithEvents DataGridViewTextBoxColumn9 As DataGridViewTextBoxColumn
     Friend WithEvents TypeDataGridViewTextBoxColumn As DataGridViewTextBoxColumn
     Friend WithEvents ModelDataGridViewTextBoxColumn As DataGridViewTextBoxColumn
     Friend WithEvents Item1DataGridViewTextBoxColumn As DataGridViewTextBoxColumn
@@ -313,4 +305,13 @@ Partial Class ItemsTableControl
     Friend WithEvents ExcludeDataGridViewCheckBoxColumn As DataGridViewCheckBoxColumn
     Friend WithEvents ParentIDDataGridViewTextBoxColumn As DataGridViewTextBoxColumn
     Friend WithEvents PartIDDataGridViewTextBoxColumn As DataGridViewTextBoxColumn
+    Friend WithEvents DataGridViewTextBoxColumn1 As DataGridViewTextBoxColumn
+    Friend WithEvents DataGridViewTextBoxColumn2 As DataGridViewTextBoxColumn
+    Friend WithEvents Item1 As DataGridViewTextBoxColumn
+    Friend WithEvents DataGridViewTextBoxColumn4 As DataGridViewTextBoxColumn
+    Friend WithEvents DataGridViewTextBoxColumn5 As DataGridViewTextBoxColumn
+    Friend WithEvents DataGridViewTextBoxColumn6 As DataGridViewTextBoxColumn
+    Friend WithEvents DataGridViewTextBoxColumn7 As DataGridViewTextBoxColumn
+    Friend WithEvents DataGridViewCheckBoxColumn1 As DataGridViewCheckBoxColumn
+    Friend WithEvents DataGridViewTextBoxColumn9 As DataGridViewTextBoxColumn
 End Class
