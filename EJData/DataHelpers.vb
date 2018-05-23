@@ -44,23 +44,4 @@
         Return New EJData.CorporateEntities(entityBuilder.ToString)
     End Function
 
-
-
-    'Public Class EJContext
-    '    Inherits CorporateEntities
-
-    '    Public Sub New()
-
-    '        MyBase.New("metadata=res://*/AllData.csdl|res://*/AllData.ssdl|res://*/AllData.msl;provider=System.Data.SqlClient;provider connection string=&quot;data source=TIMLAPTOP2015;initial catalog=CorporatePlus;integrated security=True;MultipleActiveResultSets=True;App=EntityFramework&quot;")
-    '    End Sub
-
-    '    'Public DbSet<Blog> Blogs { Get; Set; }
-    '    '   //other dbsets, ctor etc.
-
-
-
-    '    Public Function ObjectContext() As ObjectContext
-    '        Return CType(Me, IObjectContextAdapter).ObjectContext
-    '    End Function
-    'End Class
 End Module

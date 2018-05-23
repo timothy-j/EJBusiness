@@ -114,6 +114,7 @@ Public Class PartsTableControl
                 MsgBox(ex.Message)
                 e.Cancel = True
                 ' TO DO: User can never leave row as _db model or BindingSource still has row flagged as deleted
+                MsgBox("Sorry, I haven't worked out how to stop the program crashing in this circumstance. Please restart the program")
             End Try
         Else
             e.Cancel = True
