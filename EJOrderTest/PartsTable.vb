@@ -10,7 +10,7 @@ Imports System.Reflection
 Imports System.Runtime.CompilerServices
 
 
-Public Class DGTest
+Public Class PartsTable
     Private _db As EJData.CorporateEntities
 
     'Function CreateNewStatement(fields As String) As Expression(Of Func(Of IQueryable, IQueryable))

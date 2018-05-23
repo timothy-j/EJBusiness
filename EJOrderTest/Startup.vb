@@ -24,12 +24,12 @@
     End Sub
 
     Private Sub GridTest_Click(sender As Object, e As EventArgs) Handles GridTest.Click
-        Dim o = New GeneralTableTest
+        Dim o = New GeneralBOMTable
         o.Show()
     End Sub
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
-        Dim o = New DGTest
+        Dim o = New PartsTable
         o.Show()
     End Sub
 End Class

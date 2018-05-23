@@ -115,16 +115,16 @@
     <Compile Include="Control test.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="DGTest.Designer.vb">
-      <DependentUpon>DGTest.vb</DependentUpon>
+    <Compile Include="PartsTable.Designer.vb">
+      <DependentUpon>PartsTable.vb</DependentUpon>
     </Compile>
-    <Compile Include="DGTest.vb">
+    <Compile Include="PartsTable.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="GeneralTableTest.Designer.vb">
-      <DependentUpon>GeneralTableTest.vb</DependentUpon>
+    <Compile Include="GeneralBOMTable.Designer.vb">
+      <DependentUpon>GeneralBOMTable.vb</DependentUpon>
     </Compile>
-    <Compile Include="GeneralTableTest.vb">
+    <Compile Include="GeneralBOMTable.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="OrderForm.vb">
@@ -166,11 +166,11 @@
     <EmbeddedResource Include="Control test.resx">
       <DependentUpon>Control test.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="DGTest.resx">
-      <DependentUpon>DGTest.vb</DependentUpon>
+    <EmbeddedResource Include="PartsTable.resx">
+      <DependentUpon>PartsTable.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="GeneralTableTest.resx">
-      <DependentUpon>GeneralTableTest.vb</DependentUpon>
+    <EmbeddedResource Include="GeneralBOMTable.resx">
+      <DependentUpon>GeneralBOMTable.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="OrderForm.resx">
       <DependentUpon>OrderForm.vb</DependentUpon>
