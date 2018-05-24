@@ -24,6 +24,6 @@ Partial Public Class CustOrderDetail
     Public Overridable Property Item As Item
     Public Overridable Property CustOrderItemDetails As ObservableListSource(Of CustOrderItemDetail) = New ObservableListSource(Of CustOrderItemDetail)
     Public Overridable Property InvoiceDetails As ObservableListSource(Of InvoiceDetail) = New ObservableListSource(Of InvoiceDetail)
-    Public Overridable Property Machines As ObservableListSource(Of Machine) = New ObservableListSource(Of Machine)
+    Public Overridable Property Machine As ObservableListSource(Of Machine) = New ObservableListSource(Of Machine)
 
 End Class

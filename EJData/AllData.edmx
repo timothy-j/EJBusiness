@@ -19,7 +19,6 @@
           <Property Name="DespatchDate" Type="datetime" />
           <Property Name="InvoiceID" Type="int" />
           <Property Name="DiscountFraction" Type="decimal" Precision="5" Scale="4" />
-          <Property Name="ParentOrder" Type="int" />
         </EntityType>
         <EntityType Name="Customers">
           <Key>
@@ -41,6 +40,7 @@
           <Property Name="Contact regularity" Type="varchar" MaxLength="50" />
           <Property Name="Notes" Type="varchar(max)" />
           <Property Name="DefaultCurrency" Type="char" MaxLength="3" />
+          <Property Name="VatNo" Type="varchar" MaxLength="50" />
           <Property Name="Archived" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="CustomOrderAddresses">
@@ -80,6 +80,7 @@
           <Property Name="Description" Type="varchar" MaxLength="250" />
           <Property Name="Quantity" Type="decimal" Precision="18" Scale="4" />
           <Property Name="Status" Type="varchar" MaxLength="50" />
+          <Property Name="ParentID" Type="int" />
         </EntityType>
         <EntityType Name="Errors">
           <Key>
@@ -161,6 +162,13 @@
           <Property Name="Rachel's notes" Type="varchar(max)" />
           <Property Name="Supplied" Type="bit" Nullable="false" />
           <Property Name="Model" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="OperationTypes">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Description" Type="nvarchar(max)" Nullable="false" />
         </EntityType>
         <EntityType Name="OrderDetails">
           <Key>
@@ -267,6 +275,16 @@
           <Property Name="Customer Notes" Type="ntext" />
           <Property Name="upsize_ts" Type="timestamp" StoreGeneratedPattern="Computed" />
         </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'CorporatePlus.dbo.SupplierOperations' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="SupplierOperations">
+          <Key>
+            <PropertyRef Name="SupplierID" />
+            <PropertyRef Name="OperationID" />
+          </Key>
+          <Property Name="SupplierID" Type="int" Nullable="false" />
+          <Property Name="OperationID" Type="int" Nullable="false" />
+        </EntityType>
         <EntityType Name="Suppliers">
           <Key>
             <PropertyRef Name="Entry" />
@@ -292,6 +310,13 @@ warning 6002: The table/view 'CorporatePlus.dbo.FlatOrders' does not have a prim
         <EntityType Name="FlatOrders">
           <Key>
             <PropertyRef Name="ID" />
+            
+            
+            
+            
+            
+            
+            
           </Key>
           <Property Name="ID" Type="int" Nullable="false" />
           <Property Name="Order" Type="int" Nullable="false" />
@@ -341,18 +366,6 @@ warning 6002: The table/view 'CorporatePlus.dbo.FlatOrders' does not have a prim
             </Principal>
             <Dependent Role="CustomerOrders">
               <PropertyRef Name="InvoiceID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_CustomerOrders_CustomerOrders">
-          <End Role="CustomerOrders" Type="Self.CustomerOrders" Multiplicity="0..1" />
-          <End Role="CustomerOrders1" Type="Self.CustomerOrders" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="CustomerOrders">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="CustomerOrders1">
-              <PropertyRef Name="ParentOrder" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -419,6 +432,18 @@ warning 6002: The table/view 'CorporatePlus.dbo.FlatOrders' does not have a prim
             </Principal>
             <Dependent Role="CustOrderItemDetails">
               <PropertyRef Name="DetailID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CustOrderItemDetails_CustOrderItemDetails">
+          <End Role="CustOrderItemDetails" Type="Self.CustOrderItemDetails" Multiplicity="0..1" />
+          <End Role="CustOrderItemDetails1" Type="Self.CustOrderItemDetails" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CustOrderItemDetails">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="CustOrderItemDetails1">
+              <PropertyRef Name="ParentID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -582,6 +607,18 @@ warning 6002: The table/view 'CorporatePlus.dbo.FlatOrders' does not have a prim
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Parts_OperationTypes">
+          <End Role="OperationTypes" Type="Self.OperationTypes" Multiplicity="0..1" />
+          <End Role="Parts" Type="Self.Parts" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="OperationTypes">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Parts">
+              <PropertyRef Name="OpType" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_QuoteDetails_Items">
           <End Role="Items" Type="Self.Items" Multiplicity="0..1" />
           <End Role="QuoteDetails" Type="Self.QuoteDetails" Multiplicity="*" />
@@ -672,6 +709,30 @@ warning 6002: The table/view 'CorporatePlus.dbo.FlatOrders' does not have a prim
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_SupplierOperations_OperationTypes">
+          <End Role="OperationTypes" Type="Self.OperationTypes" Multiplicity="1" />
+          <End Role="SupplierOperations" Type="Self.SupplierOperations" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="OperationTypes">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="SupplierOperations">
+              <PropertyRef Name="OperationID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SupplierOperations_Suppliers">
+          <End Role="Suppliers" Type="Self.Suppliers" Multiplicity="1" />
+          <End Role="SupplierOperations" Type="Self.SupplierOperations" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Suppliers">
+              <PropertyRef Name="Entry" />
+            </Principal>
+            <Dependent Role="SupplierOperations">
+              <PropertyRef Name="SupplierID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <EntityContainer Name="CorporateModelStoreContainer">
           <EntitySet Name="CustomerOrders" EntityType="Self.CustomerOrders" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Customers" EntityType="Self.Customers" Schema="dbo" store:Type="Tables" />
@@ -684,6 +745,7 @@ warning 6002: The table/view 'CorporatePlus.dbo.FlatOrders' does not have a prim
           <EntitySet Name="Items" EntityType="Self.Items" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MachineItems" EntityType="Self.MachineItems" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Machines" EntityType="Self.Machines" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="OperationTypes" EntityType="Self.OperationTypes" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="OrderDetails" EntityType="Self.OrderDetails" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Orders" EntityType="Self.Orders" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Parts" EntityType="Self.Parts" Schema="dbo" store:Type="Tables" />
@@ -692,6 +754,12 @@ warning 6002: The table/view 'CorporatePlus.dbo.FlatOrders' does not have a prim
           <EntitySet Name="Quotes" EntityType="Self.Quotes" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Spare Parts" EntityType="Self.Spare Parts" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Suppliers" EntityType="Self.Suppliers" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SupplierOperations" EntityType="Self.SupplierOperations" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [SupplierOperations].[SupplierID] AS [SupplierID], 
+    [SupplierOperations].[OperationID] AS [OperationID]
+    FROM [dbo].[SupplierOperations] AS [SupplierOperations]</DefiningQuery>
+          </EntitySet>
           <EntitySet Name="FlatOrders" EntityType="Self.FlatOrders" store:Type="Views" store:Schema="dbo">
             <DefiningQuery>SELECT 
     [FlatOrders].[ID] AS [ID], 
@@ -730,10 +798,6 @@ warning 6002: The table/view 'CorporatePlus.dbo.FlatOrders' does not have a prim
             <End Role="Invoices" EntitySet="Invoices" />
             <End Role="CustomerOrders" EntitySet="CustomerOrders" />
           </AssociationSet>
-          <AssociationSet Name="FK_CustomerOrders_CustomerOrders" Association="Self.FK_CustomerOrders_CustomerOrders">
-            <End Role="CustomerOrders" EntitySet="CustomerOrders" />
-            <End Role="CustomerOrders1" EntitySet="CustomerOrders" />
-          </AssociationSet>
           <AssociationSet Name="FK_CustomerOrders_Customers" Association="Self.FK_CustomerOrders_Customers">
             <End Role="Customers" EntitySet="Customers" />
             <End Role="CustomerOrders" EntitySet="CustomerOrders" />
@@ -753,6 +817,10 @@ warning 6002: The table/view 'CorporatePlus.dbo.FlatOrders' does not have a prim
           <AssociationSet Name="FK_CustOrderItemDetails_CustOrderDetails" Association="Self.FK_CustOrderItemDetails_CustOrderDetails">
             <End Role="CustOrderDetails" EntitySet="CustOrderDetails" />
             <End Role="CustOrderItemDetails" EntitySet="CustOrderItemDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CustOrderItemDetails_CustOrderItemDetails" Association="Self.FK_CustOrderItemDetails_CustOrderItemDetails">
+            <End Role="CustOrderItemDetails" EntitySet="CustOrderItemDetails" />
+            <End Role="CustOrderItemDetails1" EntitySet="CustOrderItemDetails" />
           </AssociationSet>
           <AssociationSet Name="FK_CustOrderItemDetails_Items" Association="Self.FK_CustOrderItemDetails_Items">
             <End Role="Items" EntitySet="Items" />
@@ -806,6 +874,10 @@ warning 6002: The table/view 'CorporatePlus.dbo.FlatOrders' does not have a prim
             <End Role="Suppliers" EntitySet="Suppliers" />
             <End Role="Orders" EntitySet="Orders" />
           </AssociationSet>
+          <AssociationSet Name="FK_Parts_OperationTypes" Association="Self.FK_Parts_OperationTypes">
+            <End Role="OperationTypes" EntitySet="OperationTypes" />
+            <End Role="Parts" EntitySet="Parts" />
+          </AssociationSet>
           <AssociationSet Name="FK_QuoteDetails_Items" Association="Self.FK_QuoteDetails_Items">
             <End Role="Items" EntitySet="Items" />
             <End Role="QuoteDetails" EntitySet="QuoteDetails" />
@@ -834,6 +906,14 @@ warning 6002: The table/view 'CorporatePlus.dbo.FlatOrders' does not have a prim
             <End Role="Parts" EntitySet="Parts" />
             <End Role="Spare Parts" EntitySet="Spare Parts" />
           </AssociationSet>
+          <AssociationSet Name="FK_SupplierOperations_OperationTypes" Association="Self.FK_SupplierOperations_OperationTypes">
+            <End Role="OperationTypes" EntitySet="OperationTypes" />
+            <End Role="SupplierOperations" EntitySet="SupplierOperations" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SupplierOperations_Suppliers" Association="Self.FK_SupplierOperations_Suppliers">
+            <End Role="Suppliers" EntitySet="Suppliers" />
+            <End Role="SupplierOperations" EntitySet="SupplierOperations" />
+          </AssociationSet>
         </EntityContainer>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
@@ -855,10 +935,7 @@ warning 6002: The table/view 'CorporatePlus.dbo.FlatOrders' does not have a prim
           <NavigationProperty Name="Customer" Relationship="Self.FK_CustomerOrders_Customers" FromRole="CustomerOrders" ToRole="Customers" />
           <NavigationProperty Name="CustOrderDetails" Relationship="Self.FK_CustOrderDetails_CustomerOrders" FromRole="CustomerOrders" ToRole="CustOrderDetails" />
           <Property Name="DiscountFraction" Type="Decimal" Precision="5" Scale="4" />
-          <Property Name="ParentOrder" Type="Int32" />
           <NavigationProperty Name="Invoice" Relationship="CorporateModel.FK_CustomerOrders_CustomerInvoices" FromRole="CustomerOrder" ToRole="Invoice" />
-          <NavigationProperty Name="CustomerOrders1" Relationship="CorporateModel.FK_CustomerOrders_CustomerOrders" FromRole="CustomerOrder" ToRole="CustomerOrder1" />
-          <NavigationProperty Name="CustomerOrder1" Relationship="CorporateModel.FK_CustomerOrders_CustomerOrders" FromRole="CustomerOrder1" ToRole="CustomerOrder" />
         </EntityType>
         <EntityType Name="Customer">
           <Key>
@@ -885,6 +962,7 @@ warning 6002: The table/view 'CorporatePlus.dbo.FlatOrders' does not have a prim
           <NavigationProperty Name="Machines" Relationship="Self.FK_Machines_Customers" FromRole="Customers" ToRole="Machines" />
           <NavigationProperty Name="Quotes" Relationship="CorporateModel.FK_Quotes_Customers" FromRole="Customer" ToRole="Quotes" />
           <Property Name="Archived" Type="Boolean" Nullable="false" />
+          <Property Name="VatNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="CustomOrderAddress">
           <Key>
@@ -917,7 +995,7 @@ warning 6002: The table/view 'CorporatePlus.dbo.FlatOrders' does not have a prim
           <NavigationProperty Name="CustOrderItemDetails" Relationship="Self.FK_CustOrderItemDetails_CustOrderDetails" FromRole="CustOrderDetails" ToRole="CustOrderItemDetails" />
           <NavigationProperty Name="InvoiceDetails" Relationship="Self.FK_InvoiceDetails_CustOrderDetails" FromRole="CustOrderDetails" ToRole="InvoiceDetails" />
           <Property Name="DiscountFraction" Type="Decimal" Precision="5" Scale="4" />
-          <NavigationProperty Name="Machines" Relationship="CorporateModel.FK_Machines_CustOrderDetails" FromRole="CustOrderDetail" ToRole="Machine" />
+          <NavigationProperty Name="Machine" Relationship="CorporateModel.FK_Machines_CustOrderDetails" FromRole="CustOrderDetail" ToRole="Machine" />
         </EntityType>
         <EntityType Name="CustOrderItemDetail">
           <Key>
@@ -931,6 +1009,9 @@ warning 6002: The table/view 'CorporatePlus.dbo.FlatOrders' does not have a prim
           <Property Name="Status" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="CustOrderDetail" Relationship="Self.FK_CustOrderItemDetails_CustOrderDetails" FromRole="CustOrderItemDetails" ToRole="CustOrderDetails" />
           <NavigationProperty Name="Item" Relationship="Self.FK_CustOrderItemDetails_Items" FromRole="CustOrderItemDetails" ToRole="Items" />
+          <Property Name="ParentID" Type="Int32" />
+          <NavigationProperty Name="Children" Relationship="CorporateModel.FK_CustOrderItemDetails_CustOrderItemDetails" FromRole="CustOrderItemDetail" ToRole="CustOrderItemDetail1" />
+          <NavigationProperty Name="Parent" Relationship="CorporateModel.FK_CustOrderItemDetails_CustOrderItemDetails" FromRole="CustOrderItemDetail1" ToRole="CustOrderItemDetail" />
         </EntityType>
         <EntityType Name="Error">
           <Key>
@@ -1093,6 +1174,7 @@ warning 6002: The table/view 'CorporatePlus.dbo.FlatOrders' does not have a prim
           <NavigationProperty Name="OrderDetails" Relationship="Self.FK_OrderDetails_Parts1" FromRole="Parts" ToRole="OrderDetails" />
           <NavigationProperty Name="Spare_Parts" Relationship="Self.FK_Spare_Parts_Parts1" FromRole="Parts" ToRole="Spare_Parts" />
           <Property Name="OpType" Type="Int32" Nullable="true" />
+          <NavigationProperty Name="OperationType" Relationship="CorporateModel.FK_Parts_OperationTypes" FromRole="Part" ToRole="OperationType" />
         </EntityType>
         <EntityType Name="Spare_Part">
           <Key>
@@ -1128,6 +1210,7 @@ warning 6002: The table/view 'CorporatePlus.dbo.FlatOrders' does not have a prim
           <Property Name="Contact_s_" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="Orders" Relationship="Self.FK_Orders_Suppliers" FromRole="Suppliers" ToRole="Orders" />
           <Property Name="Archived" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="OperationTypes" Relationship="CorporateModel.SupplierOperations1" FromRole="Supplier" ToRole="OperationType" />
         </EntityType>
         <Association Name="FK_CustomerOrders_Customers">
           <End Role="Customers" Type="Self.Customer" Multiplicity="0..1" />
@@ -1487,10 +1570,6 @@ warning 6002: The table/view 'CorporatePlus.dbo.FlatOrders' does not have a prim
             <End Role="Invoice" EntitySet="Invoices" />
             <End Role="CustomerOrder" EntitySet="CustomerOrders" />
           </AssociationSet>
-          <AssociationSet Name="FK_CustomerOrders_CustomerOrders" Association="CorporateModel.FK_CustomerOrders_CustomerOrders">
-            <End Role="CustomerOrder" EntitySet="CustomerOrders" />
-            <End Role="CustomerOrder1" EntitySet="CustomerOrders" />
-          </AssociationSet>
           <AssociationSet Name="FK_Machines_CustOrderDetails" Association="CorporateModel.FK_Machines_CustOrderDetails">
             <End Role="CustOrderDetail" EntitySet="CustOrderDetails" />
             <End Role="Machine" EntitySet="Machines" />
@@ -1504,6 +1583,19 @@ warning 6002: The table/view 'CorporatePlus.dbo.FlatOrders' does not have a prim
             <End Role="QuoteItemDetail1" EntitySet="QuoteItemDetails" />
           </AssociationSet>
           <EntitySet Name="FlatOrders" EntityType="CorporateModel.FlatOrder" />
+          <AssociationSet Name="FK_CustOrderItemDetails_CustOrderItemDetails" Association="CorporateModel.FK_CustOrderItemDetails_CustOrderItemDetails">
+            <End Role="CustOrderItemDetail" EntitySet="CustOrderItemDetails" />
+            <End Role="CustOrderItemDetail1" EntitySet="CustOrderItemDetails" />
+          </AssociationSet>
+          <EntitySet Name="OperationTypes" EntityType="CorporateModel.OperationType" />
+          <AssociationSet Name="FK_Parts_OperationTypes" Association="CorporateModel.FK_Parts_OperationTypes">
+            <End Role="OperationType" EntitySet="OperationTypes" />
+            <End Role="Part" EntitySet="Parts" />
+          </AssociationSet>
+          <AssociationSet Name="SupplierOperations11" Association="CorporateModel.SupplierOperations1">
+            <End Role="OperationType" EntitySet="OperationTypes" />
+            <End Role="Supplier" EntitySet="Suppliers" />
+          </AssociationSet>
           </EntityContainer>
         <EntityType Name="Quote">
           <Key>
@@ -1633,18 +1725,6 @@ warning 6002: The table/view 'CorporatePlus.dbo.FlatOrders' does not have a prim
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_CustomerOrders_CustomerOrders">
-          <End Type="CorporateModel.CustomerOrder" Role="CustomerOrder" Multiplicity="0..1" />
-          <End Type="CorporateModel.CustomerOrder" Role="CustomerOrder1" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="CustomerOrder">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="CustomerOrder1">
-              <PropertyRef Name="ParentOrder" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_Machines_CustOrderDetails">
           <End Type="CorporateModel.CustOrderDetail" Role="CustOrderDetail" Multiplicity="0..1" />
           <End Type="CorporateModel.Machine" Role="Machine" Multiplicity="*" />
@@ -1715,6 +1795,43 @@ warning 6002: The table/view 'CorporatePlus.dbo.FlatOrders' does not have a prim
           <Property Name="Address4" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Postcode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
+        <Association Name="FK_CustOrderItemDetails_CustOrderItemDetails">
+          <End Type="CorporateModel.CustOrderItemDetail" Role="CustOrderItemDetail" Multiplicity="0..1" />
+          <End Type="CorporateModel.CustOrderItemDetail" Role="CustOrderItemDetail1" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CustOrderItemDetail">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="CustOrderItemDetail1">
+              <PropertyRef Name="ParentID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="OperationType">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Description" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Parts" Relationship="CorporateModel.FK_Parts_OperationTypes" FromRole="OperationType" ToRole="Part" />
+          <NavigationProperty Name="Suppliers" Relationship="CorporateModel.SupplierOperations1" FromRole="OperationType" ToRole="Supplier" />
+        </EntityType>
+        <Association Name="FK_Parts_OperationTypes">
+          <End Type="CorporateModel.OperationType" Role="OperationType" Multiplicity="0..1" />
+          <End Type="CorporateModel.Part" Role="Part" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="OperationType">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Part">
+              <PropertyRef Name="OpType" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="SupplierOperations1">
+          <End Type="CorporateModel.OperationType" Role="OperationType" Multiplicity="*" />
+          <End Type="CorporateModel.Supplier" Role="Supplier" Multiplicity="*" />
+        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1724,7 +1841,6 @@ warning 6002: The table/view 'CorporatePlus.dbo.FlatOrders' does not have a prim
           <EntitySetMapping Name="CustomerOrders">
             <EntityTypeMapping TypeName="CorporateModel.CustomerOrder">
               <MappingFragment StoreEntitySet="CustomerOrders">
-                <ScalarProperty Name="ParentOrder" ColumnName="ParentOrder" />
                 <ScalarProperty Name="DiscountFraction" ColumnName="DiscountFraction" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="CustomerID" ColumnName="CustomerID" />
@@ -1741,6 +1857,7 @@ warning 6002: The table/view 'CorporatePlus.dbo.FlatOrders' does not have a prim
           <EntitySetMapping Name="Customers">
             <EntityTypeMapping TypeName="CorporateModel.Customer">
               <MappingFragment StoreEntitySet="Customers">
+                <ScalarProperty Name="VatNo" ColumnName="VatNo" />
                 <ScalarProperty Name="Archived" ColumnName="Archived" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="Company" ColumnName="Company" />
@@ -1793,6 +1910,7 @@ warning 6002: The table/view 'CorporatePlus.dbo.FlatOrders' does not have a prim
           <EntitySetMapping Name="CustOrderItemDetails">
             <EntityTypeMapping TypeName="CorporateModel.CustOrderItemDetail">
               <MappingFragment StoreEntitySet="CustOrderItemDetails">
+                <ScalarProperty Name="ParentID" ColumnName="ParentID" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="DetailID" ColumnName="DetailID" />
                 <ScalarProperty Name="ItemID" ColumnName="ItemID" />
@@ -2054,6 +2172,22 @@ warning 6002: The table/view 'CorporatePlus.dbo.FlatOrders' does not have a prim
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="OperationTypes">
+            <EntityTypeMapping TypeName="CorporateModel.OperationType">
+              <MappingFragment StoreEntitySet="OperationTypes">
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <AssociationSetMapping Name="SupplierOperations11" TypeName="CorporateModel.SupplierOperations1" StoreEntitySet="SupplierOperations">
+            <EndProperty Name="Supplier">
+              <ScalarProperty Name="Entry" ColumnName="SupplierID" />
+            </EndProperty>
+            <EndProperty Name="OperationType">
+              <ScalarProperty Name="ID" ColumnName="OperationID" />
+            </EndProperty>
+          </AssociationSetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

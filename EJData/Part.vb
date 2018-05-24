@@ -30,5 +30,6 @@ Partial Public Class Part
     Public Overridable Property Items As ObservableListSource(Of Item) = New ObservableListSource(Of Item)
     Public Overridable Property OrderDetails As ObservableListSource(Of OrderDetail) = New ObservableListSource(Of OrderDetail)
     Public Overridable Property Spare_Parts As Spare_Part
+    Public Overridable Property OperationType As OperationType
 
 End Class

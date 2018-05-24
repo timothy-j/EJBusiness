@@ -17,8 +17,11 @@ Partial Public Class CustOrderItemDetail
     Public Property Description As String
     Public Property Quantity As Nullable(Of Decimal)
     Public Property Status As String
+    Public Property ParentID As Nullable(Of Integer)
 
     Public Overridable Property CustOrderDetail As CustOrderDetail
     Public Overridable Property Item As Item
+    Public Overridable Property Children As ObservableListSource(Of CustOrderItemDetail) = New ObservableListSource(Of CustOrderItemDetail)
+    Public Overridable Property Parent As CustOrderItemDetail
 
 End Class

@@ -28,5 +28,6 @@ Partial Public Class Supplier
     Public Property Archived As Boolean
 
     Public Overridable Property Orders As ObservableListSource(Of Order) = New ObservableListSource(Of Order)
+    Public Overridable Property OperationTypes As ObservableListSource(Of OperationType) = New ObservableListSource(Of OperationType)
 
 End Class

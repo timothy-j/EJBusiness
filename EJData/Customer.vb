@@ -28,6 +28,7 @@ Partial Public Class Customer
     Public Property Notes As String
     Public Property DefaultCurrency As String
     Public Property Archived As Boolean
+    Public Property VatNo As String
 
     Public Overridable Property CustomerOrders As ObservableListSource(Of CustomerOrder) = New ObservableListSource(Of CustomerOrder)
     Public Overridable Property Invoices As ObservableListSource(Of Invoice) = New ObservableListSource(Of Invoice)

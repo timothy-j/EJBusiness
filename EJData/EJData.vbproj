@@ -149,6 +149,9 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Compile Include="OperationType.vb">
+      <DependentUpon>AllData.tt</DependentUpon>
+    </Compile>
     <Compile Include="Order.vb">
       <DependentUpon>AllData.tt</DependentUpon>
     </Compile>

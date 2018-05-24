@@ -75,26 +75,9 @@ Public Class EJGeneralBomTable
         DataGridView1.Columns.Item("MC000Column").Visible = False
         DataGridView1.Columns.Item("MCS000Column").Visible = False
 
-        '' HACK: TODO: get this to work. should be Parent != top level item (rather than Is Nothing)
-        'Dim Bom As IQueryable(Of EJData.Item) = From i In _db.Items.Include("MachineItems").Include("Part")
-        '                                        Let topLevel = If(i.Parent Is Nothing, i.Item1, i.Parent.Item1 + "_")
-        '                                        Order By topLevel, i.Item1
-        '                                        Where i.Status <> "D"
-        '                                        Select i
-
-        'If MachineType = "" Or MachineType = "All" Then
-        '    ' No further filtering needed
-        'Else
-        '    ' Filter Items for machineType
-        '    Bom = From m In Bom
-        '          Where m.Type = MachineType
-        'End If
-
-        'GeneralBindingSource.DataSource = Bom.ToList
 
         DataGridView1.AutoGenerateColumns = False
         Requery()
-        'DataGridView1.DataSource = GeneralBindingSource
     End Sub
 
     Private Sub DataGridView1_RowsAdded(sender As Object, e As DataGridViewRowsAddedEventArgs) Handles DataGridView1.RowsAdded

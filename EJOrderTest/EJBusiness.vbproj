@@ -149,6 +149,12 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Compile Include="QuoteForm2.Designer.vb">
+      <DependentUpon>QuoteForm2.vb</DependentUpon>
+    </Compile>
+    <Compile Include="QuoteForm2.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="QuoteForm.Designer.vb">
       <DependentUpon>QuoteForm.vb</DependentUpon>
     </Compile>
@@ -180,6 +186,9 @@
       <LastGenOutput>Resources.Designer.vb</LastGenOutput>
       <CustomToolNamespace>My.Resources</CustomToolNamespace>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="QuoteForm2.resx">
+      <DependentUpon>QuoteForm2.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="QuoteForm.resx">
       <DependentUpon>QuoteForm.vb</DependentUpon>

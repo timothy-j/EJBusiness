@@ -5,7 +5,7 @@
     End Sub
 
     Private Sub btnQuotes_Click(sender As Object, e As EventArgs) Handles btnQuotes.Click
-        Dim o = New QuoteForm
+        Dim o = New QuoteForm2
         o.Show()
     End Sub
 

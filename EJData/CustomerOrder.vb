@@ -21,12 +21,9 @@ Partial Public Class CustomerOrder
     Public Property DespatchDate As Nullable(Of Date)
     Public Property InvoiceID As Nullable(Of Integer)
     Public Property DiscountFraction As Nullable(Of Decimal)
-    Public Property ParentOrder As Nullable(Of Integer)
 
     Public Overridable Property Customer As Customer
     Public Overridable Property CustOrderDetails As ObservableListSource(Of CustOrderDetail) = New ObservableListSource(Of CustOrderDetail)
     Public Overridable Property Invoice As Invoice
-    Public Overridable Property CustomerOrders1 As ObservableListSource(Of CustomerOrder) = New ObservableListSource(Of CustomerOrder)
-    Public Overridable Property CustomerOrder1 As CustomerOrder
 
 End Class

@@ -47,5 +47,6 @@ Partial Public Class CorporateEntities
     Public Overridable Property QuoteDetails() As DbSet(Of QuoteDetail)
     Public Overridable Property QuoteItemDetails() As DbSet(Of QuoteItemDetail)
     Public Overridable Property FlatOrders() As DbSet(Of FlatOrder)
+    Public Overridable Property OperationTypes() As DbSet(Of OperationType)
 
 End Class
