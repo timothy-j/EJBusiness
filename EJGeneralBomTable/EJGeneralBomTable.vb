@@ -87,6 +87,7 @@ Public Class EJGeneralBomTable
 
         DataGridView1.AutoGenerateColumns = False
         Requery()
+        DataGridView1.DataSource = GeneralBindingSource ' Done just once
     End Sub
 
 
@@ -394,13 +395,12 @@ Public Class EJGeneralBomTable
     End Sub
 
     Sub Requery()
-        ' HACK: TODO: get this to work. should be Parent != top level item (rather than Is Nothing)
+        ' Start basic item query
         Dim Bom As IQueryable(Of EJData.Item) = From i In _db.Items.Include("QuoteItemDetails").Include("Part")
-                                                Let topLevel = If(i.Parent Is Nothing, i.Item1, i.Parent.Item1 + "_")
-                                                Order By topLevel, i.Item1
                                                 Where i.Status <> "D"
                                                 Select i
 
+        ' Filter by machine type
         If MachineType = "" Or MachineType = "All" Then
             ' No further filtering needed
         Else
@@ -409,17 +409,32 @@ Public Class EJGeneralBomTable
                   Where m.Type = MachineType
         End If
 
+        ' Add user filters from filter list if _filterOn is true
         If _filterOn Then
             For Each Filter As EJFilter In _filterList
                 If Filter.columnName.StartsWith("MC") Then
-                    '' TODO: implement machine column filtering
-                    'Dim cods = (From mc In _db.Machines
-                    '            Where mc.Number = 249
-                    '            Select mc.CustOrderDetail.CustOrderItemDetails).FirstOrDefault
+                    ' Machine column filtering
+                    Dim mcNumber As Integer
+                    Dim propertyString As String
+                    If Filter.columnName.StartsWith("MCS") Then
+                        mcNumber = CInt(Filter.columnName.Replace("MCS", "").Replace("Column", ""))
+                        propertyString = "Status"
+                    Else
+                        mcNumber = CInt(Filter.columnName.Replace("MC", "").Replace("Column", ""))
+                        propertyString = "Quantity"
+                    End If
+                    Dim cods = From cod In _db.CustOrderItemDetails
+                               Where cod.CustOrderDetail.Machine.FirstOrDefault.Number = mcNumber
 
-                    'cods = cods.Where(Filter.prefix & "Status" & Filter.condition)
-                    'Bom = From b In Bom, cod In cods
-                    '      Where b.CustOrderItemDetails.Contains(cod)
+                    Try
+                        ' TODO: returns no rows when filtering for 'is blank' i.e. = null
+                        cods = cods.Where(Filter.prefix & propertyString & Filter.condition)
+                        Bom = From b In Bom, cod In cods
+                              Where b.CustOrderItemDetails.Contains(cod)
+                              Select b
+                    Catch ex As Exception
+                        MsgBox(ex.Message)
+                    End Try
                 Else
                     Dim whereString As String = Filter.prefix & DataGridView1.Columns.Item(Filter.columnName).DataPropertyName & Filter.condition
                     Try
@@ -431,10 +446,16 @@ Public Class EJGeneralBomTable
             Next
         End If
 
+        ' Order the final results
+        ' HACK: TODO: get this to work. should be Parent != top level item (rather than Is Nothing)
+        Bom = From i In Bom
+              Let topLevel = If(i.Parent Is Nothing, i.Item1, i.Parent.Item1 + "_")
+              Order By topLevel, i.Item1
+              Select i
+
         GeneralBindingSource.DataSource = Bom.ToList
 
-        'DataGridView1.AutoGenerateColumns = False
-        DataGridView1.DataSource = GeneralBindingSource
+        'DataGridView1.DataSource = GeneralBindingSource
     End Sub
 
     Private Sub AddFilter(Filter As EJFilter)
