@@ -4,13 +4,18 @@ Imports System.Reflection
 
 Public Class EJGeneralBomTable
     Private _db As EJData.CorporateEntities
-    Private _machines As List(Of Short)             ' List of machines to be displayed on form
+    Private _machines As List(Of MachInfo)             ' List of machines to be displayed on form
     Private _initialisingGrid As Boolean            ' Flag to avoid uneccessary processing while columns are being added
     Private _editMouseLocation As Point
     Private _dynamicSelectingCell As DataGridViewCell
     Private _contextMenuCell As DataGridViewCell    ' The cell the context menu opened on
     Private _filterList As New Stack(Of EJFilter)
     Private _filterOn As Boolean
+
+    Class MachInfo
+        Public Property Number As Short
+        Public Property DetailID As Integer?
+    End Class
 
     Structure EJFilter
         Public columnName As String
@@ -53,21 +58,25 @@ Public Class EJGeneralBomTable
                        Where m.Type = MachineType
         End If
 
+
+        '
         _machines = (From m In machines
                      Order By m.Number Descending
-                     Select m.Number).ToList
+                     Select New MachInfo With {.Number = m.Number, .DetailID = m.OrderDetailID}).ToList
+
+
 
         For Each mc In _machines
 
             Dim colS As DataGridViewColumn = DataGridView1.Columns.Item("MCS000Column").Clone
-            colS.Name = "MCS" & mc & "Column"
-            colS.HeaderText = "S" & mc
+            colS.Name = "MCS" & mc.Number & "Column"
+            colS.HeaderText = "S" & mc.Number
             colS.ValueType = GetType(String)
             DataGridView1.Columns.Insert(0, colS)
 
             Dim col As DataGridViewColumn = DataGridView1.Columns.Item("MC000Column").Clone
-            col.Name = "MC" & mc & "Column"
-            col.HeaderText = mc
+            col.Name = "MC" & mc.Number & "Column"
+            col.HeaderText = mc.Number
             col.ValueType = GetType(EJData.MachineItem).GetProperty("Qty").PropertyType
             DataGridView1.Columns.Insert(0, col)
         Next
@@ -80,6 +89,12 @@ Public Class EJGeneralBomTable
         Requery()
     End Sub
 
+
+    ''' <summary>
+    ''' Add data to machine columns and format rows
+    ''' </summary>
+    ''' <param name="sender"></param>
+    ''' <param name="e"></param>
     Private Sub DataGridView1_RowsAdded(sender As Object, e As DataGridViewRowsAddedEventArgs) Handles DataGridView1.RowsAdded
         If DataGridView1.Rows(e.RowIndex).DataBoundItem Is Nothing Then Exit Sub
 
@@ -91,12 +106,18 @@ Public Class EJGeneralBomTable
             If DataGridView1.Rows.Item(i).DataBoundItem.Parent IsNot Nothing Then DataGridView1.Rows.Item(i).DefaultCellStyle.ForeColor = ChildRowTextColor
 
             For Each mc In _machines
-                Dim m = (From mi In CType(DataGridView1.Rows(i).DataBoundItem, EJData.Item).MachineItems
-                         Where mi.MachineID = mc
-                         Select mi.Qty, mi.Status).FirstOrDefault
+                'Dim m = (From mi In CType(DataGridView1.Rows(i).DataBoundItem, EJData.Item).MachineItems
+                '         Where mi.MachineID = mc
+                '         Select mi.Qty, mi.Status).FirstOrDefault
+
+                ' First go at machines stored in CustOrderItemDetails
+                Dim m = (From cod In CType(DataGridView1.Rows(i).DataBoundItem, EJData.Item).CustOrderItemDetails
+                         Where cod.DetailID = mc.DetailID
+                         Select Qty = cod.Quantity, cod.Status).FirstOrDefault
+
                 If m Is Nothing Then Continue For
-                DataGridView1.Rows(i).Cells("MC" & mc & "Column").Value = m.Qty
-                DataGridView1.Rows(i).Cells("MCS" & mc & "Column").Value = m.Status
+                DataGridView1.Rows(i).Cells("MC" & mc.Number & "Column").Value = m.Qty
+                DataGridView1.Rows(i).Cells("MCS" & mc.Number & "Column").Value = m.Status
             Next
         Next
 
@@ -145,7 +166,6 @@ Public Class EJGeneralBomTable
 
     Private Sub ItemBindingSource_CurrentChanged(sender As Object, e As EventArgs) Handles GeneralBindingSource.CurrentChanged
         _getRowValues = True
-
     End Sub
 
     Private Sub DataGridView1_MouseDown(sender As Object, e As MouseEventArgs) Handles DataGridView1.MouseDown
@@ -207,42 +227,29 @@ Public Class EJGeneralBomTable
         End If
     End Sub
 
-    'Private Sub DataGridView1_MouseClick(sender As Object, e As MouseEventArgs) Handles DataGridView1.MouseClick
-    '    If e.Button = MouseButtons.Right Then
-    '        Dim Bom As IQueryable(Of EJData.Item) = From i In _db.Items.Include("MachineItems").Include("Part")
-    '                                                Order By i.Type, i.Item1
-    '        'Where ("i.Type = RF")
-    '        'Where i.Type = "RF"
-    '        Dim filterString As String = "Not Type.Contains(""F"") Or Item.StartsWith(""AC"")"
-
-    '        Try
-
-    '            Bom = Bom.Where(filterString, Nothing)
-    '            GeneralBindingSource.DataSource = Bom.ToList
-    '        Catch ex As Exception
-    '            MsgBox("Filter was not applied due to the following error:" + vbNewLine + ex.Message + vbNewLine + vbNewLine + "Filter string:" + vbNewLine + filterString)
-    '        End Try
-    '        Dim info() As PropertyInfo = GetType(EJData.Item).GetProperties
-    '        Dim info2() As MethodInfo = GetType(EJData.Item).GetMethods
-    '    End If
-    'End Sub
-
+    ''' <summary>
+    ''' Save changes back to machine column data source
+    ''' </summary>
+    ''' <param name="sender"></param>
+    ''' <param name="e"></param>
     Private Sub DataGridView1_CellValueChanged(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridView1.CellValueChanged
         If Not _initialisingGrid Then
             If DataGridView1.Columns(e.ColumnIndex).Name.StartsWith("MC") Then
                 Dim rowItem As EJData.Item = DataGridView1.Rows.Item(e.RowIndex).DataBoundItem
                 ' HACK: TODO: get this to work. should be Parent != top level item
-                If rowItem.Parent IsNot Nothing Then
-                    For Each mc In _machines
-                        If DataGridView1.Columns(e.ColumnIndex).Name = "MC" & mc & "Column" Then
-                            rowItem.MachineItems.Where("MachineID = " & mc).FirstOrDefault.Qty _
-                            = DataGridView1.Rows.Item(e.RowIndex).Cells.Item("MC" & mc & "Column").Value
-                        ElseIf DataGridView1.Columns(e.ColumnIndex).Name = "MCS" & mc & "Column" Then
-                            rowItem.MachineItems.Where("MachineID = " & mc).FirstOrDefault.Status _
-                            = DataGridView1.Rows.Item(e.RowIndex).Cells.Item("MCS" & mc & "Column").Value
-                        End If
+                'If rowItem.Parent IsNot Nothing Then
+                For Each mc In _machines
+                    Dim coid As EJData.CustOrderItemDetail = (From cod In CType(rowItem, EJData.Item).CustOrderItemDetails
+                                                              Where cod.DetailID = mc.DetailID).FirstOrDefault
+                    If DataGridView1.Columns(e.ColumnIndex).Name = "MC" & mc.Number & "Column" Then
+                        ' This is a Qty column..
+                        coid.Quantity = DataGridView1.Rows.Item(e.RowIndex).Cells.Item("MC" & mc.Number & "Column").Value
+                    ElseIf DataGridView1.Columns(e.ColumnIndex).Name = "MCS" & mc.Number & "Column" Then
+                        ' This is a Status column..
+                        coid.Status = DataGridView1.Rows.Item(e.RowIndex).Cells.Item("MCS" & mc.Number & "Column").Value
+                    End If
                     Next
-                End If
+                'End If
             End If
         End If
     End Sub
@@ -262,14 +269,15 @@ Public Class EJGeneralBomTable
     End Sub
 
     Private Sub DataGridView1_EditingControlShowing(sender As Object, e As DataGridViewEditingControlShowingEventArgs) Handles DataGridView1.EditingControlShowing
+        ' Set the ContextMenuStrip for the editing control. Items are chosen and set up only when context menu opens
         e.Control.ContextMenuStrip = DefaultContextStrip
-        '' HACK:   consider other edit control types?
-        '        Dim ctl As TextBox = CType(e.Control, TextBox)
-        '        Dim pt As Point = e.Control.PointToClient(_editMouseLocation)
-        '        ctl.SelectionStart = ctl.GetCharIndexFromPosition(_editMouseLocation)
     End Sub
 
-
+    ''' <summary>
+    ''' Prepares the context strip for display with appropriate menu items
+    ''' </summary>
+    ''' <param name="sender"></param>
+    ''' <param name="e"></param>
     Private Sub DefaultContextStrip_Opening(sender As Object, e As CancelEventArgs) Handles DefaultContextStrip.Opening
         ' Only appears on editing controls (so far) so don't need to take account of other situations (yet)
 
@@ -385,36 +393,9 @@ Public Class EJGeneralBomTable
         End If
     End Sub
 
-    'Private Sub DataGridView1_CellMouseDown(sender As Object, e As DataGridViewCellMouseEventArgs) Handles DataGridView1.CellMouseDown
-    '    ' If click was on a header..
-    '    If e.RowIndex < 0 Or e.ColumnIndex < 0 Then Exit Sub
-
-    '    Dim cell As DataGridViewCell = DataGridView1.Rows.Item(e.RowIndex).Cells.Item(e.ColumnIndex)
-    '    If cell.IsInEditMode Or DataGridView1.SelectedCells.Count > 1 Then
-    '        Exit Sub
-    '    Else
-
-    '        _editMouseLocation = e.Location
-    '        _dynamicSelectingCell = cell
-    '        'DataGridView1.CurrentCell = cell
-    '        '' Mouse location must be se before this call, as this is when cell edit is called
-    '        'DataGridView1.BeginEdit(False)
-    '    End If
-    'End Sub
-
-    'Private Sub DataGridView1_CellMouseMove(sender As Object, e As DataGridViewCellMouseEventArgs) Handles DataGridView1.CellMouseMove
-    '    If _dynamicSelectingCell IsNot Nothing Then
-    '        ' Simulate text selection in this cell
-    '        ' HACK: assumes textboxcell
-    '        'CType(_dynamicSelectingCell, DataGridViewTextBoxCell)
-    '        ' Cause cell to repaint
-    '        DataGridView1.InvalidateCell(_dynamicSelectingCell)
-    '    End If
-    'End Sub
-
     Sub Requery()
         ' HACK: TODO: get this to work. should be Parent != top level item (rather than Is Nothing)
-        Dim Bom As IQueryable(Of EJData.Item) = From i In _db.Items.Include("MachineItems").Include("Part")
+        Dim Bom As IQueryable(Of EJData.Item) = From i In _db.Items.Include("QuoteItemDetails").Include("Part")
                                                 Let topLevel = If(i.Parent Is Nothing, i.Item1, i.Parent.Item1 + "_")
                                                 Order By topLevel, i.Item1
                                                 Where i.Status <> "D"
@@ -431,7 +412,14 @@ Public Class EJGeneralBomTable
         If _filterOn Then
             For Each Filter As EJFilter In _filterList
                 If Filter.columnName.StartsWith("MC") Then
-                    ' TODO: implement machine column filtering
+                    '' TODO: implement machine column filtering
+                    'Dim cods = (From mc In _db.Machines
+                    '            Where mc.Number = 249
+                    '            Select mc.CustOrderDetail.CustOrderItemDetails).FirstOrDefault
+
+                    'cods = cods.Where(Filter.prefix & "Status" & Filter.condition)
+                    'Bom = From b In Bom, cod In cods
+                    '      Where b.CustOrderItemDetails.Contains(cod)
                 Else
                     Dim whereString As String = Filter.prefix & DataGridView1.Columns.Item(Filter.columnName).DataPropertyName & Filter.condition
                     Try

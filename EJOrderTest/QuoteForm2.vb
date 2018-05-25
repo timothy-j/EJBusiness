@@ -4,6 +4,9 @@ Public Class QuoteForm2
     Private _db As EJData.CorporateEntities
     Private _detailToDelete As EJData.QuoteDetail
     Private _itemDetailToDelete As EJData.QuoteItemDetail
+    ' HACK: up/down button test
+    Dim upBtn As New Button
+    Dim downBtn As New Button
 
     ''' <summary>
     ''' Defines a concrete type to be returned by EF query for combobox list
@@ -62,6 +65,17 @@ Public Class QuoteForm2
         ItemID.DisplayMember = "Item1"
         ParentID.ValueMember = "ID"
         ParentID.DisplayMember = "Item1"
+
+        ' HACK: up/down button layout
+        upBtn.Width = 12
+        upBtn.Height = 20
+        upBtn.Text = "^"
+        downBtn.Width = 12
+        downBtn.Height = 20
+        downBtn.Left = 12
+        downBtn.Text = "v"
+        QuoteDetailsDataGridView.Controls.Add(upBtn)
+        QuoteDetailsDataGridView.Controls.Add(downBtn)
 
     End Sub
 
@@ -284,4 +298,38 @@ Public Class QuoteForm2
         End If
     End Sub
 
+    ' HACK: up/down buttons
+#Region "up/down button hack"
+    Private Sub QuoteDetailsDataGridView_RowEnter(sender As Object, e As DataGridViewCellEventArgs) Handles QuoteDetailsDataGridView.RowEnter
+        upBtn.Top = QuoteDetailsDataGridView.GetRowDisplayRectangle(e.RowIndex, False).Top
+        downBtn.Top = QuoteDetailsDataGridView.GetRowDisplayRectangle(e.RowIndex, False).Top
+        If e.RowIndex < 1 Then
+            upBtn.Visible = False
+        Else
+            upBtn.Visible = True
+        End If
+        If e.RowIndex = QuoteDetailsDataGridView.Rows.Count - 2 Then
+            downBtn.Visible = False
+        Else
+            downBtn.Visible = True
+        End If
+    End Sub
+
+    Private Sub QuoteDetailsDataGridView_Scroll(sender As Object, e As ScrollEventArgs) Handles QuoteDetailsDataGridView.Scroll
+        ' TODO: sort out buttons disappearing when scrolled out of view and back. Ideas:
+        ' Looks like it might be something to do with order of events as it
+        Dim rowTop As Integer = QuoteDetailsDataGridView.GetRowDisplayRectangle(QuoteDetailsDataGridView.CurrentRow.Index, False).Top
+        If rowTop < QuoteDetailsDataGridView.ColumnHeadersHeight Then
+            upBtn.Visible = False
+            downBtn.Visible = False
+        Else
+            upBtn.Top = rowTop
+            downBtn.Top = rowTop
+            upBtn.Visible = True
+            downBtn.Visible = True
+        End If
+        If QuoteDetailsDataGridView.CurrentRow.Index < 1 Then upBtn.Visible = False
+        If QuoteDetailsDataGridView.CurrentRow.Index = QuoteDetailsDataGridView.Rows.Count - 2 Then upBtn.Visible = False
+    End Sub
+#End Region
 End Class

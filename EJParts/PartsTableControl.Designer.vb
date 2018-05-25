@@ -23,10 +23,11 @@ Partial Class PartsTableControl
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
-        Dim DataGridViewCellStyle1 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle2 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle3 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle4 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Me.SplitContainer1 = New System.Windows.Forms.SplitContainer()
         Me.DataGridView1 = New System.Windows.Forms.DataGridView()
+        Me.OperationBindingSource = New System.Windows.Forms.BindingSource(Me.components)
         Me.PartBindingSource = New System.Windows.Forms.BindingSource(Me.components)
         Me.ItemsTableControl2 = New EJItems.ItemsTableControl()
         Me.Label1 = New System.Windows.Forms.Label()
@@ -40,12 +41,13 @@ Partial Class PartsTableControl
         Me.Status = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.Unit = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.DateChecked = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.OpType = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.OpType = New EJControls.EJComboBoxColumn()
         CType(Me.SplitContainer1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SplitContainer1.Panel1.SuspendLayout()
         Me.SplitContainer1.Panel2.SuspendLayout()
         Me.SplitContainer1.SuspendLayout()
         CType(Me.DataGridView1, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.OperationBindingSource, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.PartBindingSource, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
@@ -65,7 +67,7 @@ Partial Class PartsTableControl
         '
         Me.SplitContainer1.Panel2.Controls.Add(Me.ItemsTableControl2)
         Me.SplitContainer1.Panel2.Controls.Add(Me.Label1)
-        Me.SplitContainer1.Size = New System.Drawing.Size(696, 459)
+        Me.SplitContainer1.Size = New System.Drawing.Size(826, 459)
         Me.SplitContainer1.SplitterDistance = 250
         Me.SplitContainer1.SplitterWidth = 2
         Me.SplitContainer1.TabIndex = 3
@@ -78,11 +80,16 @@ Partial Class PartsTableControl
         Me.DataGridView1.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.Stock, Me.PartNo, Me.DrawingType, Me.DescriptionDataGridViewTextBoxColumn, Me.Supplier, Me.SuppliersDescription, Me.ProductionNotes, Me.Status, Me.Unit, Me.DateChecked, Me.OpType})
         Me.DataGridView1.DataSource = Me.PartBindingSource
         Me.DataGridView1.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.DataGridView1.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnEnter
         Me.DataGridView1.Location = New System.Drawing.Point(0, 0)
         Me.DataGridView1.Name = "DataGridView1"
         Me.DataGridView1.RowHeadersWidth = 25
-        Me.DataGridView1.Size = New System.Drawing.Size(692, 246)
+        Me.DataGridView1.Size = New System.Drawing.Size(822, 246)
         Me.DataGridView1.TabIndex = 3
+        '
+        'OperationBindingSource
+        '
+        Me.OperationBindingSource.DataSource = GetType(EJParts.PartsTableControl.Operation)
         '
         'PartBindingSource
         '
@@ -94,10 +101,11 @@ Partial Class PartsTableControl
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.ItemsTableControl2.DataBindings.Add(New System.Windows.Forms.Binding("PartIDFilter", Me.PartBindingSource, "ID", True, System.Windows.Forms.DataSourceUpdateMode.Never))
+        Me.ItemsTableControl2.DBContext = Nothing
         Me.ItemsTableControl2.Location = New System.Drawing.Point(0, 22)
         Me.ItemsTableControl2.Name = "ItemsTableControl2"
         Me.ItemsTableControl2.PartIDFilter = Nothing
-        Me.ItemsTableControl2.Size = New System.Drawing.Size(692, 187)
+        Me.ItemsTableControl2.Size = New System.Drawing.Size(822, 193)
         Me.ItemsTableControl2.SplitterDistance = 100
         Me.ItemsTableControl2.TabIndex = 5
         '
@@ -113,9 +121,9 @@ Partial Class PartsTableControl
         'Stock
         '
         Me.Stock.DataPropertyName = "Stock"
-        DataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
-        DataGridViewCellStyle1.Format = "0.##"
-        Me.Stock.DefaultCellStyle = DataGridViewCellStyle1
+        DataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
+        DataGridViewCellStyle3.Format = "0.##"
+        Me.Stock.DefaultCellStyle = DataGridViewCellStyle3
         Me.Stock.HeaderText = "Stock"
         Me.Stock.Name = "Stock"
         Me.Stock.Width = 40
@@ -174,10 +182,10 @@ Partial Class PartsTableControl
         'Unit
         '
         Me.Unit.DataPropertyName = "Unit"
-        DataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
-        DataGridViewCellStyle2.Format = "C2"
-        DataGridViewCellStyle2.NullValue = Nothing
-        Me.Unit.DefaultCellStyle = DataGridViewCellStyle2
+        DataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
+        DataGridViewCellStyle4.Format = "C2"
+        DataGridViewCellStyle4.NullValue = Nothing
+        Me.Unit.DefaultCellStyle = DataGridViewCellStyle4
         Me.Unit.HeaderText = "Unit"
         Me.Unit.Name = "Unit"
         Me.Unit.Width = 60
@@ -191,10 +199,18 @@ Partial Class PartsTableControl
         '
         'OpType
         '
+        Me.OpType.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill
         Me.OpType.DataPropertyName = "OpType"
+        Me.OpType.DataSource = Me.OperationBindingSource
+        Me.OpType.DisplayMember = "Description"
+        Me.OpType.DisplayStyle = System.Windows.Forms.DataGridViewComboBoxDisplayStyle.[Nothing]
+        Me.OpType.FillWeight = 90.0!
         Me.OpType.HeaderText = "OpType"
+        Me.OpType.MinimumWidth = 80
         Me.OpType.Name = "OpType"
-        Me.OpType.Width = 40
+        Me.OpType.Resizable = System.Windows.Forms.DataGridViewTriState.[True]
+        Me.OpType.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic
+        Me.OpType.ValueMember = "ID"
         '
         'PartsTableControl
         '
@@ -202,13 +218,14 @@ Partial Class PartsTableControl
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.Controls.Add(Me.SplitContainer1)
         Me.Name = "PartsTableControl"
-        Me.Size = New System.Drawing.Size(696, 459)
+        Me.Size = New System.Drawing.Size(826, 459)
         Me.SplitContainer1.Panel1.ResumeLayout(False)
         Me.SplitContainer1.Panel2.ResumeLayout(False)
         Me.SplitContainer1.Panel2.PerformLayout()
         CType(Me.SplitContainer1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.SplitContainer1.ResumeLayout(False)
         CType(Me.DataGridView1, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.OperationBindingSource, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.PartBindingSource, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
 
@@ -220,6 +237,7 @@ Partial Class PartsTableControl
     Friend WithEvents Item1 As DataGridViewTextBoxColumn
     Friend WithEvents DataGridView1 As DataGridView
     Friend WithEvents ItemsTableControl2 As EJItems.ItemsTableControl
+    Friend WithEvents OperationBindingSource As BindingSource
     Friend WithEvents Stock As DataGridViewTextBoxColumn
     Friend WithEvents PartNo As DataGridViewTextBoxColumn
     Friend WithEvents DrawingType As DataGridViewTextBoxColumn
@@ -230,5 +248,5 @@ Partial Class PartsTableControl
     Friend WithEvents Status As DataGridViewTextBoxColumn
     Friend WithEvents Unit As DataGridViewTextBoxColumn
     Friend WithEvents DateChecked As DataGridViewTextBoxColumn
-    Friend WithEvents OpType As DataGridViewTextBoxColumn
+    Friend WithEvents OpType As EJControls.EJComboBoxColumn
 End Class

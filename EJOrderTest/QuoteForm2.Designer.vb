@@ -33,7 +33,7 @@ Partial Class QuoteForm2
         Dim IDLabel As System.Windows.Forms.Label
         Dim NotesLabel As System.Windows.Forms.Label
         Dim RefLabel As System.Windows.Forms.Label
-        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(QuoteForm))
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(QuoteForm2))
         Dim DataGridViewCellStyle1 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle2 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle3 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
@@ -222,14 +222,14 @@ Partial Class QuoteForm2
         Me.QuoteBindingNavigator.DeleteItem = Nothing
         Me.QuoteBindingNavigator.Dock = System.Windows.Forms.DockStyle.Bottom
         Me.QuoteBindingNavigator.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.BindingNavigatorMoveFirstItem, Me.BindingNavigatorMovePreviousItem, Me.BindingNavigatorSeparator, Me.BindingNavigatorPositionItem, Me.BindingNavigatorCountItem, Me.BindingNavigatorSeparator1, Me.BindingNavigatorMoveNextItem, Me.BindingNavigatorMoveLastItem, Me.BindingNavigatorSeparator2, Me.BindingNavigatorAddNewItem, Me.BindingNavigatorDeleteItem, Me.QuoteBindingNavigatorSaveItem})
-        Me.QuoteBindingNavigator.Location = New System.Drawing.Point(0, 572)
+        Me.QuoteBindingNavigator.Location = New System.Drawing.Point(0, 569)
         Me.QuoteBindingNavigator.MoveFirstItem = Me.BindingNavigatorMoveFirstItem
         Me.QuoteBindingNavigator.MoveLastItem = Me.BindingNavigatorMoveLastItem
         Me.QuoteBindingNavigator.MoveNextItem = Me.BindingNavigatorMoveNextItem
         Me.QuoteBindingNavigator.MovePreviousItem = Me.BindingNavigatorMovePreviousItem
         Me.QuoteBindingNavigator.Name = "QuoteBindingNavigator"
         Me.QuoteBindingNavigator.PositionItem = Me.BindingNavigatorPositionItem
-        Me.QuoteBindingNavigator.Size = New System.Drawing.Size(1284, 25)
+        Me.QuoteBindingNavigator.Size = New System.Drawing.Size(1203, 25)
         Me.QuoteBindingNavigator.TabIndex = 0
         Me.QuoteBindingNavigator.Text = "BindingNavigator1"
         '
@@ -333,8 +333,7 @@ Partial Class QuoteForm2
         '
         'QuoteDetailsDataGridView
         '
-        Me.QuoteDetailsDataGridView.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-            Or System.Windows.Forms.AnchorStyles.Left) _
+        Me.QuoteDetailsDataGridView.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.QuoteDetailsDataGridView.AutoGenerateColumns = False
         Me.QuoteDetailsDataGridView.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.DisplayedCells
@@ -342,10 +341,10 @@ Partial Class QuoteForm2
         Me.QuoteDetailsDataGridView.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.RowNo, Me.QDItemID, Me.QDDescription, Me.DataGridViewTextBoxColumn5, Me.DataGridViewTextBoxColumn6, Me.DataGridViewTextBoxColumn7, Me.DataGridViewTextBoxColumn8})
         Me.QuoteDetailsDataGridView.DataSource = Me.QuoteDetailsBindingSource
         Me.QuoteDetailsDataGridView.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnEnter
-        Me.QuoteDetailsDataGridView.Location = New System.Drawing.Point(12, 331)
+        Me.QuoteDetailsDataGridView.Location = New System.Drawing.Point(352, 27)
         Me.QuoteDetailsDataGridView.Name = "QuoteDetailsDataGridView"
         Me.QuoteDetailsDataGridView.RowHeadersWidth = 25
-        Me.QuoteDetailsDataGridView.Size = New System.Drawing.Size(668, 220)
+        Me.QuoteDetailsDataGridView.Size = New System.Drawing.Size(839, 286)
         Me.QuoteDetailsDataGridView.TabIndex = 21
         '
         'RowNo
@@ -452,17 +451,17 @@ Partial Class QuoteForm2
         'QuoteItemDetailsDataGridView
         '
         Me.QuoteItemDetailsDataGridView.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+            Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.QuoteItemDetailsDataGridView.AutoGenerateColumns = False
         Me.QuoteItemDetailsDataGridView.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.DisplayedCells
         Me.QuoteItemDetailsDataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
         Me.QuoteItemDetailsDataGridView.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.QIDItemID, Me.QIDDescription, Me.DataGridViewTextBoxColumn15, Me.DataGridViewTextBoxColumn1, Me.ParentID})
         Me.QuoteItemDetailsDataGridView.DataSource = Me.QuoteItemDetailsBindingSource
         Me.QuoteItemDetailsDataGridView.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically
-        Me.QuoteItemDetailsDataGridView.Location = New System.Drawing.Point(710, 331)
+        Me.QuoteItemDetailsDataGridView.Location = New System.Drawing.Point(17, 330)
         Me.QuoteItemDetailsDataGridView.Name = "QuoteItemDetailsDataGridView"
         Me.QuoteItemDetailsDataGridView.RowHeadersWidth = 25
-        Me.QuoteItemDetailsDataGridView.Size = New System.Drawing.Size(554, 220)
+        Me.QuoteItemDetailsDataGridView.Size = New System.Drawing.Size(562, 236)
         Me.QuoteItemDetailsDataGridView.TabIndex = 22
         '
         'QIDItemID
@@ -518,17 +517,19 @@ Partial Class QuoteForm2
         '
         Me.QuoteItemSummaryDataGridView.AllowUserToAddRows = False
         Me.QuoteItemSummaryDataGridView.AllowUserToDeleteRows = False
-        Me.QuoteItemSummaryDataGridView.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.QuoteItemSummaryDataGridView.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.QuoteItemSummaryDataGridView.AutoGenerateColumns = False
         Me.QuoteItemSummaryDataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
         Me.QuoteItemSummaryDataGridView.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.ItemID, Me.Description, Me.Quantity, Me.Status, Me.IDDataGridViewTextBoxColumn, Me.DetailIDDataGridViewTextBoxColumn, Me.ItemIDDataGridViewTextBoxColumn, Me.DescriptionDataGridViewTextBoxColumn, Me.QuantityDataGridViewTextBoxColumn, Me.ParentIDDataGridViewTextBoxColumn, Me.ItemDataGridViewTextBoxColumn, Me.QuoteDetailDataGridViewTextBoxColumn})
         Me.QuoteItemSummaryDataGridView.DataSource = Me.SummaryItemsBindingSource
         Me.QuoteItemSummaryDataGridView.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically
-        Me.QuoteItemSummaryDataGridView.Location = New System.Drawing.Point(812, 86)
+        Me.QuoteItemSummaryDataGridView.Location = New System.Drawing.Point(590, 330)
         Me.QuoteItemSummaryDataGridView.Name = "QuoteItemSummaryDataGridView"
         Me.QuoteItemSummaryDataGridView.ReadOnly = True
         Me.QuoteItemSummaryDataGridView.RowHeadersWidth = 25
-        Me.QuoteItemSummaryDataGridView.Size = New System.Drawing.Size(452, 220)
+        Me.QuoteItemSummaryDataGridView.Size = New System.Drawing.Size(601, 236)
         Me.QuoteItemSummaryDataGridView.TabIndex = 23
         '
         'ItemID
@@ -732,11 +733,11 @@ Partial Class QuoteForm2
         Me.RefTextBox.TabIndex = 45
         Me.RefTextBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         '
-        'QuoteForm
+        'QuoteForm2
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(1284, 597)
+        Me.ClientSize = New System.Drawing.Size(1203, 594)
         Me.Controls.Add(CarriageCostLabel)
         Me.Controls.Add(Me.CarriageCostTextBox)
         Me.Controls.Add(CarriageTextLabel)
@@ -761,7 +762,7 @@ Partial Class QuoteForm2
         Me.Controls.Add(Me.QuoteItemDetailsDataGridView)
         Me.Controls.Add(Me.QuoteDetailsDataGridView)
         Me.Controls.Add(Me.QuoteBindingNavigator)
-        Me.Name = "QuoteForm"
+        Me.Name = "QuoteForm2"
         Me.Text = "QuoteForm"
         CType(Me.QuoteBindingNavigator, System.ComponentModel.ISupportInitialize).EndInit()
         Me.QuoteBindingNavigator.ResumeLayout(False)

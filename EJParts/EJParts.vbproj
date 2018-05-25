@@ -127,7 +127,10 @@
       <Generator>MyApplicationCodeGenerator</Generator>
       <LastGenOutput>Application.Designer.vb</LastGenOutput>
     </None>
+    <None Include="My Project\DataSources\EJData.OperationType.datasource" />
     <None Include="My Project\DataSources\EJData.Part.datasource" />
+    <None Include="My Project\DataSources\PartsTableControl.datasource" />
+    <None Include="My Project\DataSources\PartsTableControl.Operation.datasource" />
     <None Include="My Project\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <CustomToolNamespace>My</CustomToolNamespace>

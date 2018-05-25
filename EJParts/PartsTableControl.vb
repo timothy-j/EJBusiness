@@ -10,6 +10,12 @@ Public Class PartsTableControl
     Private _discardRow As Boolean ' marks _newRow for deletion
     Private _addedPart As EJData.Part ' Stores the last item added to the database so it can be removed if necessary (e.g. if it is a duplicate)
     Private _leavingDGV As Boolean
+    Friend _opList As List(Of Operation)
+
+    Structure Operation
+        Property ID As Integer?
+        Property Description As String
+    End Structure
 
     Function IsInDesignMode() As Boolean
         Return System.Reflection.Assembly.GetExecutingAssembly().Location.Contains("VisualStudio")
@@ -18,7 +24,11 @@ Public Class PartsTableControl
     Private Sub PartsView_Load(sender As Object, e As EventArgs) Handles Me.Load
         If IsInDesignMode() Then Exit Sub
         _db = EJData.DataHelpers.GetNewDbContext
-        'ItemsTableControl2.DBContext = _db
+        Dim opList = {New With {Key .ID = CType(Nothing, Integer?), Key .Description = ""}}.AsEnumerable().Union(From ops In _db.OperationTypes
+                                                                                                                 Select ID = CType(ops.ID, Integer?), ops.Description).ToList
+
+        ' {New Operation With {.ID = Nothing, .Description = ""}}.AsEnumerable().Union
+        OperationBindingSource.DataSource = opList
 
         Requery()
         'OrderedParts = From p In _db.Parts
