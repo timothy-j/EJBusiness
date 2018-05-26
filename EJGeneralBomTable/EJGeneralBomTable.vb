@@ -87,7 +87,7 @@ Public Class EJGeneralBomTable
 
         DataGridView1.AutoGenerateColumns = False
         Requery()
-        DataGridView1.DataSource = GeneralBindingSource ' Done just once
+        DataGridView1.DataSource = GeneralBindingSource ' Done just once when first loaded
     End Sub
 
 
@@ -103,7 +103,7 @@ Public Class EJGeneralBomTable
         _initialisingGrid = True
         For i As Integer = e.RowIndex To e.RowIndex + e.RowCount - 1
 
-            ' Make assembly items grey
+            ' Make assembly items grey - TODO: consider colour levels to go with nesting levels
             If DataGridView1.Rows.Item(i).DataBoundItem.Parent IsNot Nothing Then DataGridView1.Rows.Item(i).DefaultCellStyle.ForeColor = ChildRowTextColor
 
             For Each mc In _machines
@@ -447,15 +447,13 @@ Public Class EJGeneralBomTable
         End If
 
         ' Order the final results
-        ' HACK: TODO: get this to work. should be Parent != top level item (rather than Is Nothing)
+        ' HACK: TODO: get this to work for multiple levels. should be Parent != [top level item] (rather than Is Nothing)
         Bom = From i In Bom
               Let topLevel = If(i.Parent Is Nothing, i.Item1, i.Parent.Item1 + "_")
               Order By topLevel, i.Item1
               Select i
 
         GeneralBindingSource.DataSource = Bom.ToList
-
-        'DataGridView1.DataSource = GeneralBindingSource
     End Sub
 
     Private Sub AddFilter(Filter As EJFilter)

@@ -54,6 +54,7 @@
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Design" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Linq.Dynamic, Version=1.0.6132.35681, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Linq.Dynamic.1.0.7\lib\net40\System.Linq.Dynamic.dll</HintPath>
@@ -166,10 +167,17 @@
     <Service Include="{94E38DFF-614B-4cbd-B67C-F211BB35CE8B}" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\CustomCombo\CustomComboDemo\CustomComboDemo.csproj">
+      <Project>{3A1E6DF4-7D68-4D2C-A618-124900B4C5F8}</Project>
+      <Name>CustomComboDemo</Name>
+    </ProjectReference>
     <ProjectReference Include="..\EJData\EJData.vbproj">
       <Project>{89227503-7a55-40c3-8127-e8098787d3a0}</Project>
       <Name>EJData</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="DataGridViewMultiColumnComboColumn.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>

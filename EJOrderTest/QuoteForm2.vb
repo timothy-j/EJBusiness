@@ -13,25 +13,8 @@ Public Class QuoteForm2
     ''' Can be used for any list in the form .ID as Integer?, .Item1 as String
     ''' </summary>
     Public Class EJItemType
-        Private _ID As Integer?
         Public Property ID() As Integer?
-            Get
-                Return _ID
-            End Get
-            Set(ByVal value As Integer?)
-                _ID = value
-            End Set
-        End Property
-
-        Private _Item1 As String
         Public Property Item1() As String
-            Get
-                Return _Item1
-            End Get
-            Set(ByVal value As String)
-                _Item1 = value
-            End Set
-        End Property
     End Class
 
     Public Sub New()

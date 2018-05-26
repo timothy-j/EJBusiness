@@ -3,6 +3,17 @@
 Public Class EJClassBrowser
     Private _ClassType As Type
 
+    Public Sub New()
+
+        ' This call is required by the designer.
+        InitializeComponent()
+
+        ' Add any initialization after the InitializeComponent() call.
+        Dim dgv As New DataGridView
+        dgv.Columns.Add(New DataGridViewTextBoxColumn)
+        CustomComboBox1.DropDownControl = dgv
+    End Sub
+
     Property Filter As String
         Get
             Return TextBox1.Text
