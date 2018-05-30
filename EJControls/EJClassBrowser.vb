@@ -3,15 +3,39 @@
 Public Class EJClassBrowser
     Private _ClassType As Type
 
+    Dim DataList As New List(Of Data)
+    Structure Data
+        Property ID As Integer
+        Property Name As String
+        Property Description As String
+        Property [Date] As Date
+    End Structure
+
     Public Sub New()
 
         ' This call is required by the designer.
         InitializeComponent()
 
         ' Add any initialization after the InitializeComponent() call.
-        Dim dgv As New DataGridView
-        dgv.Columns.Add(New DataGridViewTextBoxColumn)
-        CustomComboBox1.DropDownControl = dgv
+        DataList.Add(New Data With {.ID = 1, .Description = "First thing", .Name = "One", .Date = "30/08/78"})
+        DataList.Add(New Data With {.ID = 2, .Description = "second thing", .Name = "Two"})
+        DataList.Add(New Data With {.ID = 13, .Description = "thirteenth thing", .Name = "th", .Date = "01/05/12"})
+        DataList.Add(New Data With {.ID = 14, .Description = "fourteenth thing", .Name = "ft", .Date = "18/09/15"})
+        DataList.Add(New Data With {.ID = 15, .Description = "fifteenth thing", .Name = "fift", .Date = "01/05/77"})
+        DataList.Add(New Data With {.ID = 16, .Description = "sixteenth thing", .Name = "sixt", .Date = "12/09/00"})
+
+        'MultiColumnComboBox1.DataSource = DataBindingSource
+        DataBindingSource.DataSource = DataList
+        'DataGridView1.DataSource =
+        MultiColumnComboBox1.DisplayMember = "Name"
+        MultiColumnComboBox1.ValueMember = "ID"
+        Dim col As New DataGridViewTextBoxColumn With {.DataPropertyName = "Name"}
+        Dim col1 As New DataGridViewTextBoxColumn With {.DataPropertyName = "Description"}
+        Dim col2 As New DataGridViewTextBoxColumn With {.DataPropertyName = "Date"}
+        MultiColumnComboBox1.Columns.Add(col)
+        MultiColumnComboBox1.Columns.Add(col1)
+        MultiColumnComboBox1.Columns.Add(col2)
+        'Me.Controls.Add(MultiColumnComboBox1.DataGridViewPanel)
     End Sub
 
     Property Filter As String

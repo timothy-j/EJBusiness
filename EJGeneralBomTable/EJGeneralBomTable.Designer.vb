@@ -33,22 +33,6 @@ Partial Class EJGeneralBomTable
         Dim DataGridViewCellStyle8 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Me.GeneralBindingSource = New System.Windows.Forms.BindingSource(Me.components)
         Me.DataGridView1 = New EJControls.NestedSourceGrid()
-        Me.MC000Column = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.MCS000Column = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.StockColumn = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.ModelColumn = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.ItemColumn = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.DrawingTypeColumn = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.DescriptionColumn = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.SupplierColumn = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.SuppliersDescriptionColumn = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.QtyColumn = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.StatusColumn = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.RowNotesColumn = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.UnitColumn = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.SecondOpColumn = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.DateCheckedColumn = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.PartColumn = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.DefaultContextStrip = New System.Windows.Forms.ContextMenuStrip(Me.components)
         Me.CopyToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.CutToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
@@ -57,6 +41,7 @@ Partial Class EJGeneralBomTable
         Me.UndoToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator2 = New System.Windows.Forms.ToolStripSeparator()
         Me.UndoFilterToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToggleFilterToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.IsBlankToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.IsNotBlankToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.NumericContextMenu = New System.Windows.Forms.ContextMenuStrip(Me.components)
@@ -113,7 +98,22 @@ Partial Class EJGeneralBomTable
         Me.ToolStripMenuItem87 = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripMenuItem88 = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripMenuItem89 = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ToggleFilterToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.MC000Column = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.MCS000Column = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.StockColumn = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.ModelColumn = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.ItemColumn = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.DrawingTypeColumn = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.DescriptionColumn = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.SupplierColumn = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.SuppliersDescriptionColumn = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.QtyColumn = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.StatusColumn = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.RowNotesColumn = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.UnitColumn = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.SecondOpColumn = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.DateCheckedColumn = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.PartColumn = New System.Windows.Forms.DataGridViewTextBoxColumn()
         CType(Me.GeneralBindingSource, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.DataGridView1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.DefaultContextStrip.SuspendLayout()
@@ -132,6 +132,7 @@ Partial Class EJGeneralBomTable
         Me.DataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
         Me.DataGridView1.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.MC000Column, Me.MCS000Column, Me.StockColumn, Me.ModelColumn, Me.ItemColumn, Me.DrawingTypeColumn, Me.DescriptionColumn, Me.SupplierColumn, Me.SuppliersDescriptionColumn, Me.QtyColumn, Me.StatusColumn, Me.RowNotesColumn, Me.UnitColumn, Me.SecondOpColumn, Me.DateCheckedColumn, Me.PartColumn})
         Me.DataGridView1.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.DataGridView1.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically
         Me.DataGridView1.Location = New System.Drawing.Point(0, 0)
         Me.DataGridView1.Name = "DataGridView1"
         Me.DataGridView1.RowHeadersWidth = 25
@@ -140,198 +141,68 @@ Partial Class EJGeneralBomTable
         Me.DataGridView1.Size = New System.Drawing.Size(704, 422)
         Me.DataGridView1.TabIndex = 0
         '
-        'MC000Column
-        '
-        DataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
-        DataGridViewCellStyle1.Format = "0.##"
-        Me.MC000Column.DefaultCellStyle = DataGridViewCellStyle1
-        Me.MC000Column.HeaderText = "000"
-        Me.MC000Column.Name = "MC000Column"
-        Me.MC000Column.Width = 35
-        '
-        'MCS000Column
-        '
-        Me.MCS000Column.HeaderText = "S000"
-        Me.MCS000Column.Name = "MCS000Column"
-        Me.MCS000Column.Resizable = System.Windows.Forms.DataGridViewTriState.[True]
-        Me.MCS000Column.Width = 60
-        '
-        'StockColumn
-        '
-        Me.StockColumn.DataPropertyName = "Part.Stock"
-        DataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
-        DataGridViewCellStyle2.Format = "0.##"
-        Me.StockColumn.DefaultCellStyle = DataGridViewCellStyle2
-        Me.StockColumn.HeaderText = "Stock"
-        Me.StockColumn.Name = "StockColumn"
-        Me.StockColumn.Width = 45
-        '
-        'ModelColumn
-        '
-        Me.ModelColumn.DataPropertyName = "Model"
-        DataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
-        Me.ModelColumn.DefaultCellStyle = DataGridViewCellStyle3
-        Me.ModelColumn.HeaderText = "Model"
-        Me.ModelColumn.Name = "ModelColumn"
-        Me.ModelColumn.Width = 35
-        '
-        'ItemColumn
-        '
-        Me.ItemColumn.DataPropertyName = "Item1"
-        Me.ItemColumn.HeaderText = "Item"
-        Me.ItemColumn.Name = "ItemColumn"
-        Me.ItemColumn.Width = 55
-        '
-        'DrawingTypeColumn
-        '
-        Me.DrawingTypeColumn.DataPropertyName = "Part.DrawingType"
-        Me.DrawingTypeColumn.HeaderText = "Dwg"
-        Me.DrawingTypeColumn.Name = "DrawingTypeColumn"
-        Me.DrawingTypeColumn.Width = 40
-        '
-        'DescriptionColumn
-        '
-        Me.DescriptionColumn.DataPropertyName = "Description"
-        Me.DescriptionColumn.HeaderText = "Description"
-        Me.DescriptionColumn.Name = "DescriptionColumn"
-        Me.DescriptionColumn.Width = 250
-        '
-        'SupplierColumn
-        '
-        Me.SupplierColumn.DataPropertyName = "Part.Supplier"
-        Me.SupplierColumn.HeaderText = "Supplier"
-        Me.SupplierColumn.Name = "SupplierColumn"
-        Me.SupplierColumn.Width = 55
-        '
-        'SuppliersDescriptionColumn
-        '
-        Me.SuppliersDescriptionColumn.DataPropertyName = "Part.SuppliersDescription"
-        Me.SuppliersDescriptionColumn.HeaderText = "Suppliers Description"
-        Me.SuppliersDescriptionColumn.Name = "SuppliersDescriptionColumn"
-        Me.SuppliersDescriptionColumn.Width = 250
-        '
-        'QtyColumn
-        '
-        Me.QtyColumn.DataPropertyName = "Qty"
-        DataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
-        DataGridViewCellStyle4.Format = "0.##"
-        Me.QtyColumn.DefaultCellStyle = DataGridViewCellStyle4
-        Me.QtyColumn.HeaderText = "Qty"
-        Me.QtyColumn.Name = "QtyColumn"
-        Me.QtyColumn.Width = 40
-        '
-        'StatusColumn
-        '
-        Me.StatusColumn.DataPropertyName = "Part.Status"
-        Me.StatusColumn.HeaderText = "Status"
-        Me.StatusColumn.Name = "StatusColumn"
-        Me.StatusColumn.Width = 40
-        '
-        'RowNotesColumn
-        '
-        Me.RowNotesColumn.DataPropertyName = "Part.ProductionNotes"
-        DataGridViewCellStyle5.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
-        Me.RowNotesColumn.DefaultCellStyle = DataGridViewCellStyle5
-        Me.RowNotesColumn.HeaderText = "Notes"
-        Me.RowNotesColumn.Name = "RowNotesColumn"
-        Me.RowNotesColumn.Width = 150
-        '
-        'UnitColumn
-        '
-        Me.UnitColumn.DataPropertyName = "Part.Unit"
-        DataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
-        DataGridViewCellStyle6.Format = "C2"
-        Me.UnitColumn.DefaultCellStyle = DataGridViewCellStyle6
-        Me.UnitColumn.HeaderText = "Unit"
-        Me.UnitColumn.Name = "UnitColumn"
-        Me.UnitColumn.Width = 70
-        '
-        'SecondOpColumn
-        '
-        Me.SecondOpColumn.DataPropertyName = "Part.SecondOperation"
-        DataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
-        DataGridViewCellStyle7.Format = "C2"
-        DataGridViewCellStyle7.NullValue = Nothing
-        Me.SecondOpColumn.DefaultCellStyle = DataGridViewCellStyle7
-        Me.SecondOpColumn.HeaderText = "2nd Op"
-        Me.SecondOpColumn.Name = "SecondOpColumn"
-        Me.SecondOpColumn.Width = 60
-        '
-        'DateCheckedColumn
-        '
-        Me.DateCheckedColumn.DataPropertyName = "Part.DateChecked"
-        DataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
-        DataGridViewCellStyle8.Format = "d"
-        DataGridViewCellStyle8.NullValue = Nothing
-        Me.DateCheckedColumn.DefaultCellStyle = DataGridViewCellStyle8
-        Me.DateCheckedColumn.HeaderText = "DateChecked"
-        Me.DateCheckedColumn.Name = "DateCheckedColumn"
-        Me.DateCheckedColumn.Width = 80
-        '
-        'PartColumn
-        '
-        Me.PartColumn.DataPropertyName = "Part.PartNo"
-        Me.PartColumn.HeaderText = "Part"
-        Me.PartColumn.Name = "PartColumn"
-        Me.PartColumn.ReadOnly = True
-        Me.PartColumn.Width = 70
-        '
         'DefaultContextStrip
         '
         Me.DefaultContextStrip.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.CopyToolStripMenuItem, Me.CutToolStripMenuItem, Me.PasteToolStripMenuItem, Me.ToolStripSeparator1, Me.UndoToolStripMenuItem, Me.ToolStripSeparator2, Me.UndoFilterToolStripMenuItem, Me.ToggleFilterToolStripMenuItem, Me.IsBlankToolStripMenuItem, Me.IsNotBlankToolStripMenuItem})
         Me.DefaultContextStrip.Name = "DefaultContextStrip"
-        Me.DefaultContextStrip.Size = New System.Drawing.Size(181, 214)
+        Me.DefaultContextStrip.Size = New System.Drawing.Size(179, 192)
         '
         'CopyToolStripMenuItem
         '
         Me.CopyToolStripMenuItem.Name = "CopyToolStripMenuItem"
-        Me.CopyToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
+        Me.CopyToolStripMenuItem.Size = New System.Drawing.Size(178, 22)
         Me.CopyToolStripMenuItem.Text = "Copy"
         '
         'CutToolStripMenuItem
         '
         Me.CutToolStripMenuItem.Name = "CutToolStripMenuItem"
-        Me.CutToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
+        Me.CutToolStripMenuItem.Size = New System.Drawing.Size(178, 22)
         Me.CutToolStripMenuItem.Text = "Cut"
         '
         'PasteToolStripMenuItem
         '
         Me.PasteToolStripMenuItem.Name = "PasteToolStripMenuItem"
-        Me.PasteToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
+        Me.PasteToolStripMenuItem.Size = New System.Drawing.Size(178, 22)
         Me.PasteToolStripMenuItem.Text = "Paste"
         '
         'ToolStripSeparator1
         '
         Me.ToolStripSeparator1.Name = "ToolStripSeparator1"
-        Me.ToolStripSeparator1.Size = New System.Drawing.Size(177, 6)
+        Me.ToolStripSeparator1.Size = New System.Drawing.Size(175, 6)
         '
         'UndoToolStripMenuItem
         '
         Me.UndoToolStripMenuItem.Name = "UndoToolStripMenuItem"
-        Me.UndoToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
+        Me.UndoToolStripMenuItem.Size = New System.Drawing.Size(178, 22)
         Me.UndoToolStripMenuItem.Text = "Undo"
         '
         'ToolStripSeparator2
         '
         Me.ToolStripSeparator2.Name = "ToolStripSeparator2"
-        Me.ToolStripSeparator2.Size = New System.Drawing.Size(177, 6)
+        Me.ToolStripSeparator2.Size = New System.Drawing.Size(175, 6)
         '
         'UndoFilterToolStripMenuItem
         '
         Me.UndoFilterToolStripMenuItem.Name = "UndoFilterToolStripMenuItem"
-        Me.UndoFilterToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
+        Me.UndoFilterToolStripMenuItem.Size = New System.Drawing.Size(178, 22)
         Me.UndoFilterToolStripMenuItem.Text = "Undo previous filter"
+        '
+        'ToggleFilterToolStripMenuItem
+        '
+        Me.ToggleFilterToolStripMenuItem.Name = "ToggleFilterToolStripMenuItem"
+        Me.ToggleFilterToolStripMenuItem.Size = New System.Drawing.Size(178, 22)
+        Me.ToggleFilterToolStripMenuItem.Text = "Toggle filter"
         '
         'IsBlankToolStripMenuItem
         '
         Me.IsBlankToolStripMenuItem.Name = "IsBlankToolStripMenuItem"
-        Me.IsBlankToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
+        Me.IsBlankToolStripMenuItem.Size = New System.Drawing.Size(178, 22)
         Me.IsBlankToolStripMenuItem.Text = "Is blank"
         '
         'IsNotBlankToolStripMenuItem
         '
         Me.IsNotBlankToolStripMenuItem.Name = "IsNotBlankToolStripMenuItem"
-        Me.IsNotBlankToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
+        Me.IsNotBlankToolStripMenuItem.Size = New System.Drawing.Size(178, 22)
         Me.IsNotBlankToolStripMenuItem.Text = "Is not blank"
         '
         'NumericContextMenu
@@ -658,11 +529,142 @@ Partial Class EJGeneralBomTable
         Me.ToolStripMenuItem89.Size = New System.Drawing.Size(186, 22)
         Me.ToolStripMenuItem89.Text = "Does not end with.."
         '
-        'ToggleFilterToolStripMenuItem
+        'MC000Column
         '
-        Me.ToggleFilterToolStripMenuItem.Name = "ToggleFilterToolStripMenuItem"
-        Me.ToggleFilterToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
-        Me.ToggleFilterToolStripMenuItem.Text = "Toggle filter"
+        DataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
+        DataGridViewCellStyle1.Format = "0.##"
+        Me.MC000Column.DefaultCellStyle = DataGridViewCellStyle1
+        Me.MC000Column.HeaderText = "000"
+        Me.MC000Column.Name = "MC000Column"
+        Me.MC000Column.Width = 35
+        '
+        'MCS000Column
+        '
+        Me.MCS000Column.HeaderText = "S000"
+        Me.MCS000Column.Name = "MCS000Column"
+        Me.MCS000Column.Resizable = System.Windows.Forms.DataGridViewTriState.[True]
+        Me.MCS000Column.Width = 60
+        '
+        'StockColumn
+        '
+        Me.StockColumn.DataPropertyName = "Part.Stock"
+        DataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
+        DataGridViewCellStyle2.Format = "0.##"
+        Me.StockColumn.DefaultCellStyle = DataGridViewCellStyle2
+        Me.StockColumn.HeaderText = "Stock"
+        Me.StockColumn.Name = "StockColumn"
+        Me.StockColumn.Width = 45
+        '
+        'ModelColumn
+        '
+        Me.ModelColumn.DataPropertyName = "Model"
+        DataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
+        Me.ModelColumn.DefaultCellStyle = DataGridViewCellStyle3
+        Me.ModelColumn.HeaderText = "Model"
+        Me.ModelColumn.Name = "ModelColumn"
+        Me.ModelColumn.Width = 35
+        '
+        'ItemColumn
+        '
+        Me.ItemColumn.DataPropertyName = "Item1"
+        Me.ItemColumn.HeaderText = "Item"
+        Me.ItemColumn.Name = "ItemColumn"
+        Me.ItemColumn.Width = 55
+        '
+        'DrawingTypeColumn
+        '
+        Me.DrawingTypeColumn.DataPropertyName = "Part.DrawingType"
+        Me.DrawingTypeColumn.HeaderText = "Dwg"
+        Me.DrawingTypeColumn.Name = "DrawingTypeColumn"
+        Me.DrawingTypeColumn.Width = 40
+        '
+        'DescriptionColumn
+        '
+        Me.DescriptionColumn.DataPropertyName = "Description"
+        Me.DescriptionColumn.HeaderText = "Description"
+        Me.DescriptionColumn.Name = "DescriptionColumn"
+        Me.DescriptionColumn.Resizable = System.Windows.Forms.DataGridViewTriState.[True]
+        Me.DescriptionColumn.Width = 250
+        '
+        'SupplierColumn
+        '
+        Me.SupplierColumn.DataPropertyName = "Part.Supplier"
+        Me.SupplierColumn.HeaderText = "Supplier"
+        Me.SupplierColumn.Name = "SupplierColumn"
+        Me.SupplierColumn.Width = 55
+        '
+        'SuppliersDescriptionColumn
+        '
+        Me.SuppliersDescriptionColumn.DataPropertyName = "Part.SuppliersDescription"
+        Me.SuppliersDescriptionColumn.HeaderText = "Suppliers Description"
+        Me.SuppliersDescriptionColumn.Name = "SuppliersDescriptionColumn"
+        Me.SuppliersDescriptionColumn.Width = 250
+        '
+        'QtyColumn
+        '
+        Me.QtyColumn.DataPropertyName = "Qty"
+        DataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
+        DataGridViewCellStyle4.Format = "0.##"
+        Me.QtyColumn.DefaultCellStyle = DataGridViewCellStyle4
+        Me.QtyColumn.HeaderText = "Qty"
+        Me.QtyColumn.Name = "QtyColumn"
+        Me.QtyColumn.Width = 40
+        '
+        'StatusColumn
+        '
+        Me.StatusColumn.DataPropertyName = "Status"
+        Me.StatusColumn.HeaderText = "Status"
+        Me.StatusColumn.Name = "StatusColumn"
+        Me.StatusColumn.Width = 40
+        '
+        'RowNotesColumn
+        '
+        Me.RowNotesColumn.DataPropertyName = "Part.ProductionNotes"
+        DataGridViewCellStyle5.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
+        Me.RowNotesColumn.DefaultCellStyle = DataGridViewCellStyle5
+        Me.RowNotesColumn.HeaderText = "Notes"
+        Me.RowNotesColumn.Name = "RowNotesColumn"
+        Me.RowNotesColumn.Width = 150
+        '
+        'UnitColumn
+        '
+        Me.UnitColumn.DataPropertyName = "Part.Unit"
+        DataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
+        DataGridViewCellStyle6.Format = "C2"
+        Me.UnitColumn.DefaultCellStyle = DataGridViewCellStyle6
+        Me.UnitColumn.HeaderText = "Unit"
+        Me.UnitColumn.Name = "UnitColumn"
+        Me.UnitColumn.Width = 70
+        '
+        'SecondOpColumn
+        '
+        Me.SecondOpColumn.DataPropertyName = "Part.SecondOperation"
+        DataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
+        DataGridViewCellStyle7.Format = "C2"
+        DataGridViewCellStyle7.NullValue = Nothing
+        Me.SecondOpColumn.DefaultCellStyle = DataGridViewCellStyle7
+        Me.SecondOpColumn.HeaderText = "2nd Op"
+        Me.SecondOpColumn.Name = "SecondOpColumn"
+        Me.SecondOpColumn.Width = 60
+        '
+        'DateCheckedColumn
+        '
+        Me.DateCheckedColumn.DataPropertyName = "Part.DateChecked"
+        DataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
+        DataGridViewCellStyle8.Format = "d"
+        DataGridViewCellStyle8.NullValue = Nothing
+        Me.DateCheckedColumn.DefaultCellStyle = DataGridViewCellStyle8
+        Me.DateCheckedColumn.HeaderText = "DateChecked"
+        Me.DateCheckedColumn.Name = "DateCheckedColumn"
+        Me.DateCheckedColumn.Width = 80
+        '
+        'PartColumn
+        '
+        Me.PartColumn.DataPropertyName = "Part.PartNo"
+        Me.PartColumn.HeaderText = "Part"
+        Me.PartColumn.Name = "PartColumn"
+        Me.PartColumn.ReadOnly = True
+        Me.PartColumn.Width = 70
         '
         'EJGeneralBomTable
         '
@@ -746,6 +748,7 @@ Partial Class EJGeneralBomTable
     Friend WithEvents ToolStripMenuItem88 As ToolStripMenuItem
     Friend WithEvents ToolStripMenuItem89 As ToolStripMenuItem
     Friend WithEvents ToolStripSeparator7 As ToolStripSeparator
+    Friend WithEvents ToggleFilterToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents MC000Column As DataGridViewTextBoxColumn
     Friend WithEvents MCS000Column As DataGridViewTextBoxColumn
     Friend WithEvents StockColumn As DataGridViewTextBoxColumn
@@ -762,5 +765,4 @@ Partial Class EJGeneralBomTable
     Friend WithEvents SecondOpColumn As DataGridViewTextBoxColumn
     Friend WithEvents DateCheckedColumn As DataGridViewTextBoxColumn
     Friend WithEvents PartColumn As DataGridViewTextBoxColumn
-    Friend WithEvents ToggleFilterToolStripMenuItem As ToolStripMenuItem
 End Class

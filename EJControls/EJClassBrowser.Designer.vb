@@ -22,6 +22,7 @@ Partial Class EJClassBrowser
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
+        Me.components = New System.ComponentModel.Container()
         Me.TreeView1 = New System.Windows.Forms.TreeView()
         Me.Button1 = New System.Windows.Forms.Button()
         Me.Label1 = New System.Windows.Forms.Label()
@@ -29,7 +30,14 @@ Partial Class EJClassBrowser
         Me.ListBox1 = New System.Windows.Forms.ListBox()
         Me.Label2 = New System.Windows.Forms.Label()
         Me.TextBox1 = New System.Windows.Forms.TextBox()
-        Me.CustomComboBox1 = New CustomComboBox.CustomComboBox()
+        Me.DataBindingSource = New System.Windows.Forms.BindingSource(Me.components)
+        Me.DataGridViewColumn1 = New System.Windows.Forms.DataGridViewColumn()
+        Me.MultiColumnComboBox1 = New EJControls.MultiColumnComboBox(Me.components)
+        Me.DataGridViewTextBoxColumn1 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.DataGridViewTextBoxColumn2 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.DataGridViewTextBoxColumn3 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.DataGridViewTextBoxColumn4 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        CType(Me.DataBindingSource, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'TreeView1
@@ -92,23 +100,60 @@ Partial Class EJClassBrowser
         Me.TextBox1.Size = New System.Drawing.Size(421, 37)
         Me.TextBox1.TabIndex = 6
         '
-        'CustomComboBox1
+        'DataBindingSource
         '
-        Me.CustomComboBox1.AllowResizeDropDown = True
-        Me.CustomComboBox1.ControlSize = New System.Drawing.Size(1, 1)
-        Me.CustomComboBox1.DropDownControl = Nothing
-        Me.CustomComboBox1.DropSize = New System.Drawing.Size(121, 106)
-        Me.CustomComboBox1.Location = New System.Drawing.Point(18, 276)
-        Me.CustomComboBox1.Name = "CustomComboBox1"
-        Me.CustomComboBox1.Size = New System.Drawing.Size(189, 21)
-        Me.CustomComboBox1.TabIndex = 7
-        Me.CustomComboBox1.Text = "CustomComboBox1"
+        Me.DataBindingSource.DataSource = GetType(EJControls.EJClassBrowser.Data)
+        '
+        'DataGridViewColumn1
+        '
+        Me.DataGridViewColumn1.DataPropertyName = "Name"
+        Me.DataGridViewColumn1.Name = "DataGridViewColumn1"
+        '
+        'MultiColumnComboBox1
+        '
+        Me.MultiColumnComboBox1.AllowResizeDropDown = True
+        Me.MultiColumnComboBox1.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend
+        Me.MultiColumnComboBox1.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems
+        Me.MultiColumnComboBox1.ControlSize = New System.Drawing.Size(240, 150)
+        Me.MultiColumnComboBox1.DataBindings.Add(New System.Windows.Forms.Binding("SelectedValue", Me.DataBindingSource, "ID", True))
+        Me.MultiColumnComboBox1.DataBindings.Add(New System.Windows.Forms.Binding("Text", Me.DataBindingSource, "Name", True))
+        Me.MultiColumnComboBox1.DataSource = Me.DataBindingSource
+        Me.MultiColumnComboBox1.DisplayMember = "Name"
+        Me.MultiColumnComboBox1.DropSize = New System.Drawing.Size(121, 106)
+        Me.MultiColumnComboBox1.Location = New System.Drawing.Point(18, 277)
+        Me.MultiColumnComboBox1.Name = "MultiColumnComboBox1"
+        Me.MultiColumnComboBox1.Size = New System.Drawing.Size(189, 21)
+        Me.MultiColumnComboBox1.TabIndex = 7
+        '
+        'DataGridViewTextBoxColumn1
+        '
+        Me.DataGridViewTextBoxColumn1.DataPropertyName = "ID"
+        Me.DataGridViewTextBoxColumn1.HeaderText = "ID"
+        Me.DataGridViewTextBoxColumn1.Name = "DataGridViewTextBoxColumn1"
+        '
+        'DataGridViewTextBoxColumn2
+        '
+        Me.DataGridViewTextBoxColumn2.DataPropertyName = "Name"
+        Me.DataGridViewTextBoxColumn2.HeaderText = "Name"
+        Me.DataGridViewTextBoxColumn2.Name = "DataGridViewTextBoxColumn2"
+        '
+        'DataGridViewTextBoxColumn3
+        '
+        Me.DataGridViewTextBoxColumn3.DataPropertyName = "Description"
+        Me.DataGridViewTextBoxColumn3.HeaderText = "Description"
+        Me.DataGridViewTextBoxColumn3.Name = "DataGridViewTextBoxColumn3"
+        '
+        'DataGridViewTextBoxColumn4
+        '
+        Me.DataGridViewTextBoxColumn4.DataPropertyName = "Date"
+        Me.DataGridViewTextBoxColumn4.HeaderText = "Date"
+        Me.DataGridViewTextBoxColumn4.Name = "DataGridViewTextBoxColumn4"
         '
         'EJClassBrowser
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.Controls.Add(Me.CustomComboBox1)
+        Me.Controls.Add(Me.MultiColumnComboBox1)
         Me.Controls.Add(Me.TextBox1)
         Me.Controls.Add(Me.Label2)
         Me.Controls.Add(Me.ListBox1)
@@ -118,6 +163,7 @@ Partial Class EJClassBrowser
         Me.Controls.Add(Me.TreeView1)
         Me.Name = "EJClassBrowser"
         Me.Size = New System.Drawing.Size(488, 411)
+        CType(Me.DataBindingSource, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -129,5 +175,11 @@ Partial Class EJClassBrowser
     Friend WithEvents ListBox1 As ListBox
     Friend WithEvents Label2 As Label
     Friend WithEvents TextBox1 As TextBox
-    Friend WithEvents CustomComboBox1 As CustomComboBox.CustomComboBox
+    Friend WithEvents MultiColumnComboBox1 As MultiColumnComboBox
+    Friend WithEvents DataBindingSource As BindingSource
+    Friend WithEvents DataGridViewColumn1 As DataGridViewColumn
+    Friend WithEvents DataGridViewTextBoxColumn1 As DataGridViewTextBoxColumn
+    Friend WithEvents DataGridViewTextBoxColumn2 As DataGridViewTextBoxColumn
+    Friend WithEvents DataGridViewTextBoxColumn3 As DataGridViewTextBoxColumn
+    Friend WithEvents DataGridViewTextBoxColumn4 As DataGridViewTextBoxColumn
 End Class

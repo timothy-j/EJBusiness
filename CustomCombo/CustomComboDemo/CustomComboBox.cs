@@ -390,21 +390,21 @@ namespace CustomComboBox
             set { }
         }
 
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        [Browsable(false), ReadOnly(true)]
-        public new string DisplayMember
-        {
-            get { return base.DisplayMember; }
-            set { }
-        }
+        //[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        //[Browsable(false), ReadOnly(true)]
+        //public new string DisplayMember
+        //{
+        //    get { return base.DisplayMember; }
+        //    set { }
+        //}
 
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        [Browsable(false), ReadOnly(true)]
-        public new string ValueMember
-        {
-            get { return base.ValueMember; }
-            set { }
-        }
+        //[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        //[Browsable(false), ReadOnly(true)]
+        //public new string ValueMember
+        //{
+        //    get { return base.ValueMember; }
+        //    set { }
+        //}
 
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         [Browsable(false), ReadOnly(true)]
@@ -496,8 +496,8 @@ namespace CustomComboBox
             properties.Remove("Items");
             properties.Remove("ItemHeight");
             properties.Remove("MaxDropDownItems");
-            properties.Remove("DisplayMember");
-            properties.Remove("ValueMember");
+            //properties.Remove("DisplayMember");
+            //properties.Remove("ValueMember");
             properties.Remove("DropDownWidth");
             properties.Remove("DropDownHeight");
             properties.Remove("IntegralHeight");

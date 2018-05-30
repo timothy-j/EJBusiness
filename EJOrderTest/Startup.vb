@@ -32,4 +32,9 @@
         Dim o = New PartsTable
         o.Show()
     End Sub
+
+    Private Sub Startup_Shown(sender As Object, e As EventArgs) Handles Me.Shown
+        ' Check whether any actions have been specified in command line arguments
+        'My.Application.ProcessArgs(Environment.GetCommandLineArgs)
+    End Sub
 End Class

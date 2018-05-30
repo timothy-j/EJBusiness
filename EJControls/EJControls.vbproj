@@ -96,9 +96,8 @@
     <Compile Include="EJTable.vb">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="EJTextBoxCell.vb" />
     <Compile Include="Entity DGV\IEntityCell.vb" />
-    <Compile Include="Entity DGV\TestCell.vb" />
+    <Compile Include="EJTextBoxColumn.vb" />
     <Compile Include="ExampleCalendarColumn.vb" />
     <Compile Include="Entity DGV\IEntityColumn.vb" />
     <Compile Include="Multi Source DataGridView\MultiSourceGrid.Designer.vb">
@@ -111,6 +110,12 @@
       <DependentUpon>MultiColComboBox.vb</DependentUpon>
     </Compile>
     <Compile Include="MultiColComboBox.vb">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="MultiColumnComboBox.Designer.vb">
+      <DependentUpon>MultiColumnComboBox.vb</DependentUpon>
+    </Compile>
+    <Compile Include="MultiColumnComboBox.vb">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="My Project\Application.Designer.vb">
@@ -142,6 +147,9 @@
     <EmbeddedResource Include="MultiColComboBox.resx">
       <DependentUpon>MultiColComboBox.vb</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="MultiColumnComboBox.resx">
+      <DependentUpon>MultiColumnComboBox.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="My Project\Resources.resx">
       <Generator>VbMyResourcesResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.vb</LastGenOutput>
@@ -155,6 +163,7 @@
       <Generator>MyApplicationCodeGenerator</Generator>
       <LastGenOutput>Application.Designer.vb</LastGenOutput>
     </None>
+    <None Include="My Project\DataSources\EJClassBrowser.Data.datasource" />
     <None Include="My Project\DataSources\EJClassBrowser.datasource" />
     <None Include="My Project\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -178,6 +187,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="DataGridViewMultiColumnComboColumn.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="EJComboBox\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>

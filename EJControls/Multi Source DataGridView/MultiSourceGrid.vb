@@ -138,4 +138,31 @@ Public Class NestedSourceGrid
         End If
     End Sub
 
+    'Private Sub NestedSourceGrid_EditingControlShowing(sender As Object, e As DataGridViewEditingControlShowingEventArgs) Handles Me.EditingControlShowing
+    '    Dim tb As TextBox = CType(e.Control, TextBox)
+    '    If (tb IsNot Nothing) Then
+
+    '        ' Remove an existing event-handler, if present, to avoid 
+    '        ' adding multiple handlers when the editing control is reused.
+    '        RemoveHandler tb.GotFocus,
+    '            New EventHandler(AddressOf TextEditingControl_GotFocus)
+
+    '        ' Add the event handler. 
+    '        AddHandler tb.GotFocus,
+    '            New EventHandler(AddressOf TextEditingControl_GotFocus)
+
+    '    End If
+    'End Sub
+
+    'Private Sub TextEditingControl_GotFocus(sender As Object, e As EventArgs)
+    '    If MouseButtons.Left Then
+    '        Dim tb As TextBox = CType(sender, TextBox)
+    '        tb.OnMouseDown()
+    '    End If
+    'End Sub
+
+    Public Overrides Function BeginEdit(selectAll As Boolean) As Boolean
+        ' TODO: see if control can be displayed and edited immediately
+        Return MyBase.BeginEdit(selectAll)
+    End Function
 End Class

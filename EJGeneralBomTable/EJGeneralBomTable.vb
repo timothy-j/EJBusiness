@@ -3,6 +3,7 @@ Imports System.Linq.Dynamic
 Imports System.Reflection
 
 Public Class EJGeneralBomTable
+
     Private _db As EJData.CorporateEntities
     Private _machines As List(Of MachInfo)             ' List of machines to be displayed on form
     Private _initialisingGrid As Boolean            ' Flag to avoid uneccessary processing while columns are being added
@@ -249,7 +250,7 @@ Public Class EJGeneralBomTable
                         ' This is a Status column..
                         coid.Status = DataGridView1.Rows.Item(e.RowIndex).Cells.Item("MCS" & mc.Number & "Column").Value
                     End If
-                    Next
+                Next
                 'End If
             End If
         End If
@@ -388,12 +389,16 @@ Public Class EJGeneralBomTable
                 Exit Sub
             Else
                 DataGridView1.CurrentCell = cell
-                '' Mouse location must be se before this call, as this is when cell edit is called
-                DataGridView1.BeginEdit(False)
+                ' Mouse location must be set before this call, as this is when cell edit is called
+                DataGridView1.BeginEdit(True)
             End If
         End If
     End Sub
 
+
+    ''' <summary>
+    ''' Fills the datagrid with filtered data
+    ''' </summary>
     Sub Requery()
         ' Start basic item query
         Dim Bom As IQueryable(Of EJData.Item) = From i In _db.Items.Include("QuoteItemDetails").Include("Part")
