@@ -41,6 +41,21 @@
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
+        CType(Me, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.SuspendLayout()
+        '
+        'EJDropDownDGV
+        '
+        Me.AllowUserToResizeRows = False
+        Me.BorderStyle = System.Windows.Forms.BorderStyle.None
+        Me.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.None
+        Me.ColumnHeadersVisible = False
+        Me.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically
+        Me.RowHeadersVisible = False
+        Me.RowTemplate.Height = 18
+        Me.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
+        CType(Me, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.ResumeLayout(False)
 
     End Sub
 End Class
