@@ -43,10 +43,10 @@ Partial Class TestContainer
         '
         Me.TextBox1.BorderStyle = System.Windows.Forms.BorderStyle.None
         Me.TextBox1.Font = New System.Drawing.Font("Microsoft Sans Serif", 14.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.TextBox1.Location = New System.Drawing.Point(219, 20)
+        Me.TextBox1.Location = New System.Drawing.Point(15, 156)
         Me.TextBox1.Name = "TextBox1"
-        Me.TextBox1.Size = New System.Drawing.Size(144, 22)
-        Me.TextBox1.TabIndex = 2
+        Me.TextBox1.Size = New System.Drawing.Size(173, 22)
+        Me.TextBox1.TabIndex = 3
         '
         'PartBindingSource
         '
@@ -61,7 +61,7 @@ Partial Class TestContainer
         Me.MultiColumnComboBox1.Location = New System.Drawing.Point(15, 113)
         Me.MultiColumnComboBox1.Name = "MultiColumnComboBox1"
         Me.MultiColumnComboBox1.Size = New System.Drawing.Size(173, 19)
-        Me.MultiColumnComboBox1.TabIndex = 3
+        Me.MultiColumnComboBox1.TabIndex = 2
         Me.MultiColumnComboBox1.ValueMember = ""
         '
         'TestContainer

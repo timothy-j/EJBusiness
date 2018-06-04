@@ -1,5 +1,6 @@
 ﻿Imports System.ComponentModel
 Imports System.ComponentModel.Design
+Imports System.Linq.Dynamic
 
 Public Class MultiColumnComboBox
 
@@ -12,8 +13,18 @@ Public Class MultiColumnComboBox
     Private _TextMemberIndex As Integer
     Private m_settingText As Boolean
     Private m_previousText As String = ""
+    Private m_autoCompleteList As New List(Of AutoCompleteItem)
+    Private m_dropDownClicked As Boolean                        ' Change in list selection caused by click, so dropdown should be closed
     Private _ColumnWidths As New List(Of Integer)
+    Private _Value As Object
 
+#End Region
+
+#Region "Types"
+    Structure AutoCompleteItem
+        Public Property Index As Integer
+        Public Property Text As String
+    End Structure
 #End Region
 
 #Region "Design mode identification"
@@ -101,11 +112,14 @@ Public Class MultiColumnComboBox
 
             If IsInDesignMode() Then Exit Property
             ' Fill autocomplete list
-            Dim strList As New AutoCompleteStringCollection
+            m_autoCompleteList.Clear()
+
+            Dim i As Integer = 0
             For Each item In DropDownBindingSource.List
-                strList.Add(item.GetType.GetProperty(DisplayMembers(Value)).GetValue(item).ToString)
+                m_autoCompleteList.Add(New AutoCompleteItem With {.Text = item.GetType.GetProperty(DisplayMembers(Value)).GetValue(item).ToString,
+                                       .Index = i})
+                i += 1
             Next
-            TextBox1.AutoCompleteCustomSource = strList
         End Set
     End Property
 
@@ -113,6 +127,16 @@ Public Class MultiColumnComboBox
         Description("The maximum number of rows shown in the drop down list."),
         DefaultValue(16)>
     Property ListMaxRows As Integer = 16
+
+    Property Value As Object
+        Get
+            Return _Value
+        End Get
+        Set
+            ' TODO: validate and synchronise bindingsource
+            _Value = Value
+        End Set
+    End Property
 
 #End Region
 
@@ -142,11 +166,14 @@ Public Class MultiColumnComboBox
         CreateDropDownColumns() 'TextMemberIndex = TextMemberIndex
 
         ' HACK: Fill autocomplete list
-        Dim strList As New AutoCompleteStringCollection
+        m_autoCompleteList.Clear()
+
+        Dim i As Integer = 0
         For Each item In DropDownBindingSource.List
-            strList.Add(item.GetType.GetProperty(DisplayMembers(TextMemberIndex)).GetValue(item).ToString)
+            m_autoCompleteList.Add(New AutoCompleteItem With {.Text = item.GetType.GetProperty(DisplayMembers(TextMemberIndex)).GetValue(item).ToString,
+                                       .Index = i})
+            i += 1
         Next
-        TextBox1.AutoCompleteCustomSource = strList
     End Sub
 
 #End Region
@@ -189,15 +216,24 @@ Public Class MultiColumnComboBox
         Dim btnRect As New Rectangle With {.X = e.ClipRectangle.Width - m_btnWidth, .Y = 0, .Height = e.ClipRectangle.Height, .Width = m_btnWidth}
         Dim txtRect As New Rectangle With {.X = 0, .Y = 0, .Height = e.ClipRectangle.Height, .Width = e.ClipRectangle.Width - m_btnWidth}
         'btnRect.Width = 18
-        If Me.ContainsFocus Then
+        If TextBox1.Focused Then
             ' TODO: never hit
-            ComboBoxRenderer.DrawTextBox(e.Graphics, e.ClipRectangle, VisualStyles.ComboBoxState.Hot)
-            ComboBoxRenderer.DrawDropDownButton(e.Graphics, btnRect, VisualStyles.ComboBoxState.Hot)
+            ComboBoxRenderer.DrawTextBox(e.Graphics, e.ClipRectangle, VisualStyles.ComboBoxState.Pressed)
+            'ComboBoxRenderer.DrawDropDownButton(e.Graphics, btnRect, VisualStyles.ComboBoxState.Hot)
         Else
             ComboBoxRenderer.DrawTextBox(e.Graphics, e.ClipRectangle, VisualStyles.ComboBoxState.Normal)
+            'ComboBoxRenderer.DrawDropDownButton(e.Graphics, btnRect, VisualStyles.ComboBoxState.Normal)
+        End If
+        If DropDownToolStrip.Visible = True Then
+            ComboBoxRenderer.DrawDropDownButton(e.Graphics, btnRect, VisualStyles.ComboBoxState.Pressed)
+        Else
             ComboBoxRenderer.DrawDropDownButton(e.Graphics, btnRect, VisualStyles.ComboBoxState.Normal)
         End If
     End Sub
+
+    'Public Overrides Function ValidateChildren() As Boolean
+    '    Return MyBase.ValidateChildren()
+    'End Function
 
 #End Region
 
@@ -232,7 +268,8 @@ Public Class MultiColumnComboBox
             .Show(PointToScreen(New Point With {.X = 0, .Y = Height}))
         End With
         'DropDownGrid.DataSource = DropDownBindingSource
-        'DropDownGrid.FirstDisplayedScrollingRowIndex = 50
+        If DropDownGrid.Rows.Count < 1 Then Exit Sub
+        DropDownGrid.FirstDisplayedScrollingRowIndex = DropDownGrid.CurrentRow.Index
         DropDownGrid.Focus()
     End Sub
 
@@ -244,21 +281,54 @@ Public Class MultiColumnComboBox
             Exit Sub
         End If
         m_previousText = startText
-        Dim suggest As String = (From str In TextBox1.AutoCompleteCustomSource
-                                 Where str.ToString.ToLower.StartsWith(startText.ToLower)).FirstOrDefault
-        If suggest = "" Then Exit Sub
+        Dim suggest As AutoCompleteItem = (From aci In m_autoCompleteList
+                                           Where aci.Text.ToLower.StartsWith(startText.ToLower)).FirstOrDefault
+        'Dim test = CType(DropDownBindingSource.DataSource, List(Of IEnumerable)).Where(DisplayMembers(TextMemberIndex) & ".StartWith(""" & startText & """)")
+
+        If suggest.Text = "" Then Exit Sub
         m_settingText = True
-        TextBox1.Text = suggest
-        TextBox1.Select(startText.Length, suggest.Length - startText.Length)
+        DropDownBindingSource.Position = suggest.Index
+        TextBox1.Text = suggest.Text
+        TextBox1.Select(startText.Length, suggest.Text.Length - startText.Length)
         'DropDownBindingSource.Position = DropDownBindingSource.Find(DisplayMembers(TextMemberIndex), suggest)
         m_settingText = False
     End Sub
 
     Private Sub DropDownBindingSource_CurrentItemChanged(sender As Object, e As EventArgs) Handles DropDownBindingSource.CurrentItemChanged
-        If DropDownBindingSource.Position < 0 Then Exit Sub
+        If DropDownBindingSource.Position < 0 Or m_settingText Then Exit Sub
+
         ' HACK: this breaks when coming back off end of list
         TextBox1.Text = DropDownBindingSource.Current().GetType.GetProperty(DisplayMembers(TextMemberIndex)).GetValue(DropDownBindingSource.Current())
         m_previousText = TextBox1.Text
+        'TextBox1.Focus()
+        If m_dropDownClicked Then DropDownToolStrip.Hide()
+        m_dropDownClicked = False
+    End Sub
+
+    Private Sub DropDownGrid_Click(sender As Object, e As EventArgs) Handles DropDownGrid.Click
+        ' TODO: Enter text/set bindingsource current item and close dropdown
+        m_dropDownClicked = True
+    End Sub
+
+    Private Sub TextBox1_KeyDown(sender As Object, e As KeyEventArgs) Handles TextBox1.KeyDown
+        If DropDownToolStrip.Visible Then Exit Sub
+        If e.KeyCode = Keys.Down Then MultiColumnComboBox_Click(sender, e)
+    End Sub
+
+    Private Sub DropDownGrid_KeyDown(sender As Object, e As KeyEventArgs) Handles DropDownGrid.KeyDown
+        ' TODO: handle return and tab
+        If e.KeyCode = Keys.Tab Or e.KeyCode = Keys.Return Then
+            DropDownToolStrip.Hide()
+            e.Handled = True
+        End If
+    End Sub
+
+    Private Sub DropDownToolStrip_VisibleChanged(sender As Object, e As EventArgs) Handles DropDownToolStrip.VisibleChanged
+        Invalidate() ' Make sure new button state is drawn
+    End Sub
+
+    Private Sub MultiColumnComboBox_ChangeFocus(sender As Object, e As EventArgs) Handles TextBox1.GotFocus, TextBox1.LostFocus
+        Invalidate() ' Make sure new button state is drawn
     End Sub
 
 #End Region
