@@ -6,25 +6,29 @@ Public Class MultiColumnComboBox
 
 #Region "Attributes"
 
-    Private Const m_btnWidth As Integer = 16
-    'Private DropDownGrid As New EJDropDownDGV
-    Private m_DisplayMembers As New List(Of String)
-    Private m_host As ToolStripControlHost ' = New ToolStripControlHost(DropDownGrid)
+    Private Const m_btnWidth As Integer = 16        ' HACK: should be property with default of 16?
+    Private m_dataTable As New DataTable            ' Copy of the datasource columns specified in DisplayMembers and ValueMember
+    Private m_DisplayMembers As New List(Of String) '
+    Private m_host As ToolStripControlHost          ' = New ToolStripControlHost(DropDownGrid)
     Private _TextMemberIndex As Integer
     Private m_settingText As Boolean
     Private m_previousText As String = ""
-    Private m_autoCompleteList As New List(Of AutoCompleteItem)
-    Private m_dropDownClicked As Boolean                        ' Change in list selection caused by click, so dropdown should be closed
+    Private m_itemSelectedByUser As Boolean         ' Change in list selection caused by user selection, so dropdown should be closed
     Private _ColumnWidths As New List(Of Integer)
     Private _Value As Object
 
 #End Region
 
 #Region "Types"
-    Structure AutoCompleteItem
-        Public Property Index As Integer
-        Public Property Text As String
-    End Structure
+
+    ''' <summary>
+    ''' Controls how the drop down list acts as text is entered
+    ''' </summary>
+    Enum ListFilterBehaviors
+        NoFilter                ' List will not be filtered. First match will be selected
+        FilterListStartsWith    ' List filtered by "text begins with input text"
+        FilterListContains      ' List filtered by "text contains input text" first "begins with" match will be selected
+    End Enum
 #End Region
 
 #Region "Design mode identification"
@@ -43,16 +47,25 @@ Public Class MultiColumnComboBox
 
     ' TODO: expose textbox properties and hide unnecessary UserControl ones
 
+    Private Property DataTable As DataTable
+        Get
+            Return m_dataTable
+        End Get
+        Set
+            m_dataTable = Value
+        End Set
+    End Property
+
     <Category("Data"),
         Description("Data source for list items."),
         RefreshProperties(RefreshProperties.Repaint),
         AttributeProvider(GetType(IListSource))>
     Property DataSource As Object
         Get
-            Return DropDownBindingSource.DataSource
+            Return InputBindingSource.DataSource
         End Get
         Set
-            DropDownBindingSource.DataSource = Value
+            InputBindingSource.DataSource = Value
             'TextListBindingSource.DataSource = Value
         End Set
     End Property
@@ -108,18 +121,9 @@ Public Class MultiColumnComboBox
                 _TextMemberIndex = Value
             End If
 
-            If DropDownBindingSource.Count = 0 Then Exit Property
+            If InputBindingSource.Count = 0 Then Exit Property
 
             If IsInDesignMode() Then Exit Property
-            ' Fill autocomplete list
-            m_autoCompleteList.Clear()
-
-            Dim i As Integer = 0
-            For Each item In DropDownBindingSource.List
-                m_autoCompleteList.Add(New AutoCompleteItem With {.Text = item.GetType.GetProperty(DisplayMembers(Value)).GetValue(item).ToString,
-                                       .Index = i})
-                i += 1
-            Next
         End Set
     End Property
 
@@ -138,6 +142,21 @@ Public Class MultiColumnComboBox
         End Set
     End Property
 
+    <Category("Behavior"),
+        Description("Whether 'no value' is acceptable when limited to list or using Value Member"),
+        DefaultValue(True)>
+    Property AllowEmpty As Boolean = True
+
+    <Category("Behavior"),
+        Description("Limit to list values only (required when using Value Member)"), ' TODO: implement limit to list
+        DefaultValue(True)>
+    Property LimitToList As Boolean = True
+
+    <Category("Behavior"),
+        Description("Controls how the list is filtered during text entry"),
+        DefaultValue(ListFilterBehaviors.FilterListStartsWith)>
+    Property ListFilterBehaviour As ListFilterBehaviors = ListFilterBehaviors.FilterListStartsWith ' TODO: implement filter functions
+
 #End Region
 
 #Region "Initialisation"
@@ -155,6 +174,8 @@ Public Class MultiColumnComboBox
 
         DropDownGrid.AutoGenerateColumns = False
 
+        'DropDownBindingSource.DataSource = DataTable
+
         ' For some reason a new BindingContext is needed to correctly 
         ' display DGV in dropdown
         'DropDownGrid.BindingContext = New BindingContext
@@ -163,17 +184,9 @@ Public Class MultiColumnComboBox
     Private Sub MultiColumnComboBox_Load(sender As Object, e As EventArgs) Handles Me.Load
         ' This guarantees that columns get created (creation only happens
         ' when bindingsource is full, so may not have happened during initialization)
-        CreateDropDownColumns() 'TextMemberIndex = TextMemberIndex
+        CreateDropDownColumns()
 
-        ' HACK: Fill autocomplete list
-        m_autoCompleteList.Clear()
-
-        Dim i As Integer = 0
-        For Each item In DropDownBindingSource.List
-            m_autoCompleteList.Add(New AutoCompleteItem With {.Text = item.GetType.GetProperty(DisplayMembers(TextMemberIndex)).GetValue(item).ToString,
-                                       .Index = i})
-            i += 1
-        Next
+        If Not IsInDesignMode() Then FillDataTable()
     End Sub
 
 #End Region
@@ -190,6 +203,54 @@ Public Class MultiColumnComboBox
                 DropDownGrid.Columns.Add(col)
             Next
         End If
+    End Sub
+
+    Private Sub FillDataTable()
+        DataTable.Clear()
+        DataTable.Columns.Clear()
+
+        ' If no display has been specified, exit
+        If DisplayMembers.Count < 1 Then Exit Sub
+
+        ' Create table stucture:
+
+        ' If applicable, create value column (without name)
+        If Not ValueMember = "" Then DataTable.Columns.Add(New DataColumn("", InputBindingSource.Item(0).GetType.GetProperty(ValueMember).PropertyType))
+
+        ' Create all display columns
+        For Each prop As String In DisplayMembers
+            ' TODO: handle identical column names?
+            ' TODO: convert all display columns to string?
+            DataTable.Columns.Add(New DataColumn(prop, InputBindingSource.Item(0).GetType.GetProperty(prop).PropertyType))
+        Next
+
+        ' Fill with data
+        If AllowEmpty Then ' add empty row
+            Dim row As DataRow = m_dataTable.NewRow()
+            ' HACK: this may only work if type is String?
+            'row.Item(DisplayMembers(TextMemberIndex)) = ""
+            DataTable.Rows.Add(row)
+        End If
+
+        For Each item In InputBindingSource
+            Dim row As DataRow = m_dataTable.NewRow()
+
+            ' If applicable, insert value
+            If Not ValueMember = "" Then row.Item(0) = item.GetType.GetProperty(ValueMember).GetValue(item)
+
+            ' Insert display values
+            For Each prop As String In DisplayMembers
+                row.Item(prop) = item.GetType.GetProperty(prop).GetValue(item)
+            Next
+
+            DataTable.Rows.Add(row)
+        Next
+
+        'Dim bindingList = (From data In DataTable
+        '                   Order By data.Item(DisplayMembers(TextMemberIndex))).AsEnumerable
+
+        DropDownBindingSource.DataSource = DataTable 'bindingList
+
     End Sub
 
 #End Region
@@ -240,19 +301,15 @@ Public Class MultiColumnComboBox
 #Region "Event handlers"
 
     Private Sub MultiColumnComboBox_Click(sender As Object, e As EventArgs) Handles Me.Click
-        'MsgBox("clicked")
-        ' TODO: show dropdown
-        ' HACK:
-        'DropDownGrid.DataSource = DropDownBindingSource
-        'DropDownGrid.Width = DropDownGrid.GetRowDisplayRectangle(0, False).Width
+        ' Set height and widths of DropDownList and grid
         Dim width As Integer = SystemInformation.VerticalScrollBarWidth
         For Each i As Integer In ColumnWidths
             width += i
         Next
+
         With DropDownGrid
-            '.BindingContext = m_dropDownStrip.BindingContext
-            '.DataSource = DropDownBindingSource
-            'DropDownBindingSource.Position = 50
+            ' Set height to show ListMaxRows
+            ' TODO: reduce height if list is shorter than ListMaxRows?
             .Height = .RowTemplate.Height * ListMaxRows
             .Width = width
         End With
@@ -262,52 +319,79 @@ Public Class MultiColumnComboBox
         m_host.Height = DropDownGrid.Height
         m_host.Width = width
 
+        ' Show the DropDown
         With DropDownToolStrip
             .Items.Add(m_host)
-            'DropDownGrid.BindingContext = New BindingContext
             .Show(PointToScreen(New Point With {.X = 0, .Y = Height}))
         End With
-        'DropDownGrid.DataSource = DropDownBindingSource
-        If DropDownGrid.Rows.Count < 1 Then Exit Sub
-        DropDownGrid.FirstDisplayedScrollingRowIndex = DropDownGrid.CurrentRow.Index
-        DropDownGrid.Focus()
+
+        ' Scroll currently selected row to top of list
+        If DropDownGrid.Rows.Count > 0 Then DropDownGrid.FirstDisplayedScrollingRowIndex = DropDownGrid.CurrentRow.Index
+        DropDownGrid.Focus() ' Needed for Return key to close list if row isn't changed
     End Sub
 
     Private Sub TextBox1_TextChanged(sender As Object, e As EventArgs) Handles TextBox1.TextChanged
-        If m_settingText Then Exit Sub
+
+        If m_settingText Then Exit Sub ' Text has been changed by internal code
+
+        ' Don't make suggestion if text has got shorter (i.e. been deleted)
         Dim startText As String = TextBox1.Text
         If m_previousText.Length >= startText.Length Then
             m_previousText = startText
             Exit Sub
         End If
-        m_previousText = startText
-        Dim suggest As AutoCompleteItem = (From aci In m_autoCompleteList
-                                           Where aci.Text.ToLower.StartsWith(startText.ToLower)).FirstOrDefault
-        'Dim test = CType(DropDownBindingSource.DataSource, List(Of IEnumerable)).Where(DisplayMembers(TextMemberIndex) & ".StartWith(""" & startText & """)")
 
-        If suggest.Text = "" Then Exit Sub
-        m_settingText = True
-        DropDownBindingSource.Position = suggest.Index
-        TextBox1.Text = suggest.Text
-        TextBox1.Select(startText.Length, suggest.Text.Length - startText.Length)
-        'DropDownBindingSource.Position = DropDownBindingSource.Find(DisplayMembers(TextMemberIndex), suggest)
+        m_previousText = startText
+
+        Dim suggestion As DataRow
+
+        suggestion = (From row In DataTable
+                      Where row(DisplayMembers(TextMemberIndex)).ToString.StartsWith(startText)).FirstOrDefault
+
+
+        ' TODO: move this into options below
+        If suggestion Is Nothing Then
+            DropDownBindingSource.Filter = ""
+            Exit Sub
+        End If
+
+        m_settingText = True ' This sub will effectively not be called while m_settingText = True
+
+        ' HACK: TODO: sort out what happens when text isn't found
+        Select Case ListFilterBehaviour
+            Case ListFilterBehaviors.FilterListStartsWith
+                ' HACK: breaks if ', ", * or % are in string?
+                DropDownBindingSource.Filter = DisplayMembers(TextMemberIndex) & " LIKE '" & startText & "*'"
+                ' Selected row will already be first row 
+            Case ListFilterBehaviors.FilterListContains
+                ' HACK: breaks if ', ", * or % are in string?
+                DropDownBindingSource.Filter = DisplayMembers(TextMemberIndex) & " LIKE '*" & startText & "*'"
+                ' HACK: this will break if there is no suggestion
+                DropDownBindingSource.Position = DropDownBindingSource.IndexOf(suggestion)
+            Case Else
+                DropDownBindingSource.Filter = ""
+                DropDownBindingSource.Position = DropDownBindingSource.IndexOf(suggestion)
+        End Select
+        'DropDownBindingSource.Position = suggest.Index
+        TextBox1.Text = suggestion.Item(DisplayMembers(TextMemberIndex)).ToString
+        TextBox1.Select(startText.Length, TextBox1.Text.Length - startText.Length)
         m_settingText = False
     End Sub
 
     Private Sub DropDownBindingSource_CurrentItemChanged(sender As Object, e As EventArgs) Handles DropDownBindingSource.CurrentItemChanged
-        If DropDownBindingSource.Position < 0 Or m_settingText Then Exit Sub
+        If DataTable.Rows.Count < 1 Or DropDownBindingSource.Position < 0 Or m_settingText Then Exit Sub
 
         ' HACK: this breaks when coming back off end of list
-        TextBox1.Text = DropDownBindingSource.Current().GetType.GetProperty(DisplayMembers(TextMemberIndex)).GetValue(DropDownBindingSource.Current())
+        TextBox1.Text = CType(DropDownBindingSource.Current(), DataRowView).Item(DisplayMembers(TextMemberIndex)).ToString
         m_previousText = TextBox1.Text
         'TextBox1.Focus()
-        If m_dropDownClicked Then DropDownToolStrip.Hide()
-        m_dropDownClicked = False
+        If m_itemSelectedByUser Then DropDownToolStrip.Hide()
+        m_itemSelectedByUser = False
     End Sub
 
-    Private Sub DropDownGrid_Click(sender As Object, e As EventArgs) Handles DropDownGrid.Click
-        ' TODO: Enter text/set bindingsource current item and close dropdown
-        m_dropDownClicked = True
+    Private Sub DropDownGrid_MouseDown(sender As Object, e As MouseEventArgs) Handles DropDownGrid.MouseDown
+        ' HACK: uses change in binding list to cause list to update and close, so doesn't work when clicking the current item
+        m_itemSelectedByUser = True
     End Sub
 
     Private Sub TextBox1_KeyDown(sender As Object, e As KeyEventArgs) Handles TextBox1.KeyDown

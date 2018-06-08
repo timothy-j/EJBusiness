@@ -46,6 +46,9 @@
         '
         'EJDropDownDGV
         '
+        Me.AllowUserToAddRows = False
+        Me.AllowUserToDeleteRows = False
+        Me.AllowUserToResizeColumns = False
         Me.AllowUserToResizeRows = False
         Me.BorderStyle = System.Windows.Forms.BorderStyle.None
         Me.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.None

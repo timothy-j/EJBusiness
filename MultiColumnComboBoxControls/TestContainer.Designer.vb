@@ -62,6 +62,7 @@ Partial Class TestContainer
         Me.MultiColumnComboBox1.Name = "MultiColumnComboBox1"
         Me.MultiColumnComboBox1.Size = New System.Drawing.Size(173, 19)
         Me.MultiColumnComboBox1.TabIndex = 2
+        Me.MultiColumnComboBox1.Value = Nothing
         Me.MultiColumnComboBox1.ValueMember = ""
         '
         'TestContainer

@@ -24,11 +24,13 @@ Partial Class MultiColumnComboBox
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
         Me.TextBox1 = New System.Windows.Forms.TextBox()
-        Me.DropDownBindingSource = New System.Windows.Forms.BindingSource(Me.components)
+        Me.InputBindingSource = New System.Windows.Forms.BindingSource(Me.components)
         Me.DropDownToolStrip = New System.Windows.Forms.ToolStripDropDown()
         Me.DropDownGrid = New MultiColumnComboBoxControls.EJDropDownDGV(Me.components)
-        CType(Me.DropDownBindingSource, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.DropDownBindingSource = New System.Windows.Forms.BindingSource(Me.components)
+        CType(Me.InputBindingSource, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.DropDownGrid, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.DropDownBindingSource, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'TextBox1
@@ -65,6 +67,9 @@ Partial Class MultiColumnComboBox
         Me.DropDownGrid.Size = New System.Drawing.Size(208, 41)
         Me.DropDownGrid.TabIndex = 2
         '
+        'DropDownBindingSource
+        '
+        '
         'MultiColumnComboBox
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(96.0!, 96.0!)
@@ -74,14 +79,16 @@ Partial Class MultiColumnComboBox
         Me.Controls.Add(Me.TextBox1)
         Me.Name = "MultiColumnComboBox"
         Me.Size = New System.Drawing.Size(276, 170)
-        CType(Me.DropDownBindingSource, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.InputBindingSource, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.DropDownGrid, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.DropDownBindingSource, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
     End Sub
     Friend WithEvents TextBox1 As TextBox
-    Friend WithEvents DropDownBindingSource As BindingSource
+    Friend WithEvents InputBindingSource As BindingSource
     Friend WithEvents DropDownToolStrip As ToolStripDropDown
     Friend WithEvents DropDownGrid As EJDropDownDGV
+    Friend WithEvents DropDownBindingSource As BindingSource
 End Class
