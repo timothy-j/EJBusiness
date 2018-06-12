@@ -4,33 +4,54 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WpfTestApp"
-        xmlns:EJData="clr-namespace:EJData;assembly=EJData" xmlns:WpfControls="clr-namespace:WpfControls;assembly=WpfControls" x:Class="MainWindow"
+        xmlns:EJData="clr-namespace:EJData;assembly=EJData" 
+        xmlns:WpfControls="clr-namespace:WpfControls;assembly=WpfControls" 
+        xmlns:diag="clr-namespace:System.Diagnostics;assembly=WindowsBase"
+        x:Class="MainWindow"
         mc:Ignorable="d"
         Title="MainWindow" Height="600" Width="1000">
+    <!--<Window.CommandBindings>
+        <CommandBinding Command="ApplicationCommands.Open" Executed=""/>
+    </Window.CommandBindings>-->
     <Window.Resources>
-        <CollectionViewSource x:Key="ItemViewSource" d:DesignSource="{d:DesignInstance {x:Type EJData:Item}, CreateList=True}"/>
+        <CollectionViewSource x:Key="ItemViewSource" d:DesignSource="{d:DesignInstance {x:Type EJData:Item}, CreateList=True}" Filter="CollectionViewSource_Filter"/>
         <Style x:Key="RightAlignColumn" TargetType="{x:Type TextBlock}">
             <Setter Property="HorizontalAlignment" Value="Right" />
         </Style>
+        <ContextMenu x:Key="StandardContextMenu">
+            <MenuItem Command="ApplicationCommands.Cut" />
+            <MenuItem Command="ApplicationCommands.Copy" />
+            <MenuItem Command="ApplicationCommands.Paste" />
+            <MenuItem Command="ApplicationCommands.SelectAll"/>
+        </ContextMenu>
         <local:QtyConverter x:Key="QtyConverter"/>
-        <DataGridTextColumn x:Key="MCQtyColumn" x:Shared="False" Binding="{Binding Converter={StaticResource QtyConverter}}" Width="50" ElementStyle="{StaticResource RightAlignColumn}">
-            <!--Binding="{Binding Converter={StaticResource QtyConverter}}"-->
-            <!--<DataGridTextColumn.Binding>
-                <MultiBinding Converter="{StaticResource QtyConverter}">
-                    <Binding Path="MachInfo.Number"/> -->
-            <!--(local:MachInfo.Number)-->
-            <!--
-                    <Binding Path=""/>
-                </MultiBinding>
-            </DataGridTextColumn.Binding>-->
-        </DataGridTextColumn>
-        <DataGridTextColumn x:Key="MCStatusColumn" x:Shared="False" Width="70"/>
     </Window.Resources>
+
     <Grid>
+        <Menu>
+            <MenuItem Header="File"/>
+            <MenuItem Header="Edit">
+                <MenuItem Command="ApplicationCommands.Cut" />
+                <MenuItem Command="ApplicationCommands.Copy" />
+                <MenuItem Command="ApplicationCommands.Paste" />
+                <MenuItem Command="ApplicationCommands.SelectAll" />
+            </MenuItem>
+        </Menu>
         <DataGrid x:Name="ItemDataGrid" AutoGenerateColumns="False" ItemsSource="{Binding Source={StaticResource ItemViewSource}}" RowHeight="20"  Margin="2,101,2,2" RowDetailsVisibilityMode="VisibleWhenSelected" SelectionUnit="CellOrRowHeader">
+            <DataGrid.Resources>
+                <DataGridTextColumn x:Key="MCQtyColumn" x:Shared="False" Width="50" ElementStyle="{StaticResource RightAlignColumn}"/>
+                <DataGridTextColumn x:Key="MCStatusColumn" x:Shared="False" Width="70"/>
+                <TextBox x:Key="ExpandedCellBox" TextWrapping="Wrap" MinLines="1" Width="Auto" MinWidth="10"/>
+                <Popup x:Key="FullTextPopup" StaysOpen="False" Placement="Relative" PopupAnimation="Slide" HorizontalOffset="{Binding RelativeSource={RelativeSource Self}, Path=Width }">
+                    <Border BorderBrush="Transparent" Background="White">
+                        <StaticResource ResourceKey="ExpandedCellBox"/>
+                    </Border>
+                </Popup>
+            </DataGrid.Resources>
             <DataGrid.CellStyle>
                 <Style TargetType="{x:Type DataGridCell}">
                     <EventSetter Event="Control.PreviewMouseDoubleClick" Handler="DataGridCell_MouseDoubleClick"/>
+                    <Setter Property="ContextMenu" Value="{StaticResource StandardContextMenu}"/>
                 </Style>
             </DataGrid.CellStyle>
             <DataGrid.Columns>
@@ -40,22 +61,29 @@
                 <DataGridTextColumn x:Name="DrawingColumn" Binding="{Binding Part.DrawingType}" Header="Dwg" Width="40"/>
                 <DataGridTextColumn x:Name="DescriptionColumn" Binding="{Binding Description}"  Header="Description" Width="*" MinWidth="150"/>
                 <DataGridTextColumn x:Name="QtyColumn" Binding="{Binding Qty}" Header="Qty" Width="50" ElementStyle="{StaticResource RightAlignColumn}"/>
-                <DataGridTextColumn x:Name="SupplierDescriptionColumn" Binding="{Binding Part.Description}"  Header="Suppliers Description" Width="*" MinWidth="150"/>
+                <DataGridTextColumn x:Name="SupplierDescriptionColumn" Binding="{Binding Part.SuppliersDescription}"  Header="Suppliers Description" Width="*" MinWidth="150"/>
                 <DataGridTextColumn x:Name="StatusColumn" Binding="{Binding Status}" Header="Status" Width="25"/>
-                <DataGridTextColumn x:Name="NotesColumn" Binding="{Binding Part.ProductionNotes}" Header="Notes" Width="100"/>
+                <DataGridTextColumn x:Name="NotesColumn" Binding="{Binding Part.ProductionNotes}" Header="Notes" Width="100">
+                    <DataGridTextColumn.CellStyle>
+                        <Style TargetType="{x:Type DataGridCell}">
+                            <EventSetter Event="GotKeyboardFocus" Handler="DataGridCell_GotKeyboardFocus"/>
+                        </Style>
+                    </DataGridTextColumn.CellStyle>
+                </DataGridTextColumn>
                 <DataGridTextColumn x:Name="UnitColumn" Binding="{Binding Part.Unit, StringFormat=\{0:C2\}, TargetNullValue=''}" Header="Unit" Width="50" ElementStyle="{StaticResource RightAlignColumn}"/>
                 <DataGridTextColumn x:Name="SecondOpColumn" Binding="{Binding Part.SecondOperation, StringFormat=\{0:C2\}, TargetNullValue=''}" Header="2ndOp" Width="50" ElementStyle="{StaticResource RightAlignColumn}"/>
-                <DataGridTemplateColumn x:Name="DateCheckedColumn" Header="Date Checked" Width="100">
+                <DataGridTextColumn x:Name="DateCheckedColumn" Binding="{Binding Part.DateChecked, StringFormat=\{0:d\}, TargetNullValue=''}" Header="Date Checked" Width="100"/>
+                <!--<DataGridTemplateColumn x:Name="DateCheckedColumn" Header="Date Checked" Width="100">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <DatePicker SelectedDate="{Binding Part.DateChecked}" Padding="0" BorderThickness="0" FirstDayOfWeek="Monday" Text=" " />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
+                </DataGridTemplateColumn>-->
                 <DataGridTextColumn x:Name="AssociationsColumn" Binding="{Binding Associations}" Header="Associations" Width="50"/>
                 <DataGridTextColumn x:Name="PartColumn" Binding="{Binding Part.PartNo}" Header="Part" Width="70"/>
             </DataGrid.Columns>
         </DataGrid>
-        <WpfControls:MultiColComboBox HorizontalAlignment="Left" Height="42" Margin="10,10,0,0" VerticalAlignment="Top" Width="188" RenderTransformOrigin="0.467,-0.488"/>
+        <WpfControls:MultiColComboBox Height="Auto"  HorizontalAlignment="Left" Margin="10,39,0,0" VerticalAlignment="Top" Width="188"/>
     </Grid>
 </Window>

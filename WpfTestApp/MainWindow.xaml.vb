@@ -113,7 +113,7 @@ Class MainWindow
 
         For Each mc In MachineList
 
-            Dim colS As DataGridTextColumn = FindResource("MCStatusColumn")
+            Dim colS As DataGridTextColumn = ItemDataGrid.FindResource("MCStatusColumn")
             colS.Header = "S" & mc.Number
             Dim bind = New Binding("CustOrderItemDetails")
             bind.Converter = New StatusConverter
@@ -123,9 +123,9 @@ Class MainWindow
             ItemDataGrid.Columns.Insert(0, colS)
 
 
-            Dim col As DataGridTextColumn = FindResource("MCQtyColumn")
+            Dim col As DataGridTextColumn = ItemDataGrid.FindResource("MCQtyColumn")
             col.Header = mc.Number
-            Dim format As String = col.Binding.StringFormat
+            'Dim format As String = col.Binding.StringFormat
             Dim qtyBind As New Binding("CustOrderItemDetails")
             qtyBind.Converter = New QtyConverter
             qtyBind.StringFormat = "G8"
@@ -169,6 +169,7 @@ Class MainWindow
     End Sub
 
     Private Sub ItemsGrid_RowEditEnding(sender As Object, e As DataGridRowEditEndingEventArgs) Handles ItemDataGrid.RowEditEnding
+        'ItemDataGrid.CommitEdit(DataGridEditingUnit.Cell, False)
         If _db.ChangeTracker.HasChanges Then
             Try
                 _db.SaveChanges()
@@ -178,4 +179,26 @@ Class MainWindow
             End Try
         End If
     End Sub
+
+    Private Sub CollectionViewSource_Filter(sender As Object, e As FilterEventArgs)
+
+    End Sub
+
+    Private Sub DataGridCell_GotKeyboardFocus(sender As Object, e As KeyboardFocusChangedEventArgs)
+        Dim tb As TextBox = ItemDataGrid.FindResource("ExpandedCellBox")
+        Dim bind As New Binding("Text")
+        'Dim bind As Binding = BindingOperations.GetBinding(tb, tb.TextProperty)
+        bind.Source = CType(sender, DataGridCell).Content
+        bind.Mode = BindingMode.TwoWay
+        'bind.UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged
+        tb.SetBinding(tb.TextProperty, bind)
+        tb.MinWidth = CType(sender, DataGridCell).ActualWidth
+        Dim popup As Primitives.Popup = ItemDataGrid.FindResource("FullTextPopup")
+        popup.PlacementTarget = sender
+        popup.Width = CType(sender, DataGridCell).ActualWidth
+        popup.IsOpen = True
+        tb.Focus()
+        'e.Handled = True
+    End Sub
+
 End Class

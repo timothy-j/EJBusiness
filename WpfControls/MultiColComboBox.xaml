@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:WpfControls"
              mc:Ignorable="d" Width="300" Height="40">
  
-        <ComboBox Height="30" Margin="5" ItemsSource="{Binding}" HorizontalContentAlignment="Stretch">
+        <ComboBox ItemsSource="{Binding}" HorizontalContentAlignment="Stretch" IsEditable="True" Height="Auto">
             <ComboBox.ItemTemplate>
                 <DataTemplate>
                     <TextBlock Margin="2" Text="{Binding Name}"/>
