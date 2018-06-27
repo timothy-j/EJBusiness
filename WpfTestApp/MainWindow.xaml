@@ -10,16 +10,63 @@
         x:Class="MainWindow"
         mc:Ignorable="d"
         Title="EJ Business" Height="800" Width="1200">
+    <Window.CommandBindings>
+        <CommandBinding Command="local:MainWindow.OpenMachineRoutedCommand" Executed="OpenMachineCommand_Executed"/>
+        <CommandBinding Command="local:MainWindow.OpenOrdersRoutedCommand" Executed="OpenOrdersCommand_Executed"/>
+        <CommandBinding Command="local:MainWindow.OpenCustomerOrdersRoutedCommand" Executed="OpenCustomerOrdersCommand_Executed"/>
+        <CommandBinding Command="local:MainWindow.OpenQuotesRoutedCommand" Executed="OpenQuotesCommand_Executed"/>
+        <CommandBinding Command="local:MainWindow.NewOrderRoutedCommand" Executed="OpenOrdersCommand_Executed"/>
+        <CommandBinding Command="local:MainWindow.NewCustomerOrderRoutedCommand" Executed="OpenCustomerOrdersCommand_Executed"/>
+        <CommandBinding Command="local:MainWindow.NewQuoteRoutedCommand" Executed="OpenQuotesCommand_Executed"/>
+        <CommandBinding Command="local:MainWindow.PopOutRoutedCommand" Executed="PopOutCommand_Executed"/>
+        <CommandBinding Command="ApplicationCommands.Close" Executed="CloseCommand_Executed" CanExecute="CloseCommand_CanExecute"/>
+    </Window.CommandBindings>
+    <Window.Resources>
+        <TabItem x:Key="CustomerOrderTab" x:Shared="False" MouseDown="TabItem_MouseDown">
+            <TabItem.Header>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock>Customer Order</TextBlock>
+                    <Button Width="15" Height="15" Command="ApplicationCommands.Close" CommandTarget="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=TabItem}}" Margin="4,0,0,0"/>
+                </StackPanel>
+            </TabItem.Header>
+            <local:CustomerOrderEntry/>
+        </TabItem>
+        <TabItem x:Key="OrderTab" x:Shared="False" MouseDown="TabItem_MouseDown">
+            <TabItem.Header>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock>Order</TextBlock>
+                    <Button Width="15" Height="15" Command="ApplicationCommands.Close" CommandTarget="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=TabItem}}" Margin="4,0,0,0"/>
+                </StackPanel>
+            </TabItem.Header>
+            <local:OrderEntry/>
+        </TabItem>
+        <TabItem x:Key="MachineTableTab" x:Shared="False">
+            <TabItem.Header>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=TabItem}, Path=Content.MachineType}"/>
+                    <Button Width="15" Height="15" Command="ApplicationCommands.Close" CommandTarget="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=TabItem}}" Margin="4,0,0,0"/>
+                </StackPanel>
+            </TabItem.Header>
+            <local:GeneralBomTable Model="HX"/> <!--Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}"-->
+        </TabItem>
+    </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
-        <Menu>
+        <Menu x:Name="MainMenu">
             <MenuItem Header="File">
-                <MenuItem Header="Open Table"/>
-                <MenuItem Header="Customer Order"/>
-                <MenuItem Header="Customer Quote"/>
+                <MenuItem Header="Actions">
+                    <MenuItem Command="local:MainWindow.NewOrderRoutedCommand" CommandParameter="New" />
+                    <MenuItem Command="local:MainWindow.NewCustomerOrderRoutedCommand" CommandParameter="New" />
+                    <MenuItem Command="local:MainWindow.NewQuoteRoutedCommand" CommandParameter="New" />
+                </MenuItem>
+                <MenuItem Command="local:MainWindow.OpenMachineRoutedCommand"/>
+                <MenuItem Command="local:MainWindow.OpenOrdersRoutedCommand"/>
+                <MenuItem Command="local:MainWindow.OpenCustomerOrdersRoutedCommand"/>
+                <MenuItem Command="local:MainWindow.OpenQuotesRoutedCommand"/>
+                <MenuItem Command="ApplicationCommands.Close"/>
             </MenuItem>
             <MenuItem Header="Edit">
                 <MenuItem Command="ApplicationCommands.Cut" />
@@ -27,14 +74,10 @@
                 <MenuItem Command="ApplicationCommands.Paste" />
                 <MenuItem Command="ApplicationCommands.SelectAll" />
             </MenuItem>
+            <MenuItem Header="Window">
+                <MenuItem Command="local:MainWindow.PopOutRoutedCommand"/>
+            </MenuItem>
         </Menu>
-        <TabControl Margin="0,0,0,0" Grid.Row="1" Background="{DynamicResource {x:Static SystemColors.AppWorkspaceBrushKey}}">
-            <TabItem Header="Customer Order">
-                <Frame Background="{DynamicResource {x:Static SystemColors.AppWorkspaceBrushKey}}" Source="CustomerOrderEntry.xaml"/>
-            </TabItem>
-            <TabItem Header="Machine Table">
-                <Frame Background="{DynamicResource {x:Static SystemColors.AppWorkspaceBrushKey}}" Source="GeneralBomTable.xaml"/>
-            </TabItem>
-        </TabControl>
+        <TabControl x:Name="DocumentTabControl" Grid.Row="1" Background="{DynamicResource {x:Static SystemColors.AppWorkspaceBrushKey}}" Padding="0"/>
     </Grid>
 </Window>

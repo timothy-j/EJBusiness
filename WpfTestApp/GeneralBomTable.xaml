@@ -1,4 +1,4 @@
-﻿<Page
+﻿<UserControl
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -9,13 +9,13 @@
         xmlns:diag="clr-namespace:System.Diagnostics;assembly=WindowsBase"
         x:Class="GeneralBomTable"
         mc:Ignorable="d"
-        d:DesignHeight="600" d:DesignWidth="1000"
-        Title="GeneralBomTable" >
+        d:DesignHeight="600" d:DesignWidth="1000">
     <!--<Window.CommandBindings>
         <CommandBinding Command="ApplicationCommands.Open" Executed=""/>
     </Window.CommandBindings>-->
-    <Page.Resources>
-        <CollectionViewSource x:Key="ItemViewSource" d:DesignSource="{d:DesignInstance {x:Type EJData:Item}, CreateList=True}" Filter="CollectionViewSource_Filter">
+    <UserControl.Resources>
+        <CollectionViewSource x:Key="ItemViewSource" d:DesignSource="{d:DesignInstance {x:Type EJData:Item}, CreateList=True}">
+
             <!--<CollectionViewSource.GroupDescriptions>
                 <PropertyGroupDescription PropertyName="ParentID"/>
             </CollectionViewSource.GroupDescriptions>-->
@@ -23,14 +23,32 @@
         <Style x:Key="RightAlignColumn" TargetType="{x:Type TextBlock}">
             <Setter Property="HorizontalAlignment" Value="Right" />
         </Style>
-        <ContextMenu x:Key="StandardContextMenu">
+        <ContextMenu x:Key="StandardContextMenu" Opened="ContextMenu_Opened">
+            <!--<MenuItem Command="ApplicationCommands.Cut" />
+            <MenuItem Command="ApplicationCommands.Copy" />
+            <MenuItem Command="ApplicationCommands.Paste" />
+            <MenuItem Command="ApplicationCommands.SelectAll"/>-->
+        </ContextMenu>
+        <ContextMenu x:Key="StandardMenu">
             <MenuItem Command="ApplicationCommands.Cut" />
             <MenuItem Command="ApplicationCommands.Copy" />
             <MenuItem Command="ApplicationCommands.Paste" />
             <MenuItem Command="ApplicationCommands.SelectAll"/>
         </ContextMenu>
-        <local:QtyConverter x:Key="QtyConverter"/>
-    </Page.Resources>
+        <ContextMenu x:Key="SelectedStringFilterMenu">
+            <MenuItem Command="local:GeneralBomTable.EqualsCommand" />
+            <MenuItem Command="local:GeneralBomTable.NotEqualCommand" />
+        </ContextMenu>
+        <ContextMenu x:Key="StartStringFilterMenu">
+            <MenuItem Command="local:GeneralBomTable.StartsWithCommand" />
+            <MenuItem Command="local:GeneralBomTable.NotStartsWithCommand"/>
+        </ContextMenu>
+        <ContextMenu x:Key="EndStringFilterMenu">
+            <MenuItem Command="local:GeneralBomTable.EndsWithCommand" />
+            <MenuItem Command="local:GeneralBomTable.NotEndsWithCommand"/>
+        </ContextMenu>
+        <!--<local:QtyConverter x:Key="QtyConverter"/>-->
+    </UserControl.Resources>
 
     <Grid>
         <Menu>
@@ -42,7 +60,14 @@
                 <MenuItem Command="ApplicationCommands.SelectAll" />
             </MenuItem>
         </Menu>
-        <DataGrid x:Name="ItemDataGrid" DataGridCell.GotFocus="ItemDataGrid_GotFocus" AutoGenerateColumns="False" ItemsSource="{Binding Source={StaticResource ItemViewSource}}" RowHeight="20"  Margin="2,101,2,2" RowDetailsVisibilityMode="Collapsed" RowHeaderWidth="20" CanUserDeleteRows="False" CanUserAddRows="False" CanUserResizeRows="False"> <!--ScrollViewer.IsDeferredScrollingEnabled="True">-->
+        <DataGrid x:Name="ItemDataGrid" DataGridCell.GotFocus="ItemDataGrid_GotFocus" AutoGenerateColumns="False" 
+                  ItemsSource="{Binding Source={StaticResource ItemViewSource}}" RowHeight="20"  Margin="0" 
+                  RowDetailsVisibilityMode="Collapsed" RowHeaderWidth="20" CanUserAddRows="False" 
+                  CanUserResizeRows="False" CanUserDeleteRows="False" IsSynchronizedWithCurrentItem="True" >
+            <!--ColumnWidth="100"
+                  VirtualizingStackPanel.VirtualizationMode="Recycling"
+                  VirtualizingStackPanel.CacheLengthUnit="Page"
+                  VirtualizingStackPanel.CacheLength="3" ScrollViewer.IsDeferredScrollingEnabled="True">-->
             <DataGrid.Resources>
                 <DataGridTextColumn x:Key="MCQtyColumn" x:Shared="False" MinWidth="30" ElementStyle="{StaticResource RightAlignColumn}"/>
                 <DataGridTextColumn x:Key="MCStatusColumn" x:Shared="False" MinWidth="45">
@@ -73,7 +98,7 @@
             <DataGrid.Columns>
                 <DataGridTextColumn x:Name="StockColumn" Binding="{Binding Part.Stock, StringFormat=\{0:G8\}, TargetNullValue='', UpdateSourceTrigger=PropertyChanged}" Header="Stock" MinWidth="30" ElementStyle="{StaticResource RightAlignColumn}"/>
                 <DataGridTextColumn x:Name="ModelColumn" Binding="{Binding Model, UpdateSourceTrigger=PropertyChanged}" Header="Model" MinWidth="25"/>
-                <DataGridTextColumn x:Name="ItemColumn" Binding="{Binding Item1, UpdateSourceTrigger=PropertyChanged}" Header="Item" MinWidth="40"/>
+                <DataGridTextColumn x:Name="ItemColumn" Binding="{Binding Item1, UpdateSourceTrigger=PropertyChanged}" Header="Item" MinWidth="45" FontWeight="Bold" Foreground="Blue"/>
                 <DataGridTextColumn x:Name="DrawingColumn" Binding="{Binding Part.DrawingType, UpdateSourceTrigger=PropertyChanged}" Header="Dwg" Width="40"/>
                 <DataGridTextColumn x:Name="DescriptionColumn" Binding="{Binding Description, UpdateSourceTrigger=PropertyChanged}"  Header="Description" Width="*" MinWidth="150"/>
                 <DataGridTextColumn x:Name="QtyColumn" Binding="{Binding Qty, UpdateSourceTrigger=PropertyChanged}" Header="Qty" MinWidth="30" ElementStyle="{StaticResource RightAlignColumn}"/>
@@ -152,6 +177,5 @@
                 </GroupStyle>
             </DataGrid.GroupStyle>-->
         </DataGrid>
-        <WpfControls:MultiColComboBox Height="Auto"  HorizontalAlignment="Left" Margin="10,39,0,0" VerticalAlignment="Top" Width="188"/>
     </Grid>
-</Page>
+</UserControl>

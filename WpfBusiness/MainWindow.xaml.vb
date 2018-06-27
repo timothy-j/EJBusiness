@@ -1,10 +1,10 @@
-﻿Imports System.Data.Entity
-Imports System.Globalization
-Imports System.Windows.Controls
+﻿Imports System.Collections.ObjectModel
+Imports WpfTestApp
+Imports Xceed.Wpf.AvalonDock.Layout
 
 Class MainWindow
+    Public Property MyPanes As New ObservableCollection(Of Object)
 
-    Public Shared PopOutRoutedCommand As New RoutedUICommand("Pop out", "PopOut", GetType(MainWindow))
     Public Shared OpenMachineRoutedCommand As New RoutedUICommand("Machine Table", "OpenMachine", GetType(MainWindow))
     Public Shared OpenOrdersRoutedCommand As New RoutedUICommand("Orders", "OpenOrders", GetType(MainWindow))
     Public Shared OpenCustomerOrdersRoutedCommand As New RoutedUICommand("Customer Orders", "OpenCustomerOrders", GetType(MainWindow))
@@ -15,6 +15,7 @@ Class MainWindow
     Public Shared FirstRoutedCommand As New RoutedUICommand("First", "First", GetType(MainWindow))
 
     ' Action commands
+    Public Shared PopOutRoutedCommand As New RoutedUICommand("Pop out", "PopOut", GetType(MainWindow))
     Public Shared NewOrderRoutedCommand As New RoutedUICommand("New Order", "NewOrder", GetType(MainWindow))
     Public Shared NewCustomerOrderRoutedCommand As New RoutedUICommand("New Customer Order", "NewCustomerOrder", GetType(MainWindow))
     Public Shared NewQuoteRoutedCommand As New RoutedUICommand("New Quote", "NewQuote", GetType(MainWindow))
@@ -27,60 +28,56 @@ Class MainWindow
 
         ' Add any initialization after the InitializeComponent() call.
 
-        ' Internationalization fix - from the WPF Binding Cheat Sheet (http//www.nbdtech.com/Free/WpfBinding.pdf)
-        ' This defines default currency symbol (etc.)
-        FrameworkElement.LanguageProperty.OverrideMetadata(
-            GetType(FrameworkElement), New FrameworkPropertyMetadata(
-            Markup.XmlLanguage.GetLanguage(Globalization.CultureInfo.CurrentCulture.IetfLanguageTag)))
+    End Sub
 
+    Private Sub Button_Click(sender As Object, e As RoutedEventArgs)
+        Dim Bom As New GeneralBomTable
+        Bom.Model = "HX"
+        'Bom.Title = "HX Table"
+        MyPanes.Add(Bom)
     End Sub
 
     Private Sub OpenMachineCommand_Executed(sender As Object, e As ExecutedRoutedEventArgs)
-        Dim newTab As TabItem = FindResource("MachineTableTab")
-        DocumentTabControl.Items.Add(newTab)
-        DocumentTabControl.SelectedItem = newTab
+        Dim Bom As New GeneralBomTable
+        Bom.Model = e.Parameter
+        MyPanes.Add(Bom)
     End Sub
 
     Private Sub CloseCommand_Executed(sender As Object, e As ExecutedRoutedEventArgs)
-        If e.Source Is Nothing Then
-            DocumentTabControl.Items.Remove(DocumentTabControl.SelectedItem)
-        Else
-            ' HACK: assumes source is tab control, but this depends on correct source specification elsewhere
-            DocumentTabControl.Items.Remove(e.Source)
-        End If
+        ' TODO: get current document and remove it from the collection
+
     End Sub
 
     Private Sub OpenOrdersCommand_Executed(sender As Object, e As ExecutedRoutedEventArgs)
-        Dim newTab As TabItem = FindResource("OrderTab")
-        DocumentTabControl.Items.Add(newTab)
-        DocumentTabControl.SelectedItem = newTab
+        Dim ord As New OrderEntry
+        ord.Title = "Orders"
         If e.Parameter = "New" Then
-            MsgBox("New order code not written yet")
-            'WpfControls.NavigationBar.NewRoutedCommand.Execute(Nothing, newTab.Content)
+            MsgBox("New order not yet implemented")
         End If
+        MyPanes.Add(ord)
     End Sub
 
     Private Sub OpenCustomerOrdersCommand_Executed(sender As Object, e As ExecutedRoutedEventArgs)
-        Dim newTab As TabItem = FindResource("CustomerOrderTab")
-        DocumentTabControl.Items.Add(newTab)
-        DocumentTabControl.SelectedItem = newTab
+        Dim ord As New CustomerOrderEntry
+        ord.Title = "Customer Orders"
         If e.Parameter = "New" Then
             MsgBox("New customer order code not written yet")
         End If
+        MyPanes.Add(ord)
     End Sub
 
     Private Sub OpenQuotesCommand_Executed(sender As Object, e As ExecutedRoutedEventArgs)
-        Throw New NotImplementedException("Code for quotes form has not been written yet")
-        Dim newTab As TabItem = FindResource("QuoteTab")
-        DocumentTabControl.Items.Add(newTab)
-        DocumentTabControl.SelectedItem = newTab
-        If e.Parameter = "New" Then
-            MsgBox("New quote code not written yet")
-        End If
+        MsgBox("Code for quotes form has not been written yet")
+        'Dim quote As New CustomerQuoteEntry
+        'quote.Title = "Customer Orders"
+        'If e.Parameter = "New" Then
+        '    MsgBox("New quote code not written yet")
+        'End If
+        'MyPanes.Add(quote)
     End Sub
 
     Private Sub CloseCommand_CanExecute(sender As Object, e As CanExecuteRoutedEventArgs)
-        If DocumentTabControl.Items.IsEmpty Then
+        If MyPanes.Count Then
             e.CanExecute = False
         Else
             e.CanExecute = True
@@ -94,10 +91,7 @@ Class MainWindow
     End Sub
 
     Private Sub PopOutCommand_Executed(sender As Object, e As ExecutedRoutedEventArgs)
-        Dim w As New Window
-        w.Content = CType(DocumentTabControl.SelectedItem, TabItem).Content
-        'w.Title = 
-        DocumentTabControl.Items.Remove(DocumentTabControl.SelectedItem)
-        w.Show()
+        ' TODO: work out how to pop out the current document
+        MsgBox("Not yet posible to pop out current document from here; right click on document tab instead")
     End Sub
 End Class

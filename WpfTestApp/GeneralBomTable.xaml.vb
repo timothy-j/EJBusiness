@@ -1,52 +1,7 @@
 ﻿Imports System.Data.Entity
 Imports System.Globalization
 Imports System.Windows.Controls
-
-Class QtyConverter
-    Implements IMultiValueConverter
-
-    'Public Function Convert(value As Object, targetType As Type, parameter As Object, culture As CultureInfo) As Object Implements IValueConverter.Convert
-    '    Return (From cod In CType(value, EJData.ObservableListSource(Of EJData.CustOrderItemDetail))
-    '            Where cod.DetailID = parameter
-    '            Select Qty = cod.Quantity).FirstOrDefault
-    'End Function
-
-    Public Function Convert(values() As Object, targetType As Type, parameter As Object, culture As CultureInfo) As Object Implements IMultiValueConverter.Convert
-        Return (From cod In CType(values(0), EJData.ObservableListSource(Of EJData.CustOrderItemDetail))
-                Where cod.DetailID = parameter
-                Select Qty = cod.Quantity).FirstOrDefault
-        Throw New NotImplementedException()
-    End Function
-
-    'Public Function ConvertBack(value As Object, targetType As Type, parameter As Object, culture As CultureInfo) As Object Implements IValueConverter.ConvertBack
-    '    Dim coid As EJData.CustOrderItemDetail = (From cod In CType(value, EJData.ObservableListSource(Of EJData.CustOrderItemDetail))
-    '                                              Where cod.DetailID = parameter).FirstOrDefault
-    '    coid.Quantity = value
-    '    Throw New NotImplementedException()
-    'End Function
-
-    Public Function ConvertBack(value As Object, targetTypes() As Type, parameter As Object, culture As CultureInfo) As Object() Implements IMultiValueConverter.ConvertBack
-        Dim coid As EJData.CustOrderItemDetail = (From cod In CType(value(0), EJData.ObservableListSource(Of EJData.CustOrderItemDetail))
-                                                  Where cod.DetailID = parameter).FirstOrDefault
-        coid.Quantity = value
-        Return Nothing
-        'Throw New NotImplementedException()
-    End Function
-End Class
-
-Class StatusConverter
-    Implements IValueConverter
-
-    Public Function Convert(value As Object, targetType As Type, parameter As Object, culture As CultureInfo) As Object Implements IValueConverter.Convert
-        Return (From cod In CType(value, EJData.ObservableListSource(Of EJData.CustOrderItemDetail))
-                Where cod.DetailID = parameter
-                Select cod.Status).FirstOrDefault
-    End Function
-
-    Public Function ConvertBack(value As Object, targetType As Type, parameter As Object, culture As CultureInfo) As Object Implements IValueConverter.ConvertBack
-        Throw New NotImplementedException()
-    End Function
-End Class
+Imports System.Linq.Dynamic
 
 Class MachineInfo
     Public Property Number As Short
@@ -56,30 +11,8 @@ End Class
 Class MachInfo
     Inherits DependencyObject
 
-    'Public Shared ReadOnly NumberProperty As DependencyProperty = DependencyProperty.RegisterAttached(
-    '        "Number", GetType(Short), GetType(MachInfo))
-
-    'Public Shared ReadOnly DetailIDProperty As DependencyProperty = DependencyProperty.RegisterAttached(
-    '        "DetailID", GetType(Integer?), GetType(MachInfo))
-
     Public Shared ReadOnly EntitiesProperty As DependencyProperty = DependencyProperty.RegisterAttached(
             "Entities", GetType(List(Of Object)), GetType(MachInfo))
-
-    'Public Shared Function GetNumber(ByVal element As DependencyObject) As Short
-    '    Return CType(element.GetValue(NumberProperty), Short)
-    'End Function
-
-    'Public Shared Sub SetNumber(ByVal element As DependencyObject, ByVal value As Short)
-    '    element.SetValue(NumberProperty, value)
-    'End Sub
-
-    'Public Shared Function GetDetailID(ByVal element As DependencyObject) As Integer?
-    '    Return CType(element.GetValue(DetailIDProperty), Integer?)
-    'End Function
-
-    'Public Shared Function GetEntity(ByVal element As DependencyObject) As List(Of Object)
-    '    Return CType(element.GetValue(DetailIDProperty), List(Of Object))
-    'End Function
 
     Public Shared Sub SetDetailID(ByVal element As DependencyObject, ByVal value As Integer?)
         element.SetValue(EntitiesProperty, value)
@@ -93,11 +26,65 @@ End Class
 Class GeneralBomTable
     Private _db As EJData.CorporateEntities
     Dim ItemViewSource As System.Windows.Data.CollectionViewSource
-    Dim MachineType As String
     Dim m_machines As New List(Of MachineInfo)
     Private _filterList As New Stack(Of EJFilter)
     Private _filterOn As Boolean
     Private Delete_Me As Integer? = 0
+    Private _MachineType As String
+    Private _initDone As Boolean
+    Private _Model As String
+
+    Public Shared EqualsCommand As New RoutedUICommand("Equals", "Equals", GetType(MainWindow))
+    Public Shared NotEqualCommand As New RoutedUICommand("Not Equal To", "NotEqual", GetType(MainWindow))
+    Public Shared ContainsCommand As New RoutedUICommand("Contains", "Contains", GetType(MainWindow))
+    Public Shared NotContainsCommand As New RoutedUICommand("Does Not Contain", "NotContains", GetType(MainWindow))
+    Public Shared StartsWithCommand As New RoutedUICommand("Starts With", "StartsWith", GetType(MainWindow))
+    Public Shared NotStartsWithCommand As New RoutedUICommand("Does Not Start With", "NotStartsWith", GetType(MainWindow))
+    Public Shared EndsWithCommand As New RoutedUICommand("Ends With", "EndsWith", GetType(MainWindow))
+    Public Shared NotEndsWithCommand As New RoutedUICommand("Does Not End With", "NotEndsWith", GetType(MainWindow))
+    Public Shared LessThanCommand As New RoutedUICommand("Less Than", "LessThan", GetType(MainWindow))
+    Public Shared GreaterThanCommand As New RoutedUICommand("Greater Than", "GreaterThan", GetType(MainWindow))
+    Public Property Title As String
+
+    Public Property Model As String
+        Get
+            Return _Model
+        End Get
+        Set
+            _Model = Value
+            'HACK: Machine Types/Models need to be obtined from or stored in the database rather than hard-coded
+            Select Case Value
+                Case "HX"
+                    MachineType = "HX"
+                Case "R2", "RF"
+                    MachineType = "RF"
+                Case "W3", "EW", "W2"
+                    MachineType = "CW"
+                Case "CF"
+                    MachineType = "CF"
+                Case "F3", "F2", "HSF"
+                    MachineType = "AF"
+                Case Else
+                    MachineType = "All"
+            End Select
+
+            Title = Value + " Table"
+        End Set
+    End Property
+
+    Private Property MachineType As String
+        Get
+            Return _MachineType
+        End Get
+        Set
+            If Value = "" Then
+                _MachineType = "All"
+            Else
+                _MachineType = Value.ToUpper
+            End If
+        End Set
+    End Property
+
 
     Structure EJFilter
         Public columnName As String
@@ -105,22 +92,26 @@ Class GeneralBomTable
         Public prefix As String ' Such as Not
     End Structure
 
-
-
     Public Sub New()
 
         ' This call is required by the designer.
         InitializeComponent()
 
         ' Add any initialization after the InitializeComponent() call.
-        ItemViewSource = CType(Me.FindResource("ItemViewSource"), System.Windows.Data.CollectionViewSource)
+
+        ' HACK: TODO: move this as it should only be done once, but not in constructor!
+        'Init()
 
     End Sub
 
-    Private Sub MainWindow_Loaded(sender As Object, e As RoutedEventArgs) Handles Me.Loaded
+    Private Sub Init()
+        ItemViewSource = CType(Me.FindResource("ItemViewSource"), System.Windows.Data.CollectionViewSource)
 
         _db = EJData.DataHelpers.GetNewDbContext
 
+        'NavigationContext.QueryString.TryGetValue
+
+        ' HACK: TODO: move this as it should only be done once, but not in constructor!
         If MachineType = "" Then MachineType = InputBox("Enter machine type (e.g. CW or RF, not W3 or R2)")
 
         Dim machines As IQueryable(Of EJData.Machine) = From m In _db.Machines
@@ -167,30 +158,40 @@ Class GeneralBomTable
             ItemDataGrid.Columns.Insert(0, col)
         Next
 
+        Requery()
 
-        ' Start basic item query
-        Dim Bom As IQueryable(Of EJData.Item) = From i In _db.Items.Include("QuoteItemDetails").Include("Part")
-                                                Where i.Status <> "D"
-                                                Select i
+        '' Start basic item query
+        'Dim Bom As IQueryable(Of EJData.Item) = From i In _db.Items.Include("QuoteItemDetails").Include("Part")
+        '                                        Where i.Status <> "D"
+        '                                        Select i
 
-        ' Filter by machine type
-        If MachineType = "" Or MachineType = "All" Then
-            ' No further filtering needed
-        Else
-            ' Filter Items for machineType
-            Bom = From m In Bom
-                  Where m.Type = MachineType
-        End If
+        '' Filter by machine type
+        'If MachineType = "" Or MachineType = "All" Then
+        '    ' No further filtering needed
+        'Else
+        '    ' Filter Items for machineType
+        '    Bom = From m In Bom
+        '          Where m.Type = MachineType
+        'End If
 
-        ' Order list
-        Bom = From m In Bom
-              Order By m.Item1
+        '' Order list
+        'Bom = From m In Bom
+        '      Order By m.Item1
 
-        Bom.Load
+        'Bom.Load
 
         'Load data by setting the CollectionViewSource.Source property:
         'ItemViewSource.Source = [generic data source]
         ItemViewSource.Source = _db.Items.Local
+    End Sub
+
+    Private Sub MainWindow_Loaded(sender As Object, e As RoutedEventArgs) Handles Me.Loaded
+
+        If Not _initDone Then
+            Init()
+            _initDone = True
+        End If
+
     End Sub
 
     Private Sub DataGridCell_MouseDoubleClick(sender As Object, e As MouseButtonEventArgs)
@@ -285,5 +286,112 @@ Class GeneralBomTable
 
     Private Sub ItemDataGrid_GotFocus(sender As Object, e As RoutedEventArgs)
         ' TODO: set focus on current cell content for edit on enter?
+    End Sub
+
+    ''' <summary>
+    ''' Fills the datagrid with filtered data
+    ''' </summary>
+    Sub Requery()
+        ' Start basic item query
+        Dim Bom As IQueryable(Of EJData.Item) = From i In _db.Items.Include("CustOrderItemDetails").Include("Part")
+                                                Where i.Status <> "D"
+                                                Select i
+
+        ' Filter by machine type
+        If MachineType = "" Or MachineType = "All" Then
+            ' No further filtering needed
+        Else
+            ' Filter Items for machineType
+            Bom = From m In Bom
+                  Where m.Type = MachineType
+        End If
+
+        ' Add user filters from filter list if _filterOn is true
+        If _filterOn Then
+            For Each Filter As EJFilter In _filterList
+                If Filter.columnName.StartsWith("MC") Then
+                    ' Machine column filtering
+                    Dim mcNumber As Integer
+                    Dim propertyString As String
+                    If Filter.columnName.StartsWith("MCS") Then
+                        mcNumber = CInt(Filter.columnName.Replace("MCS", "").Replace("Column", ""))
+                        propertyString = "Status"
+                    Else
+                        mcNumber = CInt(Filter.columnName.Replace("MC", "").Replace("Column", ""))
+                        propertyString = "Quantity"
+                    End If
+                    Dim cods = From cod In _db.CustOrderItemDetails
+                               Where cod.CustOrderDetail.Machine.FirstOrDefault.Number = mcNumber
+
+                    Try
+                        ' TODO: returns no rows when filtering for 'is blank' i.e. = null
+                        cods = cods.Where(Filter.prefix & propertyString & Filter.condition)
+                        Bom = From b In Bom, cod In cods
+                              Where b.CustOrderItemDetails.Contains(cod)
+                              Select b
+                    Catch ex As Exception
+                        MsgBox(ex.Message)
+                    End Try
+                Else
+                    'Dim whereString As String = Filter.prefix & DataGridView1.Columns.Item(Filter.columnName).DataPropertyName & Filter.condition
+                    'Try
+                    '    Bom = Bom.Where(whereString)
+                    'Catch ex As Exception
+                    '    MsgBox(ex.Message)
+                    'End Try
+                End If
+            Next
+        End If
+
+        '' Order the final results
+        '' HACK: TODO: get this to work for multiple levels. should be Parent != [top level item] (rather than Is Nothing)
+        'Bom = From i In Bom
+        '      Let topLevel = If(i.Parent Is Nothing, i.Item1, i.Parent.Item1 + "_")
+        '      Order By topLevel, i.Item1
+        '      Select i
+        Bom = From i In Bom
+              Order By i.Item1
+              Select i
+
+        Bom.Load
+        'GeneralBindingSource.DataSource = Bom.ToList
+    End Sub
+
+    Private Sub AddFilter(Filter As EJFilter)
+        ' Start new filter list if not currently filtered
+        If _filterOn = False Then _filterList.Clear()
+        _filterList.Push(Filter)
+        _filterOn = True
+        Requery()
+    End Sub
+
+    Private Sub ContextMenu_Opened(sender As Object, e As RoutedEventArgs)
+        Dim target = CType(sender, ContextMenu).PlacementTarget
+        If TypeOf target Is TextBox Then
+            If CType(target, TextBox).SelectionLength = 0 Then
+                Dim coll As New CompositeCollection
+                Dim c As New CollectionContainer
+                Dim c2 As New CollectionContainer
+                c.Collection = CType(FindResource("StandardMenu"), ContextMenu).Items
+                coll.Add(c)
+                c2.Collection = CType(FindResource("SelectedStringFilterMenu"), ContextMenu).Items
+                coll.Add(c2)
+                'CType(sender, ContextMenu).Items.Clear()
+                CType(sender, ContextMenu).ItemsSource = coll
+            ElseIf CType(target, TextBox).SelectionStart = 0 Then
+                Dim coll As New CompositeCollection
+                Dim c As New CollectionContainer
+                Dim c2 As New CollectionContainer
+                c.Collection = CType(FindResource("StandardMenu"), ContextMenu).Items
+                coll.Add(c)
+                c2.Collection = CType(FindResource("StartStringFilterMenu"), ContextMenu).Items
+                coll.Add(c2)
+                'CType(sender, ContextMenu).Items.Clear()
+                CType(sender, ContextMenu).ItemsSource = coll
+            End If
+        ElseIf TypeOf target Is DataGridCell Then
+
+        End If
+
     End Sub
 End Class

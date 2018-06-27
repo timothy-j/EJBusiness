@@ -1,0 +1,118 @@
+﻿<Window x:Name="window" x:Class="MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:xcad="http://schemas.xceed.com/wpf/xaml/avalondock"
+        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+        xmlns:s="clr-namespace:System;assembly=mscorlib"
+        xmlns:local="clr-namespace:WpfBusiness"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="600" Width="1200">
+    <Window.CommandBindings>
+        <CommandBinding Command="local:MainWindow.OpenMachineRoutedCommand" Executed="OpenMachineCommand_Executed"/>
+        <CommandBinding Command="local:MainWindow.OpenOrdersRoutedCommand" Executed="OpenOrdersCommand_Executed"/>
+        <CommandBinding Command="local:MainWindow.OpenCustomerOrdersRoutedCommand" Executed="OpenCustomerOrdersCommand_Executed"/>
+        <CommandBinding Command="local:MainWindow.OpenQuotesRoutedCommand" Executed="OpenQuotesCommand_Executed"/>
+        <CommandBinding Command="local:MainWindow.NewOrderRoutedCommand" Executed="OpenOrdersCommand_Executed"/>
+        <CommandBinding Command="local:MainWindow.NewCustomerOrderRoutedCommand" Executed="OpenCustomerOrdersCommand_Executed"/>
+        <CommandBinding Command="local:MainWindow.NewQuoteRoutedCommand" Executed="OpenQuotesCommand_Executed"/>
+        <CommandBinding Command="local:MainWindow.PopOutRoutedCommand" Executed="PopOutCommand_Executed"/>
+        <CommandBinding Command="ApplicationCommands.Close" Executed="CloseCommand_Executed" CanExecute="CloseCommand_CanExecute"/>
+    </Window.CommandBindings>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Menu x:Name="MainMenu">
+            <MenuItem Header="File">
+                <MenuItem Header="Actions">
+                    <MenuItem Command="local:MainWindow.NewOrderRoutedCommand" CommandParameter="New" />
+                    <MenuItem Command="local:MainWindow.NewCustomerOrderRoutedCommand" CommandParameter="New" />
+                    <MenuItem Command="local:MainWindow.NewQuoteRoutedCommand" CommandParameter="New" />
+                </MenuItem>
+                <MenuItem Command="local:MainWindow.OpenMachineRoutedCommand"/>
+                <MenuItem Command="local:MainWindow.OpenOrdersRoutedCommand"/>
+                <MenuItem Command="local:MainWindow.OpenCustomerOrdersRoutedCommand"/>
+                <MenuItem Command="local:MainWindow.OpenQuotesRoutedCommand"/>
+                <MenuItem Command="ApplicationCommands.Close"/>
+            </MenuItem>
+            <MenuItem Header="Edit">
+                <MenuItem Command="ApplicationCommands.Cut" />
+                <MenuItem Command="ApplicationCommands.Copy" />
+                <MenuItem Command="ApplicationCommands.Paste" />
+                <MenuItem Command="ApplicationCommands.SelectAll" />
+            </MenuItem>
+            <MenuItem Header="Window">
+                <MenuItem Command="local:MainWindow.PopOutRoutedCommand"/>
+            </MenuItem>
+        </Menu>
+        <Grid Grid.Row="1">
+            <xcad:DockingManager Grid.Row="1"
+                           AllowMixedOrientation="True"
+                           BorderBrush="Black"
+                           BorderThickness="1"
+                           DocumentsSource="{Binding MyPanes, ElementName=window}">
+                <xcad:DockingManager.LayoutItemContainerStyle>
+                    <Style TargetType="{x:Type xcad:LayoutItem}">
+                        <Setter Property="Title" Value="{Binding Model.Title}" />
+                        <!--<Setter Property="CloseCommand" Value="{Binding Model.CloseCommand}" />
+                    <Setter Property="CanClose" Value="{Binding Model.CanClose}" />-->
+                    </Style>
+                </xcad:DockingManager.LayoutItemContainerStyle>
+                <xcad:DockingManager.DocumentHeaderTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal">
+                            <Image Source="{Binding IconSource}" Margin="0,0,4,0"/>
+                            <TextBlock Text="{Binding Title}" />
+                        </StackPanel>
+                    </DataTemplate>
+                </xcad:DockingManager.DocumentHeaderTemplate>
+                <xcad:LayoutRoot x:Name="_layoutRoot">
+                    <xcad:LayoutPanel Orientation="Horizontal">
+                        <xcad:LayoutAnchorablePaneGroup DockWidth="125">
+                            <xcad:LayoutAnchorablePane>
+                                <xcad:LayoutAnchorable ContentId="machines" Title="Machines">
+                                    <!--IconSource="../Images/alarm-clock-blue.png"-->
+                                    <local:MachinesDock/>
+                                </xcad:LayoutAnchorable>
+                                <!--<xcad:LayoutAnchorable ContentId="journal" Title="Journal" >
+                                    <RichTextBox>
+                                        <FlowDocument>
+                                            <Paragraph FontSize="14" FontFamily="Segoe">
+                                                This is the content of the Journal Pane.
+                                                <LineBreak/>
+                                                A
+                                                <Bold>RichTextBox</Bold> has been added here
+                                            </Paragraph>
+                                        </FlowDocument>
+                                    </RichTextBox>
+                                </xcad:LayoutAnchorable>-->
+                            </xcad:LayoutAnchorablePane>
+                        </xcad:LayoutAnchorablePaneGroup><xcad:LayoutDocumentPaneGroup >
+                            <xcad:LayoutDocumentPane>
+                            </xcad:LayoutDocumentPane>
+                        </xcad:LayoutDocumentPaneGroup >
+                        
+                    </xcad:LayoutPanel>
+
+                    <xcad:LayoutRoot.LeftSide>
+                        <xcad:LayoutAnchorSide>
+                            <xcad:LayoutAnchorGroup>
+                                <!--<xcad:LayoutAnchorable Title="Agenda" ContentId="agenda">
+                                    --><!--IconSource="../Images/address-book-open.png"--><!--
+                                    <TextBlock Text="Agenda Content" Margin="10" FontSize="18" FontWeight="Black" TextWrapping="Wrap"/>
+                                </xcad:LayoutAnchorable>
+                                <xcad:LayoutAnchorable Title="Contacts" ContentId="contacts" >
+                                    --><!--IconSource="../Images/address-book-pencil.png"--><!--
+                                    <TextBlock Text="Contacts Content" Margin="10" FontSize="18" FontWeight="Black" TextWrapping="Wrap"/>
+                                </xcad:LayoutAnchorable>-->
+                            </xcad:LayoutAnchorGroup>
+                        </xcad:LayoutAnchorSide>
+                    </xcad:LayoutRoot.LeftSide>
+                </xcad:LayoutRoot>
+            </xcad:DockingManager>
+        </Grid>
+    </Grid>
+</Window>
