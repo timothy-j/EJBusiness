@@ -98,6 +98,13 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Test.xaml.vb">
+      <DependentUpon>Test.xaml</DependentUpon>
+    </Compile>
+    <Page Include="DataGridTest.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="OrderEntry.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -118,6 +125,9 @@
       <DependentUpon>Application.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="DataGridTest.xaml.vb">
+      <DependentUpon>DataGridTest.xaml</DependentUpon>
+    </Compile>
     <Compile Include="OrderEntry.xaml.vb">
       <DependentUpon>OrderEntry.xaml</DependentUpon>
     </Compile>
@@ -131,6 +141,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Test.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Import Include="System.Threading.Tasks" />

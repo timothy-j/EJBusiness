@@ -20,6 +20,9 @@
         <CommandBinding Command="local:MainWindow.PopOutRoutedCommand" Executed="PopOutCommand_Executed"/>
         <CommandBinding Command="ApplicationCommands.Close" Executed="CloseCommand_Executed" CanExecute="CloseCommand_CanExecute"/>
     </Window.CommandBindings>
+    <Window.Resources>
+        <CollectionViewSource x:Key="Documents"/>
+    </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -49,16 +52,17 @@
             </MenuItem>
         </Menu>
         <Grid Grid.Row="1">
-            <xcad:DockingManager Grid.Row="1"
+            <xcad:DockingManager x:Name="DockMgr" 
+                           Grid.Row="1"
                            AllowMixedOrientation="True"
                            BorderBrush="Black"
                            BorderThickness="1"
-                           DocumentsSource="{Binding MyPanes, ElementName=window}">
+                           DocumentsSource="{Binding Source={StaticResource Documents}}"><!--"{Binding MyPanes, ElementName=window}"-->
                 <xcad:DockingManager.LayoutItemContainerStyle>
                     <Style TargetType="{x:Type xcad:LayoutItem}">
                         <Setter Property="Title" Value="{Binding Model.Title}" />
-                        <!--<Setter Property="CloseCommand" Value="{Binding Model.CloseCommand}" />
-                    <Setter Property="CanClose" Value="{Binding Model.CanClose}" />-->
+                        <Setter Property="CloseCommand" Value="{Binding Model.CloseCommand}" />
+                        <Setter Property="CanClose" Value="{Binding Model.CanClose}" />
                     </Style>
                 </xcad:DockingManager.LayoutItemContainerStyle>
                 <xcad:DockingManager.DocumentHeaderTemplate>

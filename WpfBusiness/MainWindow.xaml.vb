@@ -3,6 +3,8 @@ Imports WpfTestApp
 Imports Xceed.Wpf.AvalonDock.Layout
 
 Class MainWindow
+    Private _Documents As CollectionViewSource
+
     Public Property MyPanes As New ObservableCollection(Of Object)
 
     Public Shared OpenMachineRoutedCommand As New RoutedUICommand("Machine Table", "OpenMachine", GetType(MainWindow))
@@ -27,46 +29,48 @@ Class MainWindow
         InitializeComponent()
 
         ' Add any initialization after the InitializeComponent() call.
+        _Documents = CType(Me.FindResource("Documents"), System.Windows.Data.CollectionViewSource)
+        _Documents.Source = MyPanes
 
-    End Sub
-
-    Private Sub Button_Click(sender As Object, e As RoutedEventArgs)
-        Dim Bom As New GeneralBomTable
-        Bom.Model = "HX"
-        'Bom.Title = "HX Table"
-        MyPanes.Add(Bom)
     End Sub
 
     Private Sub OpenMachineCommand_Executed(sender As Object, e As ExecutedRoutedEventArgs)
+        ' TODO: Make document current if already open
         Dim Bom As New GeneralBomTable
         Bom.Model = e.Parameter
         MyPanes.Add(Bom)
+        DockMgr.ActiveContent = Bom
     End Sub
 
     Private Sub CloseCommand_Executed(sender As Object, e As ExecutedRoutedEventArgs)
         ' TODO: get current document and remove it from the collection
-
+        MyPanes.Remove(DockMgr.ActiveContent)
     End Sub
 
     Private Sub OpenOrdersCommand_Executed(sender As Object, e As ExecutedRoutedEventArgs)
+        ' TODO: Make document current if already open
         Dim ord As New OrderEntry
         ord.Title = "Orders"
         If e.Parameter = "New" Then
             MsgBox("New order not yet implemented")
         End If
         MyPanes.Add(ord)
+        DockMgr.ActiveContent = ord
     End Sub
 
     Private Sub OpenCustomerOrdersCommand_Executed(sender As Object, e As ExecutedRoutedEventArgs)
+        ' TODO: Make document current if already open
         Dim ord As New CustomerOrderEntry
         ord.Title = "Customer Orders"
         If e.Parameter = "New" Then
             MsgBox("New customer order code not written yet")
         End If
         MyPanes.Add(ord)
+        DockMgr.ActiveContent = ord
     End Sub
 
     Private Sub OpenQuotesCommand_Executed(sender As Object, e As ExecutedRoutedEventArgs)
+        ' TODO: Make document current if already open
         MsgBox("Code for quotes form has not been written yet")
         'Dim quote As New CustomerQuoteEntry
         'quote.Title = "Customer Orders"
@@ -74,20 +78,15 @@ Class MainWindow
         '    MsgBox("New quote code not written yet")
         'End If
         'MyPanes.Add(quote)
+        'DockMgr.ActiveContent = quote
     End Sub
 
     Private Sub CloseCommand_CanExecute(sender As Object, e As CanExecuteRoutedEventArgs)
         If MyPanes.Count Then
-            e.CanExecute = False
-        Else
             e.CanExecute = True
+        Else
+            e.CanExecute = False
         End If
-    End Sub
-
-    Private Sub TabItem_MouseDown(sender As Object, e As MouseButtonEventArgs)
-        ' TODO: record location so dragging and dropping can happen in MouseMove...
-        ' ...or just start drag drop but only mark e.Handled = true if drag drop is successful:
-        ' If DragDrop.DoDragDrop() = DragDropEffects.None Then
     End Sub
 
     Private Sub PopOutCommand_Executed(sender As Object, e As ExecutedRoutedEventArgs)
