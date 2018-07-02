@@ -1,4 +1,5 @@
 ﻿Imports System.Collections.ObjectModel
+Imports EJViews
 Imports WpfTestApp
 Imports Xceed.Wpf.AvalonDock.Layout
 
@@ -29,6 +30,14 @@ Class MainWindow
         InitializeComponent()
 
         ' Add any initialization after the InitializeComponent() call.
+
+        ' Internationalization fix - from the WPF Binding Cheat Sheet (http//www.nbdtech.com/Free/WpfBinding.pdf)
+        ' This defines default currency symbol (etc.)
+        FrameworkElement.LanguageProperty.OverrideMetadata(
+            GetType(FrameworkElement), New FrameworkPropertyMetadata(
+            Markup.XmlLanguage.GetLanguage(Globalization.CultureInfo.CurrentCulture.IetfLanguageTag)))
+
+
         _Documents = CType(Me.FindResource("Documents"), System.Windows.Data.CollectionViewSource)
         _Documents.Source = MyPanes
 
@@ -36,8 +45,8 @@ Class MainWindow
 
     Private Sub OpenMachineCommand_Executed(sender As Object, e As ExecutedRoutedEventArgs)
         ' TODO: Make document current if already open
-        Dim Bom As New GeneralBomTable
-        Bom.Model = e.Parameter
+        Dim Bom As New BomView
+        Bom.MCModel = e.Parameter
         MyPanes.Add(Bom)
         DockMgr.ActiveContent = Bom
     End Sub
@@ -49,7 +58,7 @@ Class MainWindow
 
     Private Sub OpenOrdersCommand_Executed(sender As Object, e As ExecutedRoutedEventArgs)
         ' TODO: Make document current if already open
-        Dim ord As New OrderEntry
+        Dim ord As New OrderEntryView
         ord.Title = "Orders"
         If e.Parameter = "New" Then
             MsgBox("New order not yet implemented")

@@ -1,11 +1,13 @@
 ﻿
 Imports System.Data.Entity.Core.Objects
 Imports System.Data.Entity.Infrastructure
+Imports System.Windows
 
 ' Partial classes containing additional entity properties etc.
 ' e.g. flat access to related 1:1 table properties
 
 Partial Public Class Item
+    Inherits DependencyObject
 
     'Public Property Stock() As Double?
     '    Get

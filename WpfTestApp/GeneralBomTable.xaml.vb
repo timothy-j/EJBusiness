@@ -142,6 +142,7 @@ Class GeneralBomTable
             Dim rs As New RelativeSource(RelativeSourceMode.FindAncestor, GetType(DataGridRow), 1)
             bind.RelativeSource = rs
             colS.Binding = bind
+
             ItemDataGrid.Columns.Insert(0, colS)
 
 

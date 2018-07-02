@@ -3,28 +3,25 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{EB53BBAF-6D8B-45EF-A8D3-34D7D3BC2D18}</ProjectGuid>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{F184B08F-C81C-45F6-A57F-5ABD9991F28F}</ProjectTypeGuids>
-    <OutputType>WinExe</OutputType>
-    <RootNamespace>WpfTestApp</RootNamespace>
-    <AssemblyName>WpfTestApp</AssemblyName>
+    <RootNamespace>EJViews</RootNamespace>
+    <AssemblyName>EJViews</AssemblyName>
+    <OutputType>Library</OutputType>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <MyType>Custom</MyType>
-    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <ProjectGuid>{8C557B3C-280E-47F5-AA45-9D81614330BC}</ProjectGuid>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <DefineDebug>true</DefineDebug>
     <DefineTrace>true</DefineTrace>
     <IncrementalBuild>true</IncrementalBuild>
     <OutputPath>bin\Debug\</OutputPath>
-    <DocumentationFile>WpfTestApp.xml</DocumentationFile>
+    <DocumentationFile>EJViews.xml</DocumentationFile>
     <NoWarn>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036,42314</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <DebugSymbols>false</DebugSymbols>
     <DefineDebug>false</DefineDebug>
@@ -32,7 +29,7 @@
     <IncrementalBuild>false</IncrementalBuild>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
-    <DocumentationFile>WpfTestApp.xml</DocumentationFile>
+    <DocumentationFile>EJViews.xml</DocumentationFile>
     <NoWarn>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036,42314</NoWarn>
   </PropertyGroup>
   <PropertyGroup>
@@ -47,21 +44,8 @@
   <PropertyGroup>
     <OptionInfer>On</OptionInfer>
   </PropertyGroup>
-  <PropertyGroup>
-    <ApplicationManifest>My Project\app.manifest</ApplicationManifest>
-  </PropertyGroup>
   <ItemGroup>
-    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
-    </Reference>
-    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
-    </Reference>
-    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Linq.Dynamic, Version=1.0.6132.35681, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Linq.Dynamic.1.0.7\lib\net40\System.Linq.Dynamic.dll</HintPath>
-    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System" />
@@ -94,57 +78,21 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <ApplicationDefinition Include="Application.xaml">
+    <Page Include="OrderEntryView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
-    </ApplicationDefinition>
-    <Compile Include="Test.xaml.vb">
-      <DependentUpon>Test.xaml</DependentUpon>
+    </Page>
+    <Page Include="BomView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Compile Include="OrderEntryView.xaml.vb">
+      <DependentUpon>OrderEntryView.xaml</DependentUpon>
     </Compile>
-    <Page Include="DataGridTest.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="OrderEntry.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="CustomerOrderEntry.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="GeneralBomTable.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="MainWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Compile Include="Application.xaml.vb">
-      <DependentUpon>Application.xaml</DependentUpon>
+    <Compile Include="BomView.xaml.vb">
+      <DependentUpon>BomView.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="DataGridTest.xaml.vb">
-      <DependentUpon>DataGridTest.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="OrderEntry.xaml.vb">
-      <DependentUpon>OrderEntry.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="CustomerOrderEntry.xaml.vb">
-      <DependentUpon>CustomerOrderEntry.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="GeneralBomTable.xaml.vb">
-      <DependentUpon>GeneralBomTable.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="MainWindow.xaml.vb">
-      <DependentUpon>MainWindow.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
-    <Page Include="Test.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
   </ItemGroup>
   <ItemGroup>
     <Import Include="System.Threading.Tasks" />
@@ -169,10 +117,6 @@
     <Compile Include="My Project\AssemblyInfo.vb">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="My Project\MyExtensions\MyWpfExtension.vb">
-      <VBMyExtensionTemplateID>Microsoft.VisualBasic.WPF.MyExtension</VBMyExtensionTemplateID>
-      <VBMyExtensionTemplateVersion>1.0.0.0</VBMyExtensionTemplateVersion>
-    </Compile>
     <Compile Include="My Project\Resources.Designer.vb">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -188,10 +132,10 @@
       <LastGenOutput>Resources.Designer.vb</LastGenOutput>
       <CustomToolNamespace>My.Resources</CustomToolNamespace>
     </EmbeddedResource>
-    <None Include="My Project\app.manifest" />
     <None Include="My Project\DataSources\EJData.CustomerOrder.datasource" />
     <None Include="My Project\DataSources\EJData.Item.datasource" />
     <None Include="My Project\DataSources\EJData.Order.datasource" />
+    <None Include="My Project\DataSources\EJData.Quote.datasource" />
     <None Include="My Project\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.vb</LastGenOutput>
@@ -199,20 +143,21 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\EJData\EJData.vbproj">
       <Project>{89227503-7a55-40c3-8127-e8098787d3a0}</Project>
       <Name>EJData</Name>
     </ProjectReference>
-    <ProjectReference Include="..\EJHelpers\EJHelpers.vbproj">
-      <Project>{5531e03d-7401-468d-b568-acb62148037d}</Project>
-      <Name>EJHelpers</Name>
+    <ProjectReference Include="..\EJViewModels\EJViewModels.vbproj">
+      <Project>{3a5c072d-ff28-4ed4-86d6-270e9f8abf95}</Project>
+      <Name>EJViewModels</Name>
     </ProjectReference>
     <ProjectReference Include="..\WpfControls\WpfControls.vbproj">
-      <Project>{78D64E32-900C-4B97-AFA5-BEEAB76C606C}</Project>
+      <Project>{78d64e32-900c-4b97-afa5-beeab76c606c}</Project>
       <Name>WpfControls</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WpfCSHelpers\WpfCSHelpers.csproj">
+      <Project>{5e385679-2747-458f-922d-4df703a61479}</Project>
+      <Name>WpfCSHelpers</Name>
     </ProjectReference>
     <ProjectReference Include="..\WpfHelpers\WpfHelpers.vbproj">
       <Project>{d81b0910-9fb7-4cb4-b3f5-53f614d96128}</Project>

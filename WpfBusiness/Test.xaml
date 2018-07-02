@@ -1,0 +1,25 @@
+﻿<Window x:Class="Test"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WpfBusiness"
+        xmlns:test="clr-namespace:EJViews;assembly=EJViews"
+        mc:Ignorable="d"
+        Title="Test" Height="450" Width="800">
+    <!--x:Name="window" x:Class="MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:xcad="http://schemas.xceed.com/wpf/xaml/avalondock"
+        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+        xmlns:s="clr-namespace:System;assembly=mscorlib"
+        xmlns:local="clr-namespace:WpfBusiness"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="600" Width="1200">-->
+    
+    <Grid>
+        <test:OrderEntryView/>
+    </Grid>
+</Window>

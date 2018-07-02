@@ -12,19 +12,19 @@
         <converters:OffsetConverter x:Key="OffsetConverter"/>
     </UserControl.Resources>
     <StackPanel Orientation="Horizontal">
-        <Button x:Name="FirstButton" Command="local:NavigationBar.FirstRoutedCommand">&lt;&lt;</Button>
-        <Button x:Name="PreviousButton" Command="local:NavigationBar.PreviousRoutedCommand" Width="{Binding ActualHeight, Mode=OneWay, RelativeSource={RelativeSource Self}}">&lt;</Button>
+        <Button x:Name="FirstButton" Command="{Binding FirstCommand}">&lt;&lt;</Button>
+        <Button x:Name="PreviousButton" Command="{Binding PreviousCommand}" Width="{Binding ActualHeight, Mode=OneWay, RelativeSource={RelativeSource Self}}">&lt;</Button>
         <TextBlock Margin="3">
             <TextBlock.Text>
                 <MultiBinding StringFormat="Record {0} of {1}">
-                    <Binding Path="CurrentPosition" Converter="{StaticResource OffsetConverter}" ConverterParameter="1"/>
+                    <Binding Path="CurrentIndex" Converter="{StaticResource OffsetConverter}" ConverterParameter="1"/>
                     <Binding Path="Count"/>
                 </MultiBinding>
             </TextBlock.Text>
         </TextBlock>
-        <Button x:Name="NextButton" Command="local:NavigationBar.NextRoutedCommand" Width="{Binding ActualHeight, Mode=OneWay, RelativeSource={RelativeSource Self}}">&gt;</Button>
-        <Button x:Name="LastButton" Command="local:NavigationBar.LastRoutedCommand">&gt;&gt;</Button>
-        <Button x:Name="NewButton" Command="local:NavigationBar.NewRoutedCommand" Width="{Binding ActualHeight, Mode=OneWay, RelativeSource={RelativeSource Self}}">*</Button>
+        <Button x:Name="NextButton" Command="{Binding NextCommand}" Width="{Binding ActualHeight, Mode=OneWay, RelativeSource={RelativeSource Self}}">&gt;</Button>
+        <Button x:Name="LastButton" Command="{Binding LastCommand}">&gt;&gt;</Button>
+        <Button x:Name="NewButton" Command="{Binding NewCommand}" Width="{Binding ActualHeight, Mode=OneWay, RelativeSource={RelativeSource Self}}">*</Button>
         
     </StackPanel>
 </UserControl>
