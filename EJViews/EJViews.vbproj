@@ -45,7 +45,22 @@
     <OptionInfer>On</OptionInfer>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="CommonServiceLocator, Version=2.0.3.0, Culture=neutral, PublicKeyToken=489b6accfaf20ef0, processorArchitecture=MSIL">
+      <HintPath>..\packages\CommonServiceLocator.2.0.3\lib\net45\CommonServiceLocator.dll</HintPath>
+    </Reference>
+    <Reference Include="GalaSoft.MvvmLight, Version=5.4.1.0, Culture=neutral, PublicKeyToken=e7570ab207bcb616, processorArchitecture=MSIL">
+      <HintPath>..\packages\MvvmLightLibs.5.4.1\lib\net45\GalaSoft.MvvmLight.dll</HintPath>
+    </Reference>
+    <Reference Include="GalaSoft.MvvmLight.Extras, Version=5.4.1.0, Culture=neutral, PublicKeyToken=669f0b5e8f868abf, processorArchitecture=MSIL">
+      <HintPath>..\packages\MvvmLightLibs.5.4.1\lib\net45\GalaSoft.MvvmLight.Extras.dll</HintPath>
+    </Reference>
+    <Reference Include="GalaSoft.MvvmLight.Platform, Version=5.4.1.0, Culture=neutral, PublicKeyToken=5f873c45e98af8a1, processorArchitecture=MSIL">
+      <HintPath>..\packages\MvvmLightLibs.5.4.1\lib\net45\GalaSoft.MvvmLight.Platform.dll</HintPath>
+    </Reference>
     <Reference Include="System.Core" />
+    <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\MvvmLightLibs.5.4.1\lib\net45\System.Windows.Interactivity.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System" />
@@ -78,6 +93,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Page Include="CustomerOrderEntryView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="OrderEntryView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -86,6 +105,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Compile Include="CustomerOrderEntryView.xaml.vb">
+      <DependentUpon>CustomerOrderEntryView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="OrderEntryView.xaml.vb">
       <DependentUpon>OrderEntryView.xaml</DependentUpon>
     </Compile>
@@ -132,6 +154,7 @@
       <LastGenOutput>Resources.Designer.vb</LastGenOutput>
       <CustomToolNamespace>My.Resources</CustomToolNamespace>
     </EmbeddedResource>
+    <None Include="app.config" />
     <None Include="My Project\DataSources\EJData.CustomerOrder.datasource" />
     <None Include="My Project\DataSources\EJData.Item.datasource" />
     <None Include="My Project\DataSources\EJData.Order.datasource" />
@@ -154,10 +177,6 @@
     <ProjectReference Include="..\WpfControls\WpfControls.vbproj">
       <Project>{78d64e32-900c-4b97-afa5-beeab76c606c}</Project>
       <Name>WpfControls</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\WpfCSHelpers\WpfCSHelpers.csproj">
-      <Project>{5e385679-2747-458f-922d-4df703a61479}</Project>
-      <Name>WpfCSHelpers</Name>
     </ProjectReference>
     <ProjectReference Include="..\WpfHelpers\WpfHelpers.vbproj">
       <Project>{d81b0910-9fb7-4cb4-b3f5-53f614d96128}</Project>

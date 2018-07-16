@@ -5,37 +5,46 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
              xmlns:xcdg="http://schemas.xceed.com/wpf/xaml/datagrid"
-             xmlns:vml = "clr-namespace:WpfHelpers;assembly=WpfCSHelpers"
-             vml:ViewModelLocator.AutoHookedUpViewModel = "True"
              xmlns:local="clr-namespace:EJViews"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="450" d:DesignWidth="800"
+             DataContext="{Binding Source={StaticResource Locator}, Path=BomViewModel}"><!--xmlns:vml = "clr-namespace:WpfHelpers;assembly=WpfCSHelpers"
+             vml:ViewModelLocator.AutoHookedUpViewModel = "True"-->
     <!--<local:OrderEntryView.BomView. 
                  x:Key="CommandReferencePreviewReportsCommand" 
                  Command="{Binding PreviewReportsCommand}" />-->
     <Grid.Resources>
         <!--<CommandBinding x:Key="InitCommand" Command="{Binding InitCommand}"/>-->
-        <xcdg:Column x:Key="QtyColumn" x:Shared="False" CellContentStringFormat="{}{0:G8}"/>
-        <xcdg:Column x:Key="StatusColumn" x:Shared="False"/>
+        <xcdg:Column x:Key="QtyColumn" x:Shared="False" CellContentStringFormat="{}{0:G8}" MinWidth="30"/>
+        <xcdg:Column x:Key="StatusColumn" x:Shared="False" MinWidth="45"/>
+        <Style TargetType="{x:Type xcdg:DataRow}">
+            <Setter Property="Height" Value="21"/>
+        </Style>
+        <Style x:Key="DoubleClickCell">
+        </Style>
+        <!--<Style TargetType="{x:Type xcdg:Column}">
+            <Setter Property="CellEditorDisplayConditions" Value="MouseOverCell"/>
+        </Style>-->
     </Grid.Resources>
-    <xcdg:DataGridControl x:Name="_dataGrid" AutoCreateColumns="False" ItemsSource="{Binding ItemView}" ItemScrollingBehavior="Immediate">
+    <xcdg:DataGridControl x:Name="_dataGrid" AutoCreateColumns="False" ItemsSource="{Binding ItemView}" ItemScrollingBehavior="Immediate"
+                          ScrollViewer.VerticalScrollBarVisibility="Auto" CellEditorDisplayConditions="MouseOverCell">
         <xcdg:DataGridControl.Columns>
-            <xcdg:Column FieldName="Part.Stock" Title="Stock" CellContentStringFormat="{}{0:G8}"/>
-            <xcdg:Column FieldName="Model" Title="Model"/>
-            <xcdg:Column FieldName="Item1" Title="Item"/>
-            <xcdg:Column FieldName="Part.DrawingType" Title="Dwg"/>
-            <xcdg:Column FieldName="Description" Title="Description"/>
-            <xcdg:Column FieldName="Part.Supplier" Title="Supplier"/>
-            <xcdg:Column FieldName="Part.SuppliersDescription" Title="Suppliers Description"/>
-            <xcdg:Column FieldName="Status" Title="Status"/>
-            <xcdg:Column FieldName="Part.ProductionNotes" Title="Notes"/>
+            <xcdg:Column FieldName="Part.Stock" Title="Stock" CellContentStringFormat="{}{0:G8}" MinWidth="30" Width="35"/>
+            <xcdg:Column FieldName="Model" Title="Model" MinWidth="25"/>
+            <xcdg:Column FieldName="Item1" Title="Item" MinWidth="45" />
+            <xcdg:Column FieldName="Part.DrawingType" Title="Dwg" Width="40"/>
+            <xcdg:Column FieldName="Description" Title="Description" Width="*" MinWidth="150"/>
+            <xcdg:Column FieldName="Part.Supplier" Title="Supplier" MinWidth="30"/>
+            <xcdg:Column FieldName="Part.SuppliersDescription" Title="Suppliers Description" Width="*" MinWidth="150"/>
+            <xcdg:Column FieldName="Status" Title="Status"  MinWidth="25"/>
+            <xcdg:Column FieldName="Part.ProductionNotes" Title="Notes" MinWidth="100" Width="0.5*"/>
             <xcdg:Column FieldName="Part.Unit" Title="Unit" CellContentStringFormat="{}{0:C2}"/>
             <xcdg:Column FieldName="Part.SecondOperation" Title="2nd Op" CellContentStringFormat="{}{0:C2}"/>
-            <xcdg:Column FieldName="Qty" Title="Qty" CellContentStringFormat="{}{0:G8}"/>
-            <xcdg:Column FieldName="Part.DateChecked" Title="Date checked"/>
+            <xcdg:Column FieldName="Qty" Title="Qty" CellContentStringFormat="{}{0:G8}" MinWidth="30"/>
+            <xcdg:Column FieldName="Part.DateChecked" Title="Date checked"  MinWidth="40"/>
         </xcdg:DataGridControl.Columns>
         <xcdg:DataGridControl.View>
-            <xcdg:TableView>
+            <xcdg:TableView ColumnStretchMode="All">
                 <xcdg:TableView.FixedFooters>
                     <DataTemplate>
                         <!--<xcdg:InsertionRow/>-->

@@ -5,19 +5,17 @@ Public Class BomView
 
     Private _machineColsCreated As Boolean
     Private _Model As String
-
-    Public Sub New()
-
-        ' This call is required by the designer.
-        InitializeComponent()
-
-        ' Add any initialization after the InitializeComponent() call.
-        'Model.Initialize()
-        'Loaded += delegate { Model.OnLoaded(); }; 
-        'Unloaded += delegate { Model.OnUnloaded(); }; 
-    End Sub
+    Private _Title As String
 
     Public Property Title As String
+        Get
+            Return CType(DataContext, BomViewModel).Title
+        End Get
+        Set
+            CType(DataContext, BomViewModel).Title = Value
+        End Set
+    End Property
+
     Public Property MCModel As String
         Get
             Return _Model
@@ -28,7 +26,17 @@ Public Class BomView
         End Set
     End Property
 
+    Public Sub New()
 
+        ' This call is required by the designer.
+        InitializeComponent()
+
+        '' Add any initialization after the InitializeComponent() call.
+        'Dim modelBase = CType(DataContext, WpfHelpers.ViewModelBase)
+        'modelBase.Initialize()
+        'AddHandler Loaded, AddressOf modelBase.CallOnLoaded
+        'AddHandler Unloaded, AddressOf modelBase.CallOnUnLoaded
+    End Sub
 
     Private Sub BomView_Loaded(sender As Object, e As RoutedEventArgs) Handles Me.Loaded
         If Not _machineColsCreated Then
@@ -45,7 +53,9 @@ Public Class BomView
                 'Dim rs As New RelativeSource(RelativeSourceMode.FindAncestor, GetType(DataGridRow), 1)
                 'bind.RelativeSource = rs
                 'colS.DisplayMemberBindingIn
-                _dataGrid.Columns.Insert(0, colS)
+
+                colS.VisiblePosition = 0
+                _dataGrid.Columns.Add(colS)
 
 
                 Dim col As Column = FindResource("QtyColumn")
@@ -60,7 +70,8 @@ Public Class BomView
                 'qtyBind.StringFormat = "G8"
                 'qtyBind.TargetNullValue = ""
                 'qtyBind.RelativeSource = rs
-                _dataGrid.Columns.Insert(0, col)
+                col.VisiblePosition = 0
+                _dataGrid.Columns.Add(col)
             Next
             _machineColsCreated = True
         End If

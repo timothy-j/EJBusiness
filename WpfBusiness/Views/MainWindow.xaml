@@ -7,22 +7,14 @@
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         xmlns:s="clr-namespace:System;assembly=mscorlib"
         xmlns:local="clr-namespace:WpfBusiness"
+        xmlns:vm="clr-namespace:WpfBusiness.ViewModel"
+        xmlns:vms="clr-namespace:EJViewModels;assembly=EJViewModels"
+        xmlns:vs="clr-namespace:EJViews;assembly=EJViews"
         mc:Ignorable="d"
         Title="MainWindow" Height="600" Width="1200">
-    <Window.CommandBindings>
-        <CommandBinding Command="local:MainWindow.OpenMachineRoutedCommand" Executed="OpenMachineCommand_Executed"/>
-        <CommandBinding Command="local:MainWindow.OpenOrdersRoutedCommand" Executed="OpenOrdersCommand_Executed"/>
-        <CommandBinding Command="local:MainWindow.OpenCustomerOrdersRoutedCommand" Executed="OpenCustomerOrdersCommand_Executed"/>
-        <CommandBinding Command="local:MainWindow.OpenQuotesRoutedCommand" Executed="OpenQuotesCommand_Executed"/>
-        <CommandBinding Command="local:MainWindow.NewOrderRoutedCommand" Executed="OpenOrdersCommand_Executed"/>
-        <CommandBinding Command="local:MainWindow.NewCustomerOrderRoutedCommand" Executed="OpenCustomerOrdersCommand_Executed"/>
-        <CommandBinding Command="local:MainWindow.NewQuoteRoutedCommand" Executed="OpenQuotesCommand_Executed"/>
-        <CommandBinding Command="local:MainWindow.PopOutRoutedCommand" Executed="PopOutCommand_Executed"/>
-        <CommandBinding Command="ApplicationCommands.Close" Executed="CloseCommand_Executed" CanExecute="CloseCommand_CanExecute"/>
-    </Window.CommandBindings>
-    <Window.Resources>
-        <CollectionViewSource x:Key="Documents"/>
-    </Window.Resources>
+    <Window.DataContext>
+        <vm:MainViewModel/>
+    </Window.DataContext>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -31,14 +23,15 @@
         <Menu x:Name="MainMenu">
             <MenuItem Header="File">
                 <MenuItem Header="Actions">
-                    <MenuItem Command="local:MainWindow.NewOrderRoutedCommand" CommandParameter="New" />
-                    <MenuItem Command="local:MainWindow.NewCustomerOrderRoutedCommand" CommandParameter="New" />
-                    <MenuItem Command="local:MainWindow.NewQuoteRoutedCommand" CommandParameter="New" />
+                    <MenuItem Command="{Binding NewOrderRoutedCommand}" Header="New Order"/>
+                    <MenuItem Command="{Binding NewCustomerOrderRoutedCommand}" Header="New Customer Order"/>
+                    <MenuItem Command="{Binding NewQuoteRoutedCommand}" Header="New Quote"/>
                 </MenuItem>
-                <MenuItem Command="local:MainWindow.OpenMachineRoutedCommand"/>
-                <MenuItem Command="local:MainWindow.OpenOrdersRoutedCommand"/>
-                <MenuItem Command="local:MainWindow.OpenCustomerOrdersRoutedCommand"/>
-                <MenuItem Command="local:MainWindow.OpenQuotesRoutedCommand"/>
+                <MenuItem Command="{Binding OpenMachineRoutedCommand}" Header="Machine Table"/>
+                <MenuItem Command="{Binding OpenOrdersRoutedCommand}" Header="Orders"/>
+                <MenuItem Command="{Binding OpenCustomerOrdersRoutedCommand}" Header="Customer Orders"/>
+                <MenuItem Command="{Binding OpenQuotesRoutedCommand}" Header="Quotes"/>
+                <!--<MenuItem Command="ApplicationCommands.Close"/>-->
                 <MenuItem Command="ApplicationCommands.Close"/>
             </MenuItem>
             <MenuItem Header="Edit">
@@ -48,7 +41,7 @@
                 <MenuItem Command="ApplicationCommands.SelectAll" />
             </MenuItem>
             <MenuItem Header="Window">
-                <MenuItem Command="local:MainWindow.PopOutRoutedCommand"/>
+                <MenuItem Command="{Binding PopOutRoutedCommand}"/>
             </MenuItem>
         </Menu>
         <Grid Grid.Row="1">
@@ -57,7 +50,15 @@
                            AllowMixedOrientation="True"
                            BorderBrush="Black"
                            BorderThickness="1"
-                           DocumentsSource="{Binding Source={StaticResource Documents}}"><!--"{Binding MyPanes, ElementName=window}"-->
+                           DocumentsSource="{Binding MyPanes}"
+                                 ActiveContent="{Binding ActiveDocument, Mode=TwoWay}">
+                <!--<xcad:DockingManager.Resources>
+                    --><!-- add views for specific ViewModels --><!--
+                    <DataTemplate DataType="{x:Type vm:ViewModelLocator}">
+                        <v:SampleDockWindowView />
+                    </DataTemplate>
+                </xcad:DockingManager.Resources>-->
+            <!--"{Binding Source={StaticResource Documents}}" "{Binding MyPanes, ElementName=window}"-->
                 <xcad:DockingManager.LayoutItemContainerStyle>
                     <Style TargetType="{x:Type xcad:LayoutItem}">
                         <Setter Property="Title" Value="{Binding Model.Title}" />
@@ -77,9 +78,13 @@
                     <xcad:LayoutPanel Orientation="Horizontal">
                         <xcad:LayoutAnchorablePaneGroup DockWidth="125">
                             <xcad:LayoutAnchorablePane>
-                                <xcad:LayoutAnchorable ContentId="machines" Title="Machines">
+                                <xcad:LayoutAnchorable ContentId="machines" Title="Machines" CanHide="False">
                                     <!--IconSource="../Images/alarm-clock-blue.png"-->
                                     <local:MachinesDock/>
+                                </xcad:LayoutAnchorable>
+                                <xcad:LayoutAnchorable ContentId="production" Title="Production" CanHide="False">
+                                    <!--IconSource="../Images/alarm-clock-blue.png"-->
+                                    <local:ProductionDock/>
                                 </xcad:LayoutAnchorable>
                                 <!--<xcad:LayoutAnchorable ContentId="journal" Title="Journal" >
                                     <RichTextBox>
@@ -95,8 +100,7 @@
                                 </xcad:LayoutAnchorable>-->
                             </xcad:LayoutAnchorablePane>
                         </xcad:LayoutAnchorablePaneGroup><xcad:LayoutDocumentPaneGroup >
-                            <xcad:LayoutDocumentPane>
-                            </xcad:LayoutDocumentPane>
+                            <xcad:LayoutDocumentPane/>
                         </xcad:LayoutDocumentPaneGroup >
                         
                     </xcad:LayoutPanel>

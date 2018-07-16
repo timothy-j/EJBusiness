@@ -1,11 +1,10 @@
 ﻿Imports System.Collections.ObjectModel
-Imports System.Collections.Specialized
 Imports System.ComponentModel
 Imports System.Data.Entity
 Imports System.Windows
+Imports GalaSoft.MvvmLight
+Imports GalaSoft.MvvmLight.Command
 Imports Xceed.Wpf.DataGrid
-
-
 
 Public Class MachInfo
     Inherits DependencyObject
@@ -23,7 +22,9 @@ Public Class MachInfo
 End Class
 
 Public Class BomViewModel
-    Inherits WpfHelpers.ViewModelBase 'Inherits DependencyObject
+    Inherits ViewModelBase 'WpfHelpers.ViewModelBase 'Inherits DependencyObject
+
+#Region "Fields"
 
     Private _db As EJData.CorporateEntities
     Private WithEvents _BomSource As ObservableCollection(Of EJData.Item)
@@ -33,11 +34,26 @@ Public Class BomViewModel
     Friend WithEvents _ItemView As DataGridCollectionView
 
     Property MachineList As New List(Of MachineInfo)
+    Property Title As String
+
+#End Region 'Fields
+
+#Region "Classes/Structures"
 
     Public Class MachineInfo
         Public Property Number As Short
         Public Property DetailID As Integer?
     End Class
+
+    Structure EJFilter
+        Public columnName As String
+        Public condition As String
+        Public prefix As String ' Such as Not
+    End Structure
+
+#End Region 'Classes/Structures
+
+#Region "Properties"
 
     Public Property ItemView As DataGridCollectionView
         Get
@@ -47,23 +63,6 @@ Public Class BomViewModel
             _ItemView = Value
         End Set
     End Property
-
-#Region "Command Properties"
-
-    Public Property DeleteCommand As WpfHelpers.RelayCommand
-    Public Property ViewOrderCommand As WpfHelpers.RelayCommand
-    Public Property EqualsCommand As WpfHelpers.RelayCommand
-    Public Property NotEqualCommand As WpfHelpers.RelayCommand
-    Public Property ContainsCommand As WpfHelpers.RelayCommand
-    Public Property NotContainsCommand As WpfHelpers.RelayCommand
-    Public Property StartsWithCommand As WpfHelpers.RelayCommand
-    Public Property NotStartsWithCommand As WpfHelpers.RelayCommand
-    Public Property EndsWithCommand As WpfHelpers.RelayCommand
-    Public Property NotEndsWithCommand As WpfHelpers.RelayCommand
-    Public Property LessThanCommand As WpfHelpers.RelayCommand
-    Public Property GreaterThanCommand As WpfHelpers.RelayCommand
-
-#End Region
 
     Public ReadOnly Property CurrentItem As EJData.Item
         Get
@@ -87,89 +86,6 @@ Public Class BomViewModel
         End Get
     End Property
 
-    Public Sub New()
-        _db = EJData.DataHelpers.GetNewDbContext
-
-        _BomSource = _db.Items.Local
-        ItemView = New DataGridCollectionView(_BomSource)
-
-#Region "Command handler attachment"
-
-        'DeleteCommand = New WpfHelpers.RelayCommand(AddressOf OnDelete, AddressOf CanDelete)
-        ViewOrderCommand = New WpfHelpers.RelayCommand(AddressOf OnViewOrder)
-
-        'FirstCommand = New WpfHelpers.RelayCommand(AddressOf OnFirst)
-        'PreviousCommand = New WpfHelpers.RelayCommand(AddressOf OnPrevious, AddressOf CanPrevious)
-        'NextCommand = New WpfHelpers.RelayCommand(AddressOf OnNext, AddressOf CanNext)
-        'LastCommand = New WpfHelpers.RelayCommand(AddressOf OnLast)
-        'NewCommand = New WpfHelpers.RelayCommand(AddressOf OnNew)
-
-#End Region
-
-        'If (DesignerProperties.GetIsInDesignMode(Me)) Then Exit Sub
-
-        'Init()
-
-    End Sub
-
-#Region "Command 'Can' functions"
-
-    'Private Function CanDelete() As Boolean
-    '    If CurrentOrder Is Nothing Then Return False
-    '    Return Not CurrentOrder.Sent
-    'End Function
-
-    Private Function CanPrevious() As Boolean
-        If ItemView.CurrentPosition <= 0 Then
-            Return False
-        Else
-            Return True
-        End If
-    End Function
-
-    Private Function CanNext() As Boolean
-        If ItemView.CurrentPosition >= ItemView.Count - 1 Then
-            Return False
-        Else
-            Return True
-        End If
-    End Function
-
-#End Region
-
-#Region "Command excecute subs"
-
-    'Private Sub OnDelete()
-    '    ItemView.Remove(CurrentOrder)
-    'End Sub
-
-    Private Sub OnViewOrder()
-        MsgBox("view order")
-    End Sub
-
-    Private Sub OnFirst()
-        ItemView.MoveCurrentToFirst()
-    End Sub
-
-    Private Sub OnPrevious()
-        ItemView.MoveCurrentToPrevious()
-    End Sub
-
-    Private Sub OnNext()
-        ItemView.MoveCurrentToNext()
-    End Sub
-
-    Private Sub OnLast()
-        ItemView.MoveCurrentToLast()
-    End Sub
-
-    Private Sub OnNew()
-        MsgBox("new")
-    End Sub
-
-#End Region
-
-
     Public Property Model As String
         Get
             Return _Model
@@ -192,13 +108,13 @@ Public Class BomViewModel
                     MachineType = "All"
             End Select
 
-            If (DesignerProperties.GetIsInDesignMode(Me)) Then Exit Property
+            If (ViewModelBase.IsInDesignModeStatic) Then Exit Property
 
             If Not _initDone Then
                 Init()
                 _initDone = True
             End If
-            'Title = Value + " Table"
+            Title = Value + " Table"
         End Set
     End Property
 
@@ -215,12 +131,19 @@ Public Class BomViewModel
         End Set
     End Property
 
+#End Region 'Properties
 
-    Structure EJFilter
-        Public columnName As String
-        Public condition As String
-        Public prefix As String ' Such as Not
-    End Structure
+#Region "Initialisation"
+
+    Public Sub New()
+        _db = EJData.DataHelpers.GetNewDbContext
+
+        _BomSource = _db.Items.Local
+        ItemView = New DataGridCollectionView(_BomSource)
+
+        AttachCommands()
+
+    End Sub
 
     Private Sub Init()
         'ItemViewSource = CType(Me.FindResource("ItemViewSource"), System.Windows.Data.CollectionViewSource)
@@ -234,7 +157,7 @@ Public Class BomViewModel
         Dim machines As IQueryable(Of EJData.Machine) = From m In _db.Machines
                                                         Where m.Supplied = False
 
-        If MachineType = "" Or MachineType = "All" Then
+        If MachineType = "" Or MachineType = "ALL" Then
             ' No further filtering needed
         Else
             ' Filter machines for machineType
@@ -253,14 +176,26 @@ Public Class BomViewModel
                                                 Where i.Status <> "D"
                                                 Select i
         'Filter by machine type
-        If MachineType = "" Or MachineType = "All" Then
+        If MachineType = "" Or MachineType = "ALL" Then
             ' No further filtering needed
         Else
             ' Filter Items for machineType
             Bom = From m In Bom
                   Where m.Type = MachineType
         End If
+
+        Bom = From m In Bom
+              Order By m.Item1
+
         Bom.Load
+
+        '' NOTE: uncommenting the following adds this query to the previous list
+        'Dim test = From i In _db.Items.Include("QuoteItemDetails").Include("Part")
+        '           Where i.Status <> "D" And i.Type = "CF"
+        '           Select i
+
+        'test.Load
+
         AttachMachineLists()
 
 
@@ -320,19 +255,6 @@ Public Class BomViewModel
         '    ItemViewSource.Source = _db.Items.Local
     End Sub
 
-    Private Sub MainWindow_Loaded(sender As Object, e As RoutedEventArgs) 'Handles Me.Loaded
-
-        'If Not _initDone Then
-        '    Init()
-        '    _initDone = True
-        'End If
-
-    End Sub
-
-    Private Sub _ItemView_CurrentChanged(sender As Object, e As EventArgs) Handles _ItemView.CurrentChanged
-        'MsgBox("current changed")
-    End Sub
-
     Private Sub AttachMachineLists()
         'MsgBox("bomsource collection changed")
         For Each item As EJData.Item In _BomSource
@@ -349,6 +271,98 @@ Public Class BomViewModel
 
         Next
     End Sub
+
+#End Region 'Initialisation
+
+#Region "Commands"
+
+#Region "Command Properties"
+
+    Public Property DeleteCommand As RelayCommand
+    Public Property ViewOrderCommand As RelayCommand
+    Public Property EqualsCommand As RelayCommand
+    Public Property NotEqualCommand As RelayCommand
+    Public Property ContainsCommand As RelayCommand
+    Public Property NotContainsCommand As RelayCommand
+    Public Property StartsWithCommand As RelayCommand
+    Public Property NotStartsWithCommand As RelayCommand
+    Public Property EndsWithCommand As RelayCommand
+    Public Property NotEndsWithCommand As RelayCommand
+    Public Property LessThanCommand As RelayCommand
+    Public Property GreaterThanCommand As RelayCommand
+
+#End Region
+
+#Region "Command handler attachment"
+
+    Private Sub AttachCommands()
+
+        ViewOrderCommand = New RelayCommand(AddressOf OnViewOrder)
+
+    End Sub
+
+#End Region 'Command handler attachment
+
+#Region "Command Can functions"
+
+    'Private Function CanDelete() As Boolean
+    '    If CurrentOrder Is Nothing Then Return False
+    '    Return Not CurrentOrder.Sent
+    'End Function
+
+    Private Function CanPrevious() As Boolean
+        If ItemView.CurrentPosition <= 0 Then
+            Return False
+        Else
+            Return True
+        End If
+    End Function
+
+    Private Function CanNext() As Boolean
+        If ItemView.CurrentPosition >= ItemView.Count - 1 Then
+            Return False
+        Else
+            Return True
+        End If
+    End Function
+
+#End Region
+
+#Region "Command Excecute subs"
+
+    'Private Sub OnDelete()
+    '    ItemView.Remove(CurrentOrder)
+    'End Sub
+
+    Private Sub OnViewOrder()
+        MsgBox("view order")
+    End Sub
+
+    Private Sub OnFirst()
+        ItemView.MoveCurrentToFirst()
+    End Sub
+
+    Private Sub OnPrevious()
+        ItemView.MoveCurrentToPrevious()
+    End Sub
+
+    Private Sub OnNext()
+        ItemView.MoveCurrentToNext()
+    End Sub
+
+    Private Sub OnLast()
+        ItemView.MoveCurrentToLast()
+    End Sub
+
+    Private Sub OnNew()
+        MsgBox("new")
+    End Sub
+
+#End Region
+
+#End Region 'Commands
+
+#Region "Events"
 
     Private Sub _ItemView_CurrentChanging(sender As Object, e As CurrentChangingEventArgs) Handles _ItemView.CurrentChanging
         If _db.ChangeTracker.HasChanges Then
@@ -559,5 +573,7 @@ Public Class BomViewModel
     '    End If
 
     'End Sub
+
+#End Region 'Events
 
 End Class

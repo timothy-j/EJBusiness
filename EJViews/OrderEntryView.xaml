@@ -7,10 +7,11 @@
       xmlns:EJData="clr-namespace:EJData;assembly=EJData"  
       xmlns:EJModel = "clr-namespace:EJViewModels;assembly=EJViewModels"
       xmlns:ctrl="clr-namespace:WpfControls;assembly=WpfControls"
-      xmlns:vml = "clr-namespace:WpfHelpers;assembly=WpfCSHelpers"
-      vml:ViewModelLocator.AutoHookedUpViewModel = "True"
       mc:Ignorable="d" 
-      d:DesignHeight="450" d:DesignWidth="800">
+      d:DesignHeight="450" d:DesignWidth="800"
+      DataContext="{Binding Source={StaticResource Locator}, Path=OrderEntryViewModel}">
+    <!--xmlns:vml = "clr-namespace:WpfHelpers;assembly=WpfCSHelpers"
+      vml:ViewModelLocator.AutoHookedUpViewModel = "True"-->
     <UserControl.Resources>
         <!--<CollectionViewSource x:Key="OrderOrderDetailsViewSource" Source="{Binding OrderDetails}" 
                               d:DesignSource="{d:DesignInstance {x:Type EJData:CustOrderDetail}, CreateList=True}"/>-->
@@ -95,7 +96,7 @@
                 <CheckBox x:Name="SentCheckBox" Content="" Grid.Column="1" HorizontalAlignment="Left" IsChecked="{Binding Sent, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" Margin="3" Grid.Row="7" VerticalAlignment="Center"/>
                 <TextBox x:Name="SuffixTextBox" Grid.Column="1" Margin="128,3,3,3" Grid.Row="5" Text="{Binding Suffix, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" VerticalAlignment="Center" FontSize="18"/>
                 <Label Content="Supplier:" HorizontalAlignment="Left" Margin="3" Grid.Row="8" VerticalAlignment="Center"/>
-                <TextBox x:Name="SupplierTextBox" Grid.Column="1" HorizontalAlignment="Left" Height="23" Margin="3" Grid.Row="8" Text="{Binding Supplier, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" VerticalAlignment="Center" Width="120"/>
+                <ComboBox x:Name="SupplierComboBox" Grid.Column="1" Height="23" Margin="3" Grid.Row="8" VerticalAlignment="Center" IsEditable="True"/>
             </Grid>
             <!--<Button Content="View Order" Command="{Binding DataContext.ViewOrderCommand, Source={RelativeSource Mode=FindAncestor, AncestorType=UserControl}}" HorizontalAlignment="Left" Margin="3" VerticalAlignment="Bottom" Width="75" />-->
 

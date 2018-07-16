@@ -1,0 +1,67 @@
+﻿<UserControl x:Class="BomView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:dxmvvm="http://schemas.devexpress.com/winfx/2008/xaml/mvvm" 
+             xmlns:views="clr-namespace:DXApplication3.Modules.Views"
+             xmlns:viewModels="clr-namespace:DXApplication3.Modules"
+             xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid"
+             xmlns:sys="clr-namespace:System;assembly=mscorlib"
+             xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core" 
+             xmlns:EJData="clr-namespace:EJData;assembly=EJData"
+             mc:Ignorable="d"
+             d:DesignHeight="300" d:DesignWidth="800"
+             d:DataContext="{dxmvvm:ViewModelSource viewModels:BomViewModel}">
+    <UserControl.Resources>
+        <!--<CollectionViewSource x:Key="CollectionViewSource" Culture="en-GB" CollectionViewType="{x:Type ListCollectionView}">
+            <dx:DesignDataManager.DesignData>
+                <dx:DesignDataSettings DataObjectType="{x:Type EJData:Item}" RowCount="5"/>
+            </dx:DesignDataManager.DesignData>
+        </CollectionViewSource>-->
+    </UserControl.Resources>
+    <!--<UserControl.DataContext>
+        <ViewModels:BomViewModel/>
+    </UserControl.DataContext>-->
+    <Grid>
+        <!--<Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>-->
+        <dxg:GridControl AutoGenerateColumns="None" EnableSmartColumnsGeneration="True" 
+                         HorizontalAlignment="Left" Margin="0" VerticalAlignment="Top" 
+                         ItemsSource="{Binding ItemView}" SelectionMode="Cell">
+            <dxg:GridControl.View>
+                <dxg:TreeListView AllowPerPixelScrolling="True" ShowDataNavigator="True" KeyFieldName="ID" ParentFieldName="ParentID" 
+                  TreeDerivationMode="Selfreference">
+                </dxg:TreeListView>
+            </dxg:GridControl.View>
+            <dxg:GridColumn FieldName="Model" IsSmart="True"/>
+            <dxg:GridColumn FieldName="Item1" IsSmart="True" Header="Item"/>
+            <dxg:GridColumn FieldName="Qty" IsSmart="True"/>
+            <dxg:GridColumn FieldName="Type" IsSmart="True"/>
+            <dxg:GridColumn FieldName="Description" IsSmart="True"/>
+            <dxg:GridColumn FieldName="Status" IsSmart="True"/>
+            <dxg:GridColumn FieldName="Associations" IsSmart="True"/>
+            <dxg:GridColumn FieldName="Exclude" IsSmart="True"/>
+            <dxg:GridColumn FieldName="ParentID" IsSmart="True"/>
+            <dxg:GridColumn FieldName="Part.PartNo" IsSmart="True"/>
+        </dxg:GridControl>
+        <!--<dxg:TreeListControl AutoGenerateColumns="None" EnableSmartColumnsGeneration="True" HorizontalAlignment="Left" Margin="0" Grid.Row="1" VerticalAlignment="Top" ItemsSource="{Binding ItemView}">
+            <dxg:TreeListControl.View>
+                <dxg:TreeListView AllowPerPixelScrolling="True" ShowTotalSummary="True"/>
+            </dxg:TreeListControl.View>
+            <dxg:TreeListColumn FieldName="Qty" IsSmart="True"/>
+            <dxg:TreeListColumn FieldName="Model" IsSmart="True"/>
+            <dxg:TreeListColumn FieldName="Item1" IsSmart="True" Header="Item"/>
+            <dxg:TreeListColumn FieldName="ID" IsSmart="True"/>
+            <dxg:TreeListColumn FieldName="Type" IsSmart="True"/>
+            <dxg:TreeListColumn FieldName="Description" IsSmart="True"/>
+            <dxg:TreeListColumn FieldName="Status" IsSmart="True"/>
+            <dxg:TreeListColumn FieldName="Associations" IsSmart="True"/>
+            <dxg:TreeListColumn FieldName="Exclude" IsSmart="True"/>
+            <dxg:TreeListColumn FieldName="ParentID" IsSmart="True"/>
+            <dxg:TreeListColumn FieldName="Part.PartNo" IsSmart="True"/>
+        </dxg:TreeListControl>-->
+    </Grid>
+</UserControl>

@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27004.2009
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "EJBusiness", "EJOrderTest\EJBusiness.vbproj", "{96115991-0E57-4E07-AB6A-9E6417D38CC3}"
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "EJBusinessOld", "EJOrderTest\EJBusinessOld.vbproj", "{96115991-0E57-4E07-AB6A-9E6417D38CC3}"
 EndProject
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "EJData", "EJData\EJData.vbproj", "{89227503-7A55-40C3-8127-E8098787D3A0}"
 EndProject
@@ -41,7 +41,13 @@ Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "EJViews", "EJViews\EJViews.
 EndProject
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "EJViewModels", "EJViewModels\EJViewModels.vbproj", "{3A5C072D-FF28-4ED4-86D6-270E9F8ABF95}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfCSHelpers", "WpfCSHelpers\WpfCSHelpers.csproj", "{5E385679-2747-458F-922D-4DF703A61479}"
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "EJBusiness.Main", "EJBusiness\EJBusiness.Main\EJBusiness.Main.vbproj", "{877B80CD-A298-4691-B2EA-8E9D4A1A22FE}"
+EndProject
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "EJBusiness.Common", "EJBusiness\EJBusiness.Common\EJBusiness.Common.vbproj", "{D27D7DA8-7ADC-4AB9-87A6-5590C4466BED}"
+EndProject
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "EJBusiness.Modules", "EJBusiness\EJBusiness.Modules\EJBusiness.Modules.vbproj", "{0D69E3D5-32B0-4140-993C-A01B069811B3}"
+EndProject
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "EJBusiness.Tests", "EJBusiness\EJBusiness.Tests\EJBusiness.Tests.vbproj", "{9D357184-8101-4B2A-8474-05B3262287D3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -121,10 +127,22 @@ Global
 		{3A5C072D-FF28-4ED4-86D6-270E9F8ABF95}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3A5C072D-FF28-4ED4-86D6-270E9F8ABF95}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3A5C072D-FF28-4ED4-86D6-270E9F8ABF95}.Release|Any CPU.Build.0 = Release|Any CPU
-		{5E385679-2747-458F-922D-4DF703A61479}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{5E385679-2747-458F-922D-4DF703A61479}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{5E385679-2747-458F-922D-4DF703A61479}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{5E385679-2747-458F-922D-4DF703A61479}.Release|Any CPU.Build.0 = Release|Any CPU
+		{877B80CD-A298-4691-B2EA-8E9D4A1A22FE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{877B80CD-A298-4691-B2EA-8E9D4A1A22FE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{877B80CD-A298-4691-B2EA-8E9D4A1A22FE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{877B80CD-A298-4691-B2EA-8E9D4A1A22FE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D27D7DA8-7ADC-4AB9-87A6-5590C4466BED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D27D7DA8-7ADC-4AB9-87A6-5590C4466BED}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D27D7DA8-7ADC-4AB9-87A6-5590C4466BED}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D27D7DA8-7ADC-4AB9-87A6-5590C4466BED}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0D69E3D5-32B0-4140-993C-A01B069811B3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0D69E3D5-32B0-4140-993C-A01B069811B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0D69E3D5-32B0-4140-993C-A01B069811B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0D69E3D5-32B0-4140-993C-A01B069811B3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9D357184-8101-4B2A-8474-05B3262287D3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9D357184-8101-4B2A-8474-05B3262287D3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9D357184-8101-4B2A-8474-05B3262287D3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9D357184-8101-4B2A-8474-05B3262287D3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

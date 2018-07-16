@@ -1,4 +1,5 @@
-﻿Imports System.Windows
+﻿Imports System.ComponentModel
+Imports System.Windows
 
 ''' <summary>
 ''' Inspired by https://github.com/RSuter/MyToolkit/blob/master/src/MyToolkit/Mvvm/ViewModelBase.cs
@@ -29,18 +30,18 @@ Public Class ViewModelBase
         End If
     End Sub
 
-    Public Overridable Sub OnCallUnLoaded()
+    Public Overridable Sub CallOnUnLoaded()
         If IsViewLoaded Then
             OnUnLoaded()
             IsViewLoaded = False
         End If
     End Sub
 
-    Public Overridable Sub OnLoaded()
+    Protected Overridable Sub OnLoaded()
         ' Must be empty
     End Sub
 
-    Public Overridable Sub OnUnLoaded()
+    Protected Overridable Sub OnUnLoaded()
         ' Must be empty
     End Sub
 

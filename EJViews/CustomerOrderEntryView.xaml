@@ -1,0 +1,141 @@
+﻿<UserControl x:Class="CustomerOrderEntryView"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:WpfTestApp"
+      xmlns:EJData="clr-namespace:EJData;assembly=EJData" 
+      xmlns:ctrl="clr-namespace:WpfControls;assembly=WpfControls" 
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      DataContext="{Binding Source={StaticResource Locator}, Path=CustomerOrderEntryViewModel}">
+    <UserControl.Resources>
+        <!--<CollectionViewSource x:Key="CustomerOrderViewSource" d:DesignSource="{d:DesignInstance {x:Type EJData:CustomerOrder}, CreateList=True}"/>-->
+        <CollectionViewSource x:Key="CustomerOrderCustOrderDetailsViewSource" Source="{Binding CurrentOrder.CustOrderDetails}"/>
+        <CollectionViewSource x:Key="CustOrderDetailsItemDetailsViewSource" Source="{Binding CustOrderItemDetails, Source={StaticResource CustomerOrderCustOrderDetailsViewSource}}"/>
+        <!--<Menu x:Key="NavigationMenu">
+            <MenuItem Header="Navigation">-->
+                <!--<MenuItem Command="NavigationCommands." />--><!--
+                <MenuItem Command="ApplicationCommands.Copy" />
+                <MenuItem Command="ApplicationCommands.Paste" />
+                <MenuItem Command="ApplicationCommands.SelectAll" />
+            </MenuItem>
+        </Menu>-->
+    </UserControl.Resources>
+    <UserControl.CommandBindings>
+        <!--<CommandBinding Command="ctrl:NavigationBar.NextRoutedCommand" Executed="NextCommand_Executed"/>
+        <CommandBinding Command="ctrl:NavigationBar.PreviousRoutedCommand" Executed="PreviousCommand_Executed"/>
+        <CommandBinding Command="ctrl:NavigationBar.LastRoutedCommand" Executed="LastCommand_Executed"/>
+        <CommandBinding Command="ctrl:NavigationBar.FirstRoutedCommand" Executed="FirstCommand_Executed"/>-->
+    </UserControl.CommandBindings>
+    <Grid Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}" Margin="3" >
+        <!--<Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="5"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>-->
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid x:Name="Grid1" Grid.RowSpan="3" VerticalAlignment="Top" Margin="3" HorizontalAlignment="Left" DataContext="{Binding Orders.CurrentItem}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <Label Content="Order No:" HorizontalAlignment="Left" Margin="3" Grid.Row="0" VerticalAlignment="Center"/>
+            <TextBox x:Name="OrderNoTextBox" Grid.Column="1" HorizontalAlignment="Left" Margin="3" Grid.Row="0" Text="{Binding ID, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" VerticalAlignment="Center" Width="120" FontSize="18" Foreground="Blue"/>
+            <Label VerticalAlignment="Center" Grid.Row="1" Margin="3" HorizontalAlignment="Left" Grid.Column="0" Content="Carrier:"/>
+            <TextBox x:Name="CarrierTextBox" Width="120" VerticalAlignment="Center" Text="{Binding Carrier, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" Grid.Row="1" Margin="3" Height="23" HorizontalAlignment="Left" Grid.Column="1"/>
+            <Label VerticalAlignment="Center" Grid.Row="2" Margin="3" HorizontalAlignment="Left" Grid.Column="0" Content="Currency:"/>
+            <TextBox x:Name="CurrencyTextBox" Width="120" VerticalAlignment="Center" Text="{Binding Currency, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" Grid.Row="2" Margin="3" Height="23" HorizontalAlignment="Left" Grid.Column="1"/>
+            <Label VerticalAlignment="Center" Grid.Row="3" Margin="3" HorizontalAlignment="Left" Grid.Column="0" Content="Customer ID:"/>
+            <TextBox x:Name="CustomerIDTextBox" Width="120" VerticalAlignment="Center" Text="{Binding CustomerID, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" Grid.Row="3" Margin="3" Height="23" HorizontalAlignment="Left" Grid.Column="1"/>
+            <Label VerticalAlignment="Center" Grid.Row="4" Margin="3" HorizontalAlignment="Left" Grid.Column="0" Content="Date:"/>
+            <DatePicker x:Name="DateDatePicker" VerticalAlignment="Center" SelectedDate="{Binding Date, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" Grid.Row="3" Margin="4" HorizontalAlignment="Left" Grid.Column="1"/>
+            <Label VerticalAlignment="Center" Grid.Row="5" Margin="3" HorizontalAlignment="Left" Grid.Column="0" Content="Despatch Date:"/>
+            <DatePicker x:Name="DespatchDateDatePicker" VerticalAlignment="Center" SelectedDate="{Binding DespatchDate, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" Grid.Row="5" Margin="3" HorizontalAlignment="Left" Grid.Column="1"/>
+            <Label VerticalAlignment="Center" Grid.Row="6" Margin="3" HorizontalAlignment="Left" Grid.Column="0" Content="Discount Fraction:"/>
+            <TextBox x:Name="DiscountFractionTextBox" Width="120" VerticalAlignment="Center" Text="{Binding DiscountFraction, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" Grid.Row="6" Margin="3" Height="23" HorizontalAlignment="Left" Grid.Column="1"/>
+            <Label VerticalAlignment="Center" Grid.Row="7" Margin="3" HorizontalAlignment="Left" Grid.Column="0" Content="Customer:"/>
+            <TextBox x:Name="IDTextBox" Width="120" VerticalAlignment="Center" Text="{Binding Customer.Company, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" Grid.Row="7" Margin="3" Height="23" HorizontalAlignment="Left" Grid.Column="1"/>
+            <Label VerticalAlignment="Center" Grid.Row="8" Margin="3" HorizontalAlignment="Left" Grid.Column="0" Content="Invoice ID:"/>
+            <TextBox x:Name="InvoiceIDTextBox" Width="120" VerticalAlignment="Center" Text="{Binding InvoiceID, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" Grid.Row="8" Margin="3" Height="23" HorizontalAlignment="Left" Grid.Column="1"/>
+            <Label VerticalAlignment="Center" Grid.Row="9" Margin="3" HorizontalAlignment="Left" Grid.Column="0" Content="Notes:"/>
+            <TextBox x:Name="NotesTextBox" Width="120" VerticalAlignment="Center" Text="{Binding Notes, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" Grid.Row="9" Margin="3" Height="23" HorizontalAlignment="Left" Grid.Column="1"/>
+            <Label VerticalAlignment="Center" Grid.Row="10" Margin="3" HorizontalAlignment="Left" Grid.Column="0" Content="Order Ref:"/>
+            <TextBox x:Name="OrderRefTextBox" Width="120" VerticalAlignment="Center" Text="{Binding OrderRef, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" Grid.Row="10" Margin="3" Height="23" HorizontalAlignment="Left" Grid.Column="1"/>
+        </Grid>
+        <Grid Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="5"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <GridSplitter Grid.Row="1" Height="5" Grid.ColumnSpan="2" HorizontalAlignment="Stretch"/>
+        
+        <DataGrid x:Name="CustOrderDetailsDataGrid" Grid.Row="0" Grid.Column="1"
+                  AutoGenerateColumns="False" EnableRowVirtualization="True" ItemsSource="{Binding Source={StaticResource CustomerOrderCustOrderDetailsViewSource}}" Margin="3" RowDetailsVisibilityMode="VisibleWhenSelected">
+            <DataGrid.Columns>
+                <DataGridTextColumn x:Name="ItemColumn" Header="Item" MinWidth="70">
+                    <DataGridTextColumn.Binding>
+                        <MultiBinding StringFormat="{}{0}-{1}">
+                            <Binding Path="Item.Model"/>
+                            <Binding Path="Item.Item1"/>
+                        </MultiBinding>
+                    </DataGridTextColumn.Binding>
+                </DataGridTextColumn>
+                <DataGridTextColumn x:Name="DescriptionColumn" Binding="{Binding Description}" Header="Description" MinWidth="150"/>
+                <DataGridTextColumn x:Name="PartDescriptionColumn" Binding="{Binding Item.Part.Description}" Header="Part Description" MinWidth="150
+                                    "/>
+                <DataGridTextColumn x:Name="UnitColumn" Binding="{Binding Unit, StringFormat=\{0:C2\}}" Header="Unit" MinWidth="55"/>
+                <DataGridTextColumn x:Name="PriceColumn" Binding="{Binding Price, StringFormat=\{0:C2\}}" Header="Price" MinWidth="55"/>
+                <DataGridTextColumn x:Name="QuantityColumn" Binding="{Binding Quantity, StringFormat=\{0:G8\}}" Header="Quantity" MinWidth="50"/>
+                <DataGridTextColumn x:Name="DiscountFractionColumn" Binding="{Binding DiscountFraction}" Header="Discount Fraction" MinWidth="40"/>
+            </DataGrid.Columns>
+        </DataGrid>
+        <DataGrid x:Name="CustOrderItemDetailsDataGrid" Grid.Row="2" Grid.Column="1"
+                  AutoGenerateColumns="False" EnableRowVirtualization="True" ItemsSource="{Binding Source={StaticResource CustOrderDetailsItemDetailsViewSource}}" Margin="3" RowDetailsVisibilityMode="VisibleWhenSelected">
+            <DataGrid.Columns>
+                <DataGridTextColumn x:Name="ItemColumn1" Header="Item" MinWidth="70">
+                    <DataGridTextColumn.Binding>
+                        <MultiBinding StringFormat="{}{0}-{1}">
+                            <Binding Path="Item.Model"/>
+                            <Binding Path="Item.Item1"/>
+                        </MultiBinding>
+                    </DataGridTextColumn.Binding>
+                </DataGridTextColumn>
+                <DataGridTextColumn x:Name="DescriptionColumn1" Binding="{Binding Description}" Header="Description" MinWidth="150"/>
+                <DataGridTextColumn x:Name="QuantityColumn1" Binding="{Binding Quantity, StringFormat={}{0:G8}}" Header="Quantity" MinWidth="55"/>
+                <DataGridTextColumn x:Name="StatusColumn" Binding="{Binding Status}" Header="Status" MinWidth="55
+                                    "/>
+                <DataGridTextColumn x:Name="PartDescriptionColumn1" Binding="{Binding Item.Part.Description}" Header="Part Description" MinWidth="150"/>
+                <DataGridTextColumn x:Name="ParentIDColumn" Header="Parent" MinWidth="70">
+                    <DataGridTextColumn.Binding>
+                        <MultiBinding StringFormat="{}{0}-{1}">
+                            <Binding Path="Parent.Item.Model"/>
+                            <Binding Path="Parent.Item.Item1"/>
+                        </MultiBinding>
+                    </DataGridTextColumn.Binding>
+                </DataGridTextColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+        </Grid>
+        <ctrl:NavigationBar HorizontalAlignment="Left" VerticalAlignment="Bottom" Grid.Row="1"/>
+
+    </Grid>
+</UserControl>

@@ -1,14 +1,23 @@
 ﻿Imports System.Collections.ObjectModel
+Imports System.ComponentModel
 Imports System.Data.Entity
 Imports System.Windows
 Imports Xceed.Wpf.DataGrid
+Imports GalaSoft.MvvmLight
+Imports GalaSoft.MvvmLight.Command
 
 Public Class OrderEntryViewModel
-    Inherits DependencyObject
+    Inherits ViewModelBase 'WpfHelpers.ViewModelBase
+
+#Region "Fields"
 
     Private _db As EJData.CorporateEntities
     Private _OrdersSource As ObservableCollection(Of EJData.Order)
     Private WithEvents _Orders As DataGridCollectionView
+
+#End Region 'Fields
+
+#Region "Properties"
 
     Public Property Orders As DataGridCollectionView
         Get
@@ -16,20 +25,9 @@ Public Class OrderEntryViewModel
         End Get
         Set
             _Orders = Value
+            RaisePropertyChanged("Orders")
         End Set
     End Property
-
-#Region "Command Properties"
-
-    Public Property DeleteCommand As WpfHelpers.RelayCommand
-    Public Property ViewOrderCommand As WpfHelpers.RelayCommand
-    Public Property NextCommand As WpfHelpers.RelayCommand
-    Public Property PreviousCommand As WpfHelpers.RelayCommand
-    Public Property FirstCommand As WpfHelpers.RelayCommand
-    Public Property LastCommand As WpfHelpers.RelayCommand
-    Public Property NewCommand As WpfHelpers.RelayCommand
-
-#End Region
 
     Public ReadOnly Property CurrentOrder As EJData.Order
         Get
@@ -37,13 +35,16 @@ Public Class OrderEntryViewModel
         End Get
     End Property
 
+    'Public Shared ReadOnly CurrentIndexProperty As DependencyProperty = DependencyProperty.Register("CurrentIndex", GetType(Integer), GetType(OrderEntryViewModel))
+
     Property CurrentIndex As Integer
         Get
-            Return Orders.CurrentPosition
+            Return Orders.CurrentPosition 'GetValue(CurrentIndexProperty)
         End Get
         Set
             ' TODO: validate position value
             Orders.MoveCurrentToPosition(Value)
+            RaisePropertyChanged("Orders")
         End Set
     End Property
 
@@ -53,31 +54,61 @@ Public Class OrderEntryViewModel
         End Get
     End Property
 
+#End Region 'Properties
+
+#Region "Initialisation"
+
     Public Sub New()
         _db = EJData.DataHelpers.GetNewDbContext
-        _db.Orders.Include("OrderDetails").Load
+        'Dim t As Thread = New Thread(Sub()
+        '                                 _db.Orders.Include("OrderDetails").Load
+        '                                 _OrdersSource = _db.Orders.Local
+        '                                 Orders = New DataGridCollectionView(_OrdersSource)
+        '                             End Sub)
+        't.Start()
+        _db.Orders.Load
         _OrdersSource = _db.Orders.Local
         Orders = New DataGridCollectionView(_OrdersSource)
 
+        AttachCommands()
+    End Sub
+
+#End Region 'Initialisation
+
+#Region "Commands"
+
+#Region "Command Properties"
+
+    Public Property DeleteCommand As RelayCommand 'WpfHelpers.RelayCommand
+    Public Property ViewOrderCommand As RelayCommand
+    Public Property NextCommand As RelayCommand
+    Public Property PreviousCommand As RelayCommand
+    Public Property FirstCommand As RelayCommand
+    Public Property LastCommand As RelayCommand
+    Public Property NewCommand As RelayCommand
+
+#End Region 'Command Properties
+
 #Region "Command handler attachment"
 
-        DeleteCommand = New WpfHelpers.RelayCommand(AddressOf OnDelete, AddressOf CanDelete)
-        ViewOrderCommand = New WpfHelpers.RelayCommand(AddressOf OnViewOrder)
+    Private Sub AttachCommands()
 
-        FirstCommand = New WpfHelpers.RelayCommand(AddressOf OnFirst)
-        PreviousCommand = New WpfHelpers.RelayCommand(AddressOf OnPrevious, AddressOf CanPrevious)
-        NextCommand = New WpfHelpers.RelayCommand(AddressOf OnNext, AddressOf CanNext)
-        LastCommand = New WpfHelpers.RelayCommand(AddressOf OnLast)
-        NewCommand = New WpfHelpers.RelayCommand(AddressOf OnNew)
+        DeleteCommand = New RelayCommand(AddressOf OnDelete, AddressOf CanDelete)
+        ViewOrderCommand = New RelayCommand(AddressOf OnViewOrder)
 
-#End Region
+        FirstCommand = New RelayCommand(AddressOf OnFirst)
+        PreviousCommand = New RelayCommand(AddressOf OnPrevious, AddressOf CanPrevious)
+        NextCommand = New RelayCommand(AddressOf OnNext, AddressOf CanNext)
+        LastCommand = New RelayCommand(AddressOf OnLast)
+        NewCommand = New RelayCommand(AddressOf OnNew)
 
     End Sub
 
-#Region "Command 'Can' functions"
+#End Region 'Command handler attachment
+
+#Region "Command Can functions"
 
     Private Function CanDelete() As Boolean
-        If CurrentOrder Is Nothing Then Return False
         Return Not CurrentOrder.Sent
     End Function
 
@@ -90,16 +121,16 @@ Public Class OrderEntryViewModel
     End Function
 
     Private Function CanNext() As Boolean
-        If Orders.CurrentPosition >= Orders.Count - 1 Then
+        If Orders.CurrentPosition >= Orders.Count Then
             Return False
         Else
             Return True
         End If
     End Function
 
-#End Region
+#End Region 'Command Can functions
 
-#Region "Command excecute subs"
+#Region "Command Excecute subs"
 
     Private Sub OnDelete()
         Orders.Remove(CurrentOrder)
@@ -126,9 +157,66 @@ Public Class OrderEntryViewModel
     End Sub
 
     Private Sub OnNew()
-        MsgBox("new")
+        If MsgBox("Create new order?", MsgBoxStyle.YesNo) = MsgBoxResult.Yes Then
+            ' Create new order
+            Dim o As New EJData.Order
+            o.OrderNo = (From os In _db.Orders
+                         Order By os.OrderNo Descending
+                         Select os.OrderNo).First + 1
+            o.Date = DateAndTime.Now
+            _db.Orders.Add(o)
+            _Orders.MoveCurrentTo(o)
+        End If
     End Sub
 
-#End Region
+#End Region 'Command Excecute subs
+
+#End Region 'Commands
+
+#Region "Events"
+
+    Private Sub _Orders_CurrentChanging(sender As Object, e As CurrentChangingEventArgs) Handles _Orders.CurrentChanging
+        If _db.ChangeTracker.HasChanges Then
+            'Dim ents = _db.ChangeTracker.Entries().Where(Function(x) x.State <> EntityState.Unchanged)
+            Try
+                _db.SaveChanges()
+            Catch ex As Exception
+                MsgBox(ex.Message)
+                e.Cancel = True
+            End Try
+        End If
+    End Sub
+
+    Private Sub _Orders_CurrentChanged(sender As Object, e As EventArgs) Handles _Orders.CurrentChanged
+        If _Orders.IsCurrentAfterLast Then
+            If MsgBox("Create new order?", MsgBoxStyle.YesNo) = MsgBoxResult.Yes Then
+                ' Create new order
+                Dim o As New EJData.Order
+                o.OrderNo = (From os In _db.Orders
+                             Order By os.OrderNo Descending
+                             Select os.OrderNo).First + 1
+                o.Date = DateAndTime.Now
+                _db.Orders.Add(o)
+                _Orders.MoveCurrentTo(o)
+            Else
+                _Orders.MoveCurrentToLast()
+            End If
+        End If
+        RaisePropertyChanged("CurrentIndex")
+        PreviousCommand.RaiseCanExecuteChanged()
+        NextCommand.RaiseCanExecuteChanged()
+        DeleteCommand.RaiseCanExecuteChanged()
+        'CurrentIndex = _Orders.CurrentPosition
+    End Sub
+
+    Private Sub _Orders_ItemRemoved(sender As Object, e As DataGridItemRemovedEventArgs) Handles _Orders.ItemRemoved
+        RaisePropertyChanged("Count")
+    End Sub
+
+    Private Sub _Orders_NewItemCreated(sender As Object, e As DataGridItemEventArgs) Handles _Orders.NewItemCreated
+        RaisePropertyChanged("Count")
+    End Sub
+
+#End Region 'Events
 
 End Class
