@@ -23,7 +23,7 @@ Partial Public Class Machine
     Public Property OrderDetailID As Nullable(Of Integer)
 
     Public Overridable Property Customer As Customer
-    Public Overridable Property MachineItems As ObservableListSource(Of MachineItem) = New ObservableListSource(Of MachineItem)
+    Public Overridable Property MachineItems As ICollection(Of MachineItem) = New HashSet(Of MachineItem)
     Public Overridable Property CustOrderDetail As CustOrderDetail
 
 End Class

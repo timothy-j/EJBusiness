@@ -28,7 +28,7 @@ Partial Public Class Invoice
     Public Property VatFraction As Nullable(Of Decimal)
 
     Public Overridable Property Customer As Customer
-    Public Overridable Property InvoiceDetails As ObservableListSource(Of InvoiceDetail) = New ObservableListSource(Of InvoiceDetail)
-    Public Overridable Property CustomerOrders As ObservableListSource(Of CustomerOrder) = New ObservableListSource(Of CustomerOrder)
+    Public Overridable Property InvoiceDetails As ICollection(Of InvoiceDetail) = New HashSet(Of InvoiceDetail)
+    Public Overridable Property CustomerOrders As ICollection(Of CustomerOrder) = New HashSet(Of CustomerOrder)
 
 End Class

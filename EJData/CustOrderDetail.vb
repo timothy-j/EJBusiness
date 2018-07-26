@@ -22,8 +22,8 @@ Partial Public Class CustOrderDetail
 
     Public Overridable Property CustomerOrder As CustomerOrder
     Public Overridable Property Item As Item
-    Public Overridable Property CustOrderItemDetails As ObservableListSource(Of CustOrderItemDetail) = New ObservableListSource(Of CustOrderItemDetail)
-    Public Overridable Property InvoiceDetails As ObservableListSource(Of InvoiceDetail) = New ObservableListSource(Of InvoiceDetail)
-    Public Overridable Property Machine As ObservableListSource(Of Machine) = New ObservableListSource(Of Machine)
+    Public Overridable Property CustOrderItemDetails As ICollection(Of CustOrderItemDetail) = New HashSet(Of CustOrderItemDetail)
+    Public Overridable Property InvoiceDetails As ICollection(Of InvoiceDetail) = New HashSet(Of InvoiceDetail)
+    Public Overridable Property Machine As ICollection(Of Machine) = New HashSet(Of Machine)
 
 End Class

@@ -26,9 +26,9 @@ Partial Public Class Part
     Public Property Nett As Nullable(Of Decimal)
     Public Property OpType As Nullable(Of Integer)
 
-    Public Overridable Property Errors As ObservableListSource(Of [Error]) = New ObservableListSource(Of [Error])
-    Public Overridable Property Items As ObservableListSource(Of Item) = New ObservableListSource(Of Item)
-    Public Overridable Property OrderDetails As ObservableListSource(Of OrderDetail) = New ObservableListSource(Of OrderDetail)
+    Public Overridable Property Errors As ICollection(Of [Error]) = New HashSet(Of [Error])
+    Public Overridable Property Items As ICollection(Of Item) = New HashSet(Of Item)
+    Public Overridable Property OrderDetails As ICollection(Of OrderDetail) = New HashSet(Of OrderDetail)
     Public Overridable Property Spare_Parts As Spare_Part
     Public Overridable Property OperationType As OperationType
 

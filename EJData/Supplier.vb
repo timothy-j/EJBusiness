@@ -27,7 +27,7 @@ Partial Public Class Supplier
     Public Property Contact_s_ As String
     Public Property Archived As Boolean
 
-    Public Overridable Property Orders As ObservableListSource(Of Order) = New ObservableListSource(Of Order)
-    Public Overridable Property OperationTypes As ObservableListSource(Of OperationType) = New ObservableListSource(Of OperationType)
+    Public Overridable Property Orders As ICollection(Of Order) = New HashSet(Of Order)
+    Public Overridable Property OperationTypes As ICollection(Of OperationType) = New HashSet(Of OperationType)
 
 End Class

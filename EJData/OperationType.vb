@@ -14,7 +14,7 @@ Partial Public Class OperationType
     Public Property ID As Integer
     Public Property Description As String
 
-    Public Overridable Property Parts As ObservableListSource(Of Part) = New ObservableListSource(Of Part)
-    Public Overridable Property Suppliers As ObservableListSource(Of Supplier) = New ObservableListSource(Of Supplier)
+    Public Overridable Property Parts As ICollection(Of Part) = New HashSet(Of Part)
+    Public Overridable Property Suppliers As ICollection(Of Supplier) = New HashSet(Of Supplier)
 
 End Class

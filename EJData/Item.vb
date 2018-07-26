@@ -23,13 +23,13 @@ Partial Public Class Item
     Public Property Exclude As Boolean
     Public Property ParentID As Nullable(Of Integer)
 
-    Public Overridable Property CustOrderDetails As ObservableListSource(Of CustOrderDetail) = New ObservableListSource(Of CustOrderDetail)
-    Public Overridable Property CustOrderItemDetails As ObservableListSource(Of CustOrderItemDetail) = New ObservableListSource(Of CustOrderItemDetail)
+    Public Overridable Property CustOrderDetails As ICollection(Of CustOrderDetail) = New HashSet(Of CustOrderDetail)
+    Public Overridable Property CustOrderItemDetails As ICollection(Of CustOrderItemDetail) = New HashSet(Of CustOrderItemDetail)
     Public Overridable Property Part As Part
-    Public Overridable Property MachineItems As ObservableListSource(Of MachineItem) = New ObservableListSource(Of MachineItem)
-    Public Overridable Property QuoteDetails As ObservableListSource(Of QuoteDetail) = New ObservableListSource(Of QuoteDetail)
-    Public Overridable Property QuoteItemDetails As ObservableListSource(Of QuoteItemDetail) = New ObservableListSource(Of QuoteItemDetail)
-    Public Overridable Property Children As ObservableListSource(Of Item) = New ObservableListSource(Of Item)
+    Public Overridable Property MachineItems As ICollection(Of MachineItem) = New HashSet(Of MachineItem)
+    Public Overridable Property QuoteDetails As ICollection(Of QuoteDetail) = New HashSet(Of QuoteDetail)
+    Public Overridable Property QuoteItemDetails As ICollection(Of QuoteItemDetail) = New HashSet(Of QuoteItemDetail)
+    Public Overridable Property Children As ICollection(Of Item) = New HashSet(Of Item)
     Public Overridable Property Parent As Item
 
 End Class

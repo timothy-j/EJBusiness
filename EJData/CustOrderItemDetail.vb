@@ -21,7 +21,7 @@ Partial Public Class CustOrderItemDetail
 
     Public Overridable Property CustOrderDetail As CustOrderDetail
     Public Overridable Property Item As Item
-    Public Overridable Property Children As ObservableListSource(Of CustOrderItemDetail) = New ObservableListSource(Of CustOrderItemDetail)
+    Public Overridable Property Children As ICollection(Of CustOrderItemDetail) = New HashSet(Of CustOrderItemDetail)
     Public Overridable Property Parent As CustOrderItemDetail
 
 End Class

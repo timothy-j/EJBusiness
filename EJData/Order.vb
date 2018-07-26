@@ -22,9 +22,9 @@ Partial Public Class Order
     Public Property Received As Boolean
     Public Property Sent As Boolean
 
-    Public Overridable Property CustomOrderAddresses As ObservableListSource(Of CustomOrderAddress) = New ObservableListSource(Of CustomOrderAddress)
-    Public Overridable Property Errors As ObservableListSource(Of [Error]) = New ObservableListSource(Of [Error])
-    Public Overridable Property OrderDetails As ObservableListSource(Of OrderDetail) = New ObservableListSource(Of OrderDetail)
+    Public Overridable Property CustomOrderAddresses As ICollection(Of CustomOrderAddress) = New HashSet(Of CustomOrderAddress)
+    Public Overridable Property Errors As ICollection(Of [Error]) = New HashSet(Of [Error])
+    Public Overridable Property OrderDetails As ICollection(Of OrderDetail) = New HashSet(Of OrderDetail)
     Public Overridable Property Supplier1 As Supplier
 
 End Class

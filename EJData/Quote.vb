@@ -23,6 +23,6 @@ Partial Public Class Quote
     Public Property DiscountFraction As Nullable(Of Decimal)
 
     Public Overridable Property Customer As Customer
-    Public Overridable Property QuoteDetails As ObservableListSource(Of QuoteDetail) = New ObservableListSource(Of QuoteDetail)
+    Public Overridable Property QuoteDetails As ICollection(Of QuoteDetail) = New HashSet(Of QuoteDetail)
 
 End Class

@@ -24,6 +24,6 @@ Partial Public Class QuoteDetail
 
     Public Overridable Property Item As Item
     Public Overridable Property Quote As Quote
-    Public Overridable Property QuoteItemDetails As ObservableListSource(Of QuoteItemDetail) = New ObservableListSource(Of QuoteItemDetail)
+    Public Overridable Property QuoteItemDetails As ICollection(Of QuoteItemDetail) = New HashSet(Of QuoteItemDetail)
 
 End Class

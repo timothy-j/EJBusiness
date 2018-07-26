@@ -215,8 +215,8 @@ Public Class CodeStringGenerator
         Dim propertyType = endType
 
         If(navProp.ToEndMember.RelationshipMultiplicity = RelationshipMultiplicity.Many)
-            defaultValue = " = New ObservableListSource(Of " & endType & ")"
-            propertyType = "ObservableListSource(Of " & endType & ")"
+            defaultValue = " = New HashSet(Of " & endType & ")"
+            propertyType = "ICollection(Of " & endType & ")"
         End If
 
         Return AnyProperty(
@@ -417,7 +417,7 @@ Public Class TypeMapper
 
         Dim collectionType = TryCast(edmType, CollectionType)
         If collectionType IsNot Nothing Then
-            Return String.Format(CultureInfo.InvariantCulture, "ObservableListSource( Of {0})", GetTypeName(collectionType.TypeUsage, modelNamespace))
+            Return String.Format(CultureInfo.InvariantCulture, "ICollection( Of {0})", GetTypeName(collectionType.TypeUsage, modelNamespace))
         End If
 
         Dim typeName = If(_code.Escape(edmType.MetadataProperties.Where(Function(p) p.Name = ExternalTypeNameAttributeName).Select(Function(p) DirectCast(p.Value, String)).FirstOrDefault()), (If(modelNamespace IsNot Nothing AndAlso edmType.NamespaceName <> modelNamespace, _code.CreateFullName(_code.EscapeNamespace(edmType.NamespaceName), _code.Escape(edmType)), _code.Escape(edmType))))

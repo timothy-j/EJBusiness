@@ -30,9 +30,9 @@ Partial Public Class Customer
     Public Property Archived As Boolean
     Public Property VatNo As String
 
-    Public Overridable Property CustomerOrders As ObservableListSource(Of CustomerOrder) = New ObservableListSource(Of CustomerOrder)
-    Public Overridable Property Invoices As ObservableListSource(Of Invoice) = New ObservableListSource(Of Invoice)
-    Public Overridable Property Machines As ObservableListSource(Of Machine) = New ObservableListSource(Of Machine)
-    Public Overridable Property Quotes As ObservableListSource(Of Quote) = New ObservableListSource(Of Quote)
+    Public Overridable Property CustomerOrders As ICollection(Of CustomerOrder) = New HashSet(Of CustomerOrder)
+    Public Overridable Property Invoices As ICollection(Of Invoice) = New HashSet(Of Invoice)
+    Public Overridable Property Machines As ICollection(Of Machine) = New HashSet(Of Machine)
+    Public Overridable Property Quotes As ICollection(Of Quote) = New HashSet(Of Quote)
 
 End Class

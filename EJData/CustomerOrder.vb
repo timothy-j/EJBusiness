@@ -23,7 +23,7 @@ Partial Public Class CustomerOrder
     Public Property DiscountFraction As Nullable(Of Decimal)
 
     Public Overridable Property Customer As Customer
-    Public Overridable Property CustOrderDetails As ObservableListSource(Of CustOrderDetail) = New ObservableListSource(Of CustOrderDetail)
+    Public Overridable Property CustOrderDetails As ICollection(Of CustOrderDetail) = New HashSet(Of CustOrderDetail)
     Public Overridable Property Invoice As Invoice
 
 End Class
