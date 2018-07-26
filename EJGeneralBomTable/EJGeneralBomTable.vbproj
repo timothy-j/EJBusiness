@@ -135,10 +135,6 @@
     <Service Include="{94E38DFF-614B-4cbd-B67C-F211BB35CE8B}" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\EJControls\EJControls.vbproj">
-      <Project>{955bac9b-1322-4fe3-b73d-1a56e2f7c0b9}</Project>
-      <Name>EJControls</Name>
-    </ProjectReference>
     <ProjectReference Include="..\EJData\EJData.vbproj">
       <Project>{89227503-7a55-40c3-8127-e8098787d3a0}</Project>
       <Name>EJData</Name>

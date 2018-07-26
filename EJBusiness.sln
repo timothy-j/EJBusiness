@@ -3,29 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27004.2009
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "EJBusinessOld", "EJOrderTest\EJBusinessOld.vbproj", "{96115991-0E57-4E07-AB6A-9E6417D38CC3}"
-EndProject
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "EJData", "EJData\EJData.vbproj", "{89227503-7A55-40C3-8127-E8098787D3A0}"
 EndProject
-Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "EJControls", "EJControls\EJControls.vbproj", "{955BAC9B-1322-4FE3-B73D-1A56E2F7C0B9}"
-EndProject
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "EJEmail", "EJEmail\EJEmail.vbproj", "{51763FD1-634A-49F1-8681-024B8837E5A7}"
-EndProject
-Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "EJParts", "EJParts\EJParts.vbproj", "{5C596F25-9E21-46B6-899A-46E284B380A3}"
-EndProject
-Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "EJItems", "EJItems\EJItems.vbproj", "{147E1BFA-477F-4666-9D4D-0BD4F5325549}"
-EndProject
-Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "EJGeneralBomTable", "EJGeneralBomTable\EJGeneralBomTable.vbproj", "{8A1BA392-5A99-4F46-A932-0D692D83AAD8}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{D64B32B0-0FA7-4B84-BF3F-1DB8C178B2CC}"
 EndProject
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "EJHelpers", "EJHelpers\EJHelpers.vbproj", "{5531E03D-7401-468D-B568-ACB62148037D}"
 EndProject
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "EJOrderView", "EJOrderView\EJOrderView.vbproj", "{1954720A-839F-486F-A1C5-B4DE287C0F77}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomComboDemo", "CustomCombo\CustomComboDemo\CustomComboDemo.csproj", "{3A1E6DF4-7D68-4D2C-A618-124900B4C5F8}"
-EndProject
-Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "MultiColumnComboBoxControls", "MultiColumnComboBoxControls\MultiColumnComboBoxControls.vbproj", "{25EF51A3-3EA9-4EED-86B6-985484B27093}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestControlLibrary", "TestControlLibrary\TestControlLibrary.csproj", "{20AE5808-5BCD-42D2-B425-D5507C88B34D}"
 EndProject
@@ -55,34 +41,14 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{96115991-0E57-4E07-AB6A-9E6417D38CC3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{96115991-0E57-4E07-AB6A-9E6417D38CC3}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{96115991-0E57-4E07-AB6A-9E6417D38CC3}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{96115991-0E57-4E07-AB6A-9E6417D38CC3}.Release|Any CPU.Build.0 = Release|Any CPU
 		{89227503-7A55-40C3-8127-E8098787D3A0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{89227503-7A55-40C3-8127-E8098787D3A0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{89227503-7A55-40C3-8127-E8098787D3A0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{89227503-7A55-40C3-8127-E8098787D3A0}.Release|Any CPU.Build.0 = Release|Any CPU
-		{955BAC9B-1322-4FE3-B73D-1A56E2F7C0B9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{955BAC9B-1322-4FE3-B73D-1A56E2F7C0B9}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{955BAC9B-1322-4FE3-B73D-1A56E2F7C0B9}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{955BAC9B-1322-4FE3-B73D-1A56E2F7C0B9}.Release|Any CPU.Build.0 = Release|Any CPU
 		{51763FD1-634A-49F1-8681-024B8837E5A7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{51763FD1-634A-49F1-8681-024B8837E5A7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{51763FD1-634A-49F1-8681-024B8837E5A7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{51763FD1-634A-49F1-8681-024B8837E5A7}.Release|Any CPU.Build.0 = Release|Any CPU
-		{5C596F25-9E21-46B6-899A-46E284B380A3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{5C596F25-9E21-46B6-899A-46E284B380A3}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{5C596F25-9E21-46B6-899A-46E284B380A3}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{5C596F25-9E21-46B6-899A-46E284B380A3}.Release|Any CPU.Build.0 = Release|Any CPU
-		{147E1BFA-477F-4666-9D4D-0BD4F5325549}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{147E1BFA-477F-4666-9D4D-0BD4F5325549}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{147E1BFA-477F-4666-9D4D-0BD4F5325549}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{147E1BFA-477F-4666-9D4D-0BD4F5325549}.Release|Any CPU.Build.0 = Release|Any CPU
-		{8A1BA392-5A99-4F46-A932-0D692D83AAD8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8A1BA392-5A99-4F46-A932-0D692D83AAD8}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{8A1BA392-5A99-4F46-A932-0D692D83AAD8}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{8A1BA392-5A99-4F46-A932-0D692D83AAD8}.Release|Any CPU.Build.0 = Release|Any CPU
 		{5531E03D-7401-468D-B568-ACB62148037D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{5531E03D-7401-468D-B568-ACB62148037D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5531E03D-7401-468D-B568-ACB62148037D}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -91,14 +57,6 @@ Global
 		{1954720A-839F-486F-A1C5-B4DE287C0F77}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1954720A-839F-486F-A1C5-B4DE287C0F77}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1954720A-839F-486F-A1C5-B4DE287C0F77}.Release|Any CPU.Build.0 = Release|Any CPU
-		{3A1E6DF4-7D68-4D2C-A618-124900B4C5F8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3A1E6DF4-7D68-4D2C-A618-124900B4C5F8}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{3A1E6DF4-7D68-4D2C-A618-124900B4C5F8}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{3A1E6DF4-7D68-4D2C-A618-124900B4C5F8}.Release|Any CPU.Build.0 = Release|Any CPU
-		{25EF51A3-3EA9-4EED-86B6-985484B27093}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{25EF51A3-3EA9-4EED-86B6-985484B27093}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{25EF51A3-3EA9-4EED-86B6-985484B27093}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{25EF51A3-3EA9-4EED-86B6-985484B27093}.Release|Any CPU.Build.0 = Release|Any CPU
 		{20AE5808-5BCD-42D2-B425-D5507C88B34D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{20AE5808-5BCD-42D2-B425-D5507C88B34D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{20AE5808-5BCD-42D2-B425-D5507C88B34D}.Release|Any CPU.ActiveCfg = Release|Any CPU

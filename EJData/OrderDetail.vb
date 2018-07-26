@@ -18,8 +18,8 @@ Partial Public Class OrderDetail
     Public Property Unit As String
     Public Property Part As Nullable(Of Integer)
     Public Property Description As String
-    Private Property oUnitPrice As Nullable(Of Decimal)
-    Private Property oPrice As Nullable(Of Decimal)
+    Public Property UnitPrice As Nullable(Of Decimal)
+    Public Property Price As Nullable(Of Decimal)
     Public Property RowNotes As String
     Public Property Received As Boolean
     Public Property Inspected As Boolean

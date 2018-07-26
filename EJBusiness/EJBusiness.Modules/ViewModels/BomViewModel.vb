@@ -19,6 +19,7 @@ Namespace ViewModels
         Private _initDone As Boolean
         Private _Model As String
         Friend WithEvents _ItemView As ListCollectionView
+        Private _SourceTest As ObservableCollection(Of EJData.Item)
         'Private _BomSource As ObservableCollection(Of EJData.Item)
         Property MachineList As New List(Of MachineInfo)
         Property Title As String
@@ -60,6 +61,15 @@ Namespace ViewModels
             End Get
             Set
                 _BomSource = Value
+            End Set
+        End Property
+
+        Public Property SourceTest As ObservableCollection(Of EJData.Item)
+            Get
+                Return _SourceTest
+            End Get
+            Set
+                _SourceTest = Value
             End Set
         End Property
 
@@ -197,6 +207,10 @@ Namespace ViewModels
                   Order By m.Item1
 
             Bom.Load
+
+            'SourceTest = CType((From m In Bom
+            '                    Where m.ParentID Is Nothing
+            '                    Order By m.Item1), ObservableCollection(Of EJData.Item))
 
             '' NOTE: uncommenting the following adds this query to the previous list
             'Dim test = From i In _db.Items.Include("QuoteItemDetails").Include("Part")

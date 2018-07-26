@@ -20,10 +20,19 @@
     <dxb:BarManager>
         <DockPanel>
             <dxr:RibbonControl DockPanel.Dock="Top" RibbonStyle="Office2010" ToolbarShowMode="Hide">
+                <dxr:RibbonControl.ApplicationMenu>
+                    <dxr:ApplicationMenu/>
+                </dxr:RibbonControl.ApplicationMenu>
                 <dxr:RibbonDefaultPageCategory>
+                    <dxr:RibbonPage Caption="Home">
+                        <dxr:RibbonPageGroup Caption="Machines">
+                            <dxb:BarButtonItem Glyph="{dx:DXImage Image=Add_16x16.png}" LargeGlyph="{dx:DXImage Image=Add_32x32.png}" Content="A Button" RibbonStyle="All"/>
+
+                        </dxr:RibbonPageGroup>
+                    </dxr:RibbonPage>
                     <dxr:RibbonPage x:Name="ribbonPage_Main" Caption="View">
                         <dxr:RibbonPageGroup x:Name="ribbonPageGroup_Main">
-                            <dxr:RibbonGalleryBarItem x:Name="ribbonGalleryBarItem_Theme">
+                            <dxr:RibbonGalleryBarItem x:Name="ribbonGalleryBarItem_Theme" RibbonStyle="Default">
                                 <dxmvvm:Interaction.Behaviors>
                                     <dxr:RibbonGalleryItemThemeSelectorBehavior/>
                                 </dxmvvm:Interaction.Behaviors>

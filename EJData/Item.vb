@@ -17,7 +17,7 @@ Partial Public Class Item
     Public Property Model As String
     Public Property Item1 As String
     Public Property Description As String
-    Private Property oQty As Nullable(Of Decimal)
+    Public Property Qty As Nullable(Of Decimal)
     Public Property Status As String
     Public Property Associations As String
     Public Property Exclude As Boolean
